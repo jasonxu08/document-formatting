@@ -17,7 +17,7 @@ A rule that no existing rule covers is exactly what the [open items](review/skil
 Python 3.9 or newer. The skill's scripts and the tests use only the standard library.
 
 ```bash
-# unit tests for check_doc.py, source_set.py, check_links.py and the validators
+# unit tests for check_doc.py, source_set.py, check_links.py, package_skill.py and the validators
 python -m unittest discover -s tests -v
 # the skill against the Agent Skills spec and the plugin manifests
 python tools/validate_skill.py

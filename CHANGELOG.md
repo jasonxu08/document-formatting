@@ -19,6 +19,7 @@ First public release.
 ### Fixed
 
 - `source_set.py slice` and the packaging script crashed on Python 3.9 (`Path.write_text(newline=)` needs 3.10). Found by the unit tests, which run on 3.9 in CI.
+- The packaging script built a different archive on Windows than on Linux: path ordering ignores case on Windows, and Python marks Windows-built entries as MS-DOS. It now sorts on the POSIX path and sets the Unix creator flag, so the archive is the same on both. Found by rebuilding the released archive on a second platform; a new unit test covers it.
 
 ### Changed since the last fully graded version (v0.4)
 
