@@ -1,0 +1,26 @@
+name: Rule or capability request
+description: Propose a new rule, a new kind of document, or a better way to do something the skill already does
+title: "[request] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check the [open items](https://github.com/jasonxu08/document-formatting/blob/main/review/skill-evolution/README.md#open-items) first; your idea may already be listed there.
+  - type: textarea
+    id: problem
+    attributes:
+      label: The reader's problem
+      description: Who reads the document, and what do they miss or misread today?
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: An example
+      description: A short document, or an excerpt, that shows the problem. Remove anything private.
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would change
+      description: A rule, a template change, a checker rule, a new reference file. How would a reviewer or a script tell that it was followed?

@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: Package the skill
+    runs-on: ubuntu-latest
+    env:
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate before packaging
+        run: |
+          python -m unittest discover -s tests
+          python tools/validate_skill.py
+      - name: The release tag matches the skill version
+        if: github.event_name == 'release'
+        run: |
+          version=$(grep -E '^\s+version:' skills/document-formatting/SKILL.md | head -1 | tr -d ' "' | cut -d: -f2)
+          tag="${{ github.event.release.tag_name }}"
+          echo "skill version: $version, tag: $tag"
+          test "v$version" = "$tag"
+      - name: Package
+        run: python tools/package_skill.py --out dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: document-formatting
+          path: dist/
+      - name: Attach the archives to the release
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" \
+            dist/document-formatting.zip dist/document-formatting.skill dist/SHA256SUMS --clobber

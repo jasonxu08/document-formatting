@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Tests (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.9", "3.12"]
+    env:
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Validate the skill, the plugin manifests and the changelog
+        run: python tools/validate_skill.py
+      - name: Check every relative link and anchor
+        run: python tools/check_links.py
+      - name: The delivery gate holds on every example written with the skill
+        shell: bash
+        run: |
+          for f in examples/*/with-skill/report.md; do
+            python skills/document-formatting/scripts/check_doc.py "$f" || exit 1
+          done
+      - name: The package builds the same bytes twice
+        shell: bash
+        run: |
+          python tools/package_skill.py --out dist-a
+          python tools/package_skill.py --out dist-b
+          cmp dist-a/document-formatting.zip dist-b/document-formatting.zip
+
+  review-pages:
+    name: Review pages match the records
+    runs-on: ubuntu-latest
+    env:
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r review/tools/requirements.txt
+      - name: Rebuild the generated pages
+        run: python review/tools/build_review.py
+      - name: Fail if a generated page changed
+        run: |
+          git diff --exit-code --stat -- '*.md' ||
+            (echo "A generated page is out of date. Run python review/tools/build_review.py and commit the result." && exit 1)

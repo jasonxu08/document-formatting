@@ -1,0 +1,90 @@
+[
+ {
+  "query": "ok so I just finished going through all the incident tickets from last quarter (about 40 of them, exported to incidents.csv) and the on-call notes. can you write up the findings for the eng managers meeting thursday? they'll want to know what to fix first",
+  "should_trigger": true
+ },
+ {
+  "query": "Write a root cause analysis doc for the 3am outage on the payments gateway. I've pasted the timeline and the grafana screenshots in the notes folder. needs to go in the team wiki.",
+  "should_trigger": true
+ },
+ {
+  "query": "We need a design doc for moving our ingestion pipeline from cron jobs to a queue-based runner. Consider the options, tradeoffs and a migration plan and put your recommendation in. The architecture board will review it.",
+  "should_trigger": true
+ },
+ {
+  "query": "can you review this PR (the diff is in C:\\temp\\pr-1234.diff) and write up a code review report for the team? there are like 40 files changed so please organize it somehow",
+  "should_trigger": true
+ },
+ {
+  "query": "Summarize everything we learned in the performance investigation into a document for the product owner. she's non-technical and just wants to know what we found and what she needs to decide",
+  "should_trigger": true
+ },
+ {
+  "query": "i'm handing the billing migration to Tom's team next week, please write a handoff doc covering where we are, what's left, and the risks. a coding agent will also use it to continue the work",
+  "should_trigger": true
+ },
+ {
+  "query": "Generate a test report from the junit xml results in C:\\build\\results - 2,300 tests, a bunch of failures. I need something I can send to the release manager before the go/no-go",
+  "should_trigger": true
+ },
+ {
+  "query": "explain how our auth flow works end to end in a markdown doc for new hires - there are a lot of moving parts (gateway, token service, session store, user directory, audit log, policy engine)",
+  "should_trigger": true
+ },
+ {
+  "query": "write up a security assessment of the new file upload feature: attack surface, findings by severity, recommendations. put it in docs/security/",
+  "should_trigger": true
+ },
+ {
+  "query": "帮我把这周排查线上问题的过程和结论整理成一份详细的复盘报告，要发给整个团队看，里面涉及好几个服务之间的调用关系",
+  "should_trigger": true
+ },
+ {
+  "query": "convert this markdown file to a nicely formatted Word document using our company template, with headers, footers and page numbers",
+  "should_trigger": false
+ },
+ {
+  "query": "fix the typo in the README title and make sure the table of contents links still point to the right sections",
+  "should_trigger": false
+ },
+ {
+  "query": "rewrite this one paragraph of the README intro so it's shorter and less jargony",
+  "should_trigger": false
+ },
+ {
+  "query": "add a mermaid sequence diagram to docs/auth.md showing the login flow between the browser, the gateway and the token service",
+  "should_trigger": false
+ },
+ {
+  "query": "write a unit test for OrderService.CalculateTotal covering the discount edge cases (negative quantity, 100% discount, rounding)",
+  "should_trigger": false
+ },
+ {
+  "query": "write a python script that pulls last month's sales from the database and generates the monthly report as a PDF every first of the month",
+  "should_trigger": false
+ },
+ {
+  "query": "create an excel spreadsheet that tracks our sprint velocity for the last 6 sprints and add a line chart",
+  "should_trigger": false
+ },
+ {
+  "query": "can you proofread my report draft in docs/q3-review.md? just fix grammar and tone, don't restructure anything",
+  "should_trigger": false
+ },
+ {
+  "query": "give me a 3-bullet summary of this slack thread so I can paste it in the standup channel",
+  "should_trigger": false
+ },
+ {
+  "query": "extract all the tables from this PDF (C:\\docs\\annual-report.pdf) into csv files",
+  "should_trigger": false
+ },
+ {
+  "query": "docs/project-notes.md is about 800 lines of running notes we appended over two months. nobody can find what we decided or what is still open. restructure it so the reviewers can read it, and don't lose anything",
+  "should_trigger": true
+ },
+ {
+  "query": "can you rewrite last quarter's post-mortem (it's a wall of chronological text, about 600 lines) so the VP can get it in two minutes and the engineers still have the details?",
+  "should_trigger": true
+ }
+]

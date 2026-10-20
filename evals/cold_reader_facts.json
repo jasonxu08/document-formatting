@@ -1,0 +1,34 @@
+{
+  "1": [
+    {"id": "K1", "fact": "Recommendation is a split: upgrade the 7 services that passed staging before the freeze; hold auth-service and user-store until January."},
+    {"id": "K2", "fact": "auth-service is the hub (6 services depend on it), has no rollback path (restore from backup, about 4 hours) and failed 2 of 148 staging tests; user-store was never tested."},
+    {"id": "K3", "fact": "Marcus (Engineering Lead) must decide by Friday 23 Oct, so the Data team can start Monday 26 Oct."},
+    {"id": "K4", "fact": "v8 security support ends 12 Nov; extended support costs 18,000 USD per quarter and must be ordered by 5 Nov."},
+    {"id": "K5", "fact": "Code freeze runs 1 Nov to 5 Jan; only P1 hotfixes deploy unless the change advisory board grants an exception."},
+    {"id": "K6", "fact": "auth-service accounts for about a third of the Q3 incidents (11 of 36 records, mostly token-validation timeouts)."}
+  ],
+  "2": [
+    {"id": "K1", "fact": "Status is at risk: the 10 Nov cutover depends on four blockers (T4 to T7) that need input from outside engineering by about 30 Oct."},
+    {"id": "K2", "fact": "Progress: 3 of 11 tasks are done (T1 to T3); CSV export works in staging; nothing is live in production yet."},
+    {"id": "K3", "fact": "Dana must decide or unblock: XLS policy above 1M rows (recommend a ZIP of 1M-row files), pool size 3 to 6 workers (about 1,200 USD per month), Marketing's email approval, a DBA window for migration 0042, and an owner for the 3 unmapped cron jobs."},
+    {"id": "K4", "fact": "Acme's 15-minute SLA fails when three exports run in parallel (21 minutes); a single export takes 9.5 minutes."},
+    {"id": "K5", "fact": "Alex is away until 7 Nov (a Saturday) and cannot be asked; an AI agent continues the work from this document."},
+    {"id": "K6", "fact": "The agent can continue work that needs no decision (for example mapping the 3 cron jobs) but must not touch production."}
+  ],
+  "3": [
+    {"id": "K1", "fact": "Mental model: upload, validate, transform, publish, all asynchronous (nobody waits on an HTTP call)."},
+    {"id": "K2", "fact": "The Catalog, not the queue, is the source of truth for a Version's status."},
+    {"id": "K3", "fact": "Main components: Uploader API, Message Queue, Validation Worker, Transform Worker, Raw Zone, Curated Zone, Catalog and Quarantine Store (plus Policy Engine, Schema Registry and Notifier)."},
+    {"id": "K4", "fact": "A failed validation is an expected outcome (file quarantined, owner told); infrastructure failures are retried 3 times and then go to the dead-letter queue, which pages on-call."},
+    {"id": "K5", "fact": "Versions are immutable: a re-upload creates a new Version."},
+    {"id": "K6", "fact": "Where to read next or what to do first: a reading path or a first-week plan is visible."}
+  ],
+  "4": [
+    {"id": "K1", "fact": "Incident on 9 Oct from 14:02 to 15:47 (105 minutes): order submission and payment were failing."},
+    {"id": "K2", "fact": "Root cause: change CFG-2231 set the order service's connection pool limit from 200 to 20 (meant for test, applied globally) and was pushed to everything at once; the config centre had no range validation."},
+    {"id": "K3", "fact": "Impact: about 3,800 failed orders and 1,200 users; availability fell to 99.93%, below the 99.95% SLO."},
+    {"id": "K4", "fact": "Contributing factors: no canary for config pushes, the 5 s latency alert was too lax, the runbook lacked a config-change check, and payment retries without backoff amplified the failure."},
+    {"id": "K5", "fact": "Decision needed: Zhang Wei prioritises follow-ups A1 to A6 (about 17 person-days of work against about 10 available)."},
+    {"id": "K6", "fact": "How the services relate: gateway calls order and user; order calls payment, inventory and user; config-center pushes config to gateway, order and payment."}
+  ]
+}

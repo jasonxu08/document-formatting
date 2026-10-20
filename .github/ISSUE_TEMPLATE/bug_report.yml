@@ -1,0 +1,52 @@
+name: Bug report
+description: A document came out hard to read, or the skill or one of its scripts misbehaved
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The most useful report has three things: the prompt, the document that came out, and the rule it breaks (or the fact that no rule covers it). Please remove anything private from what you paste.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What went wrong?
+      options:
+        - A reader could not find something, or understood it wrongly
+        - The skill did not load when it should have
+        - check_doc.py or source_set.py gave a wrong result or crashed
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: prompt
+    attributes:
+      label: The prompt
+      description: What you asked the agent to write or rewrite.
+    validations:
+      required: true
+  - type: textarea
+    id: document
+    attributes:
+      label: The document, or the relevant part
+      description: Paste it, or link to it. A first screen is often enough.
+  - type: textarea
+    id: expected
+    attributes:
+      label: What the reader needed instead
+      description: What should a person have been able to see or do within a minute?
+  - type: input
+    id: agent
+    attributes:
+      label: Agent and model
+      placeholder: "for example GitHub Copilot CLI 1.0.95, or Claude Code with a named model"
+  - type: input
+    id: version
+    attributes:
+      label: Skill version
+      placeholder: "1.0.0"
+  - type: textarea
+    id: checker
+    attributes:
+      label: Checker output, if relevant
+      render: text
