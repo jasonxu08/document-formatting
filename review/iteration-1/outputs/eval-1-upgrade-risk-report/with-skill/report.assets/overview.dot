@@ -1,0 +1,59 @@
+// Dependency map of the nine services (source of overview.png).
+// Every edge comes from the depends_on column of report.data/services.csv; none is inferred.
+// Render:  dot -Tpng -Gdpi=150 report.assets/overview.dot -o report.assets/overview.png
+digraph upgrade_map {
+  rankdir=LR; pad=0.3; nodesep=0.5; ranksep=1.0; bgcolor="white";
+  graph [fontname="Arial", labelloc=b, fontsize=13];
+  node  [shape=box, style="rounded,filled", fillcolor="#F2F4F7", color="#98A2B3", penwidth=1.2,
+         fontname="Arial", fontsize=15, margin="0.18,0.10"];
+  edge  [color="#98A2B3", fontname="Arial", fontsize=11, arrowsize=0.8];
+
+  // Held until January: the two Identity services (focal point)
+  "auth-service" [fillcolor="#FEE4E2", color="#D92D20", penwidth=2.4,
+    label=<<b>auth-service</b><br/><font point-size="12">Identity · critical</font><br/><font point-size="12" color="#B42318">6 services depend on it<br/>2 of 148 tests fail · no rollback</font>>];
+  "user-store" [fillcolor="#FEE4E2", color="#D92D20", penwidth=2.4,
+    label=<<b>user-store</b><br/><font point-size="12">Identity · critical</font><br/><font point-size="12" color="#B42318">never tested · no rollback</font>>];
+
+  // Upgrade before the freeze: the other seven
+  "gateway" [label=<<b>gateway</b><br/><font point-size="12">Platform · critical</font><br/><font point-size="12">upgrade it last</font>>];
+  "catalog-service" [label=<<b>catalog-service</b><br/><font point-size="12">Data · high</font>>];
+  "share-service" [label=<<b>share-service</b><br/><font point-size="12">Data · high</font>>];
+  "connector-service" [label=<<b>connector-service</b><br/><font point-size="12">Integration · medium</font>>];
+  "map-service" [label=<<b>map-service</b><br/><font point-size="12">Data · medium</font>>];
+  "search-index" [label=<<b>search-index</b><br/><font point-size="12">Data · medium</font>>];
+  "notify-service" [label=<<b>notify-service</b><br/><font point-size="12">Platform · low</font>>];
+
+  {rank=same; "share-service"; "connector-service";}
+  {rank=same; "catalog-service"; "map-service"; "search-index"; "notify-service";}
+  {rank=same; "auth-service"; "user-store";}
+
+  // Edges into the held services are red; all other dependencies are grey
+  "gateway" -> "auth-service" [color="#D92D20", penwidth=1.8];
+  "catalog-service" -> "auth-service" [color="#D92D20", penwidth=1.8];
+  "share-service" -> "auth-service" [color="#D92D20", penwidth=1.8];
+  "connector-service" -> "auth-service" [color="#D92D20", penwidth=1.8];
+  "map-service" -> "auth-service" [color="#D92D20", penwidth=1.8];
+  "notify-service" -> "auth-service" [color="#D92D20", penwidth=1.8];
+  "auth-service" -> "user-store" [color="#D92D20", penwidth=1.8];
+
+  "gateway" -> "catalog-service";
+  "gateway" -> "share-service";
+  "gateway" -> "connector-service";
+  "share-service" -> "catalog-service";
+  "share-service" -> "notify-service";
+  "connector-service" -> "catalog-service";
+  // catalog-service depends on search-index; drawn with dir=back so search-index sits above catalog-service
+  "search-index" -> "catalog-service" [dir=back];
+  // invisible edges only fix the vertical order inside a column
+  "notify-service" -> "search-index" [style=invis];
+  "share-service" -> "connector-service" [style=invis];
+  // catalog-service and map-service list each other in depends_on: one arrow with two heads
+  "catalog-service" -> "map-service" [dir=both, penwidth=1.6];
+
+  label=<<table border="0" cellborder="1" cellspacing="6" cellpadding="6">
+    <tr>
+      <td bgcolor="#F2F4F7" color="#98A2B3">upgrade before the freeze</td>
+      <td bgcolor="#FEE4E2" color="#D92D20">hold until January</td>
+      <td border="0">every arrow means "depends on"</td>
+    </tr></table>>;
+}

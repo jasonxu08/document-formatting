@@ -1,0 +1,49 @@
+// Task dependency map for the exports migration handoff.
+// Edges come from the "Depends on" column of tasks.md (all verified, none inferred).
+// Render: dot -Tpng -Gdpi=120 report.assets/task-map.dot -o report.assets/task-map.png
+digraph taskmap {
+  rankdir=TB; pad=0.25; nodesep=0.28; ranksep=0.62; bgcolor="white";
+  graph [fontname="Arial", labelloc=b, fontsize=12];
+  node  [shape=box, style="rounded,filled", fontname="Arial", fontsize=13, margin="0.14,0.09",
+         color="#98A2B3", fillcolor="#F2F4F7"];
+  edge  [color="#667085", fontname="Arial", fontsize=12, arrowsize=0.8];
+
+  // done
+  T1  [label="T1  Job definition\nDONE", fillcolor="#D1FADF", color="#12B76A"];
+  T2  [label="T2  Streaming CSV writer\nDONE", fillcolor="#D1FADF", color="#12B76A"];
+  T3  [label="T3  Idempotency key and\nexport_runs migration\nDONE (staging only)", fillcolor="#D1FADF", color="#12B76A"];
+
+  // blocked or waiting on people
+  T4  [label="T4  Migration 0042\nin production\nBLOCKED: DBA window (Q4)", fillcolor="#FEE4E2", color="#D92D20", penwidth=2];
+  T5  [label="T5  XLS above\n1M rows\nBLOCKED: product call (Q1)", fillcolor="#FEE4E2", color="#D92D20", penwidth=2];
+  T6  [label="T6  Pool 3 to 6\nworkers\nBLOCKED: budget call (Q2)", fillcolor="#FEE4E2", color="#D92D20", penwidth=2];
+  T7  [label="T7  Email template\napproval and wiring\nWAITING: Marketing (Q3)", fillcolor="#FEF0C7", color="#DC6803", penwidth=2];
+
+  // not started
+  T8  [label="T8  Map 3 unmapped\ncron jobs\nTODO: can start now"];
+  T9  [label="T9  Per-tenant rollout\nTODO: needs T4 to T7", penwidth=3, color="#101828"];
+  T10 [label="T10  Decommission\nlegacy cron\nTODO: needs T8 and T9"];
+  T11 [label="T11  Fix flaky\ncancel test\nTODO: low priority"];
+
+  T1 -> T2  [label="unblocks"];
+  T1 -> T3  [label="unblocks"];
+  T3 -> T4  [label="unblocks"];
+  T2 -> T5  [label="unblocks"];
+  T2 -> T6  [label="unblocks"];
+  T2 -> T7  [label="unblocks"];
+  T4 -> T9  [label="unblocks"];
+  T5 -> T9  [label="unblocks"];
+  T6 -> T9  [label="unblocks"];
+  T7 -> T9  [label="unblocks"];
+  T8 -> T10 [label="unblocks"];
+  T9 -> T10 [label="unblocks"];
+
+  label=<<table border="0" cellborder="1" cellspacing="6" cellpadding="5">
+    <tr>
+      <td bgcolor="#D1FADF" color="#12B76A">done</td>
+      <td bgcolor="#FEE4E2" color="#D92D20">blocked by a decision or a booking</td>
+      <td bgcolor="#FEF0C7" color="#DC6803">waiting on Marketing</td>
+      <td bgcolor="#F2F4F7" color="#98A2B3">not started</td>
+      <td bgcolor="#F2F4F7" color="#101828">thick outline: the rollout gate</td>
+    </tr></table>>;
+}

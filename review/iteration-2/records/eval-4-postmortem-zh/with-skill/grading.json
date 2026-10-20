@@ -1,0 +1,270 @@
+{
+  "expectations": [
+    {
+      "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input or archive material sits last in its own labelled zone; nothing for people follows machine content",
+      "passed": true,
+      "evidence": "report.md L1 `<!-- zone:human -->`, L2 H1, L4 one metadata line (…面向全体研发团队，决策人：技术负责人张伟), then L6 `## 👤 从这里开始 - 一眼看懂`: a real zone heading (not a pointer line) that opens the human zone with the 👤 human-reader glyph and a 'start here' instruction, the pattern the skill prescribes. Machine material comes last and is labelled: L175 `<!-- zone:ai-input -->` + L176 `## 🗄️ 机器与存档区 - 不需要原始证据、也不是接手这项工作的 AI，可以跳过`, then blocks A (L180), B (marker L201, heading L202) and C (marker L242, heading L243). Checker zones = [human, ai-input, archive, archive]; the last human content is L171 and nothing meant for people follows L175. Judgement call: the heading names its audience through the glyph and the instruction (this zone is for human readers), not by spelling out a reader group; the readers are named only in the L4 metadata line."
+    },
+    {
+      "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+      "passed": false,
+      "evidence": "Met: blocks A (L180-199), B (L202-240) and C (L243-267) are each collapsed in `<details>` (3, balanced), have plain-word headings (`### A 给后续接手者的上下文`, `### B 群聊原文`, `### C 示意图的来源和边清单`) and open with an italic line naming the bin and what it supports (L182 `🤖 AI 输入 - 让接手的人或 AI 知道这份复盘停在哪、决定之后要更新哪里…`; L204 `🗄️ 存档 - 2026-10-09 故障群聊导出…支撑第 3 节的耗时拆解和第 5 节的核对`; L245 `🗄️ 存档 - 概览图是怎么画出来的…支撑第 1 节的链路和第 5 节的第 4 行`). NOT met: long material is not in a sibling file behind a pointer. The raw chat is a 28-line code block (L209-238), over the skill's ~25-line single-block threshold, and the machine zone is 93 lines (75 non-blank), over the ~60-line combined threshold (SKILL.md Step 3). No report.evidence.md or any other sibling Markdown file exists and there is no one-line pointer to one (the only pointer is to services.dot, L250). user_notes.md 2.1 concedes the deviation (kept inline because the user said '留在报告里'), but the final assertion accepts 'a linked file' too, so a sibling file would not have broken the user's request. With the burden on the expectation and one of its four clauses unmet this is a FAIL, though a borderline one: everything else in A3 is done well."
+    },
+    {
+      "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+      "passed": true,
+      "evidence": "Title is L2. L32-39 '接着读' lists six section links, each with what the reader gets and a time, all inside the first 41 lines: L34 `[1 经过与影响](#…) - 出了什么事、影响了谁 · 2 分钟`, L35 `[2 根因] - 七个没拦住的环节 · 3 分钟`, L37 `[4 改进排序] - 张伟的决策依据和备选 · 4 分钟`, L39 `[B 群聊原文](#b-群聊原文) - 存档，核对原话时看`. Who can stop where: L41 `只做决定？读到第 4 节。要核对数字，读第 5 节和 B。` Checker reports no B1 finding (25 internal links)."
+    },
+    {
+      "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive (or is a compact timeline in the human zone with the raw chat log in the archive)",
+      "passed": true,
+      "evidence": "The panel (L8-30) opens with the verdict and the eight-service picture of the push; §1 (L43-74) gives the failure-propagation chain (L49-55) as the mental model and then a glossary `几个会反复出现的词` (L65-72: 连接池上限, 全量/灰度推送, 重试风暴, A1–A6) before §2-§5, which lean on those terms. Chronology: a compact six-phase table in §3 (L104-111, 7+11+38+12+15+22 = 105 min) in the human zone, and the raw chat appears only in archive block B (L202-240). Nit: the panel and the first chain steps (L52 '没有灰度', L54 '没有退避') use 灰度/退避 a few lines before the glossary; tolerable for an R&D audience and it is the placement the skill prescribes ('a short glossary right after the mental model')."
+    },
+    {
+      "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+      "passed": true,
+      "evidence": "The numbered H2s read alone: '配置推送先卡住订单服务再拖垮支付服务' → '根因是误改的配置畅通无阻地到了生产' → '105 分钟里有 38 分钟花在定位上' → '建议先做 A4 A6 A3 A1 A5 共 9 人天 A2 灰度推送后排' → '四处资料对不上 两件事资料里没有'. That is the argument, and the decision heading (§4, L123) carries its answer. The first H2 (L6) is the zone/panel label."
+    },
+    {
+      "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the conclusion itself, not what the document covers",
+      "passed": true,
+      "evidence": "L1 zone marker, L2 H1, L4 the single metadata line, L6 zone heading, then the panel: L8 `🟡 故障已恢复，但让它发生的缺口还没补上` and L10 `结论：CFG-2231 本想只改测试环境，却把订单服务连接池上限的全局默认值从 200 改成 20，14:02 无灰度全量推送：订单提交和支付故障 105 分钟，约 3,800 笔订单失败、1,200 位用户受影响`. It states what happened, why and who was hit, not what the document covers. Checker: no C1 finding."
+    },
+    {
+      "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words, where one Chinese character counts as 0.6 words), one line per decision and per risk, and verdict, decisions and top risks fit the first screen",
+      "passed": true,
+      "evidence": "mechanical.json panel_words = 283 (<= 300); my re-run of check_doc.py --json gives the same 283. One bullet per decision (L16, 73 Chinese characters plus Latin/numbers, about 2 rendered lines) and one 'cost if wrong' line (L18); one table row per risk (L22-26, five rows). The verdict (L8-12), the decision (L14-18) and all five risks (L20-26) sit in the first 26 lines, inside the first screen or two."
+    },
+    {
+      "text": "C3 Verdict, decisions and risks are complete and loud in the panel: the verdict has a glyph, confidence and basis; each decision has who, what, by when and a recommendation; at most 5 ranked risks, each with severity and consequence",
+      "passed": true,
+      "evidence": "Verdict: glyph 🟡 in a heading-sized blockquote (L8), confidence with basis on L12 `根因高（回滚后线程释放、延迟恢复）；改进排序中（收益是推断）；4 处数字待核对`. Decision (L14-18, 🧭 blockquote): who 张伟, what 先做哪些改进项, by when 下个迭代排期前, recommendation `先做 A4 手册、A6 评审、A3 告警、A1 校验、A5 退避（共 9 人天），A2 灰度推送（8 人天）后排`, plus a cost-if-wrong line. Risks (L20-26): exactly five, ranked 🔴🟠🟠🟡🟡 under the header '按再次发生时的影响排序', each with a consequence column and a link. The 'by when' is an assumption (the sources give no date) that is flagged only in §4 L151, not in the panel, but it is present."
+    },
+    {
+      "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+      "passed": true,
+      "evidence": "Each panel element traces to the inputs: the verdict to timeline.md (incident closed, six improvements 待决定优先级); the decision to the user's prompt and timeline.md ('下个迭代大约能腾出 10 个人天'); the risks to timeline factors (no validation, no canary, 5 s alert, runbook, retry without backoff) and chat 15:03; the one risk that goes beyond the inputs is marked '（推断）' (L23). The ranking basis is stated (L20 header; §4 L127 '“这次故障的证据显示它本来能改变什么 ÷ 人天”；这是推断，不是实测，把握：中'). Empty slots are omitted (no Key-facts line). Cross-checking the phase table, sums and owner assignments against the inputs found no unlabelled invented fact."
+    },
+    {
+      "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived, merged or de-duplicated numbers say so",
+      "passed": true,
+      "evidence": "Spot-checks: 200→20, 14:02, 105 分钟, 约 3,800 笔, 1,200 位 all match timeline.md; '迭代约 10 人天' matches '大约能腾出 10 个人天'. Derived numbers say so: '17 人天' = 3+8+0.5+0.5+4+1, panel says '估时相加' and §4 L127 says '（本报告相加得出）'; '共 9 人天' = 0.5+1+0.5+3+4 with the cumulative column at L131-135; '38 分钟' = 14:20→14:58 from chat times, covered by the L47 convention '时长由两份资料里的时间点相减得出' and the §3 table. Small looseness: the panel says '4 处数字待核对' although one of the four (retry direction) is not a number."
+    },
+    {
+      "text": "D1 Diagram drawn: the eight related services (gateway, order-service, payment-service, inventory-service, user-service, notification-service, config-center, cache) and their call and push relationships are shown in at least one diagram",
+      "passed": true,
+      "evidence": "report.assets/services.png, embedded at L28, shows all eight services (配置中心, 网关, 订单服务, 支付服务, 通知服务, 库存服务, 用户服务, 缓存), the 8 call edges, the 3 config-push edges and one dashed retry edge."
+    },
+    {
+      "text": "D2 Coverage and truth: every one of the eight services appears in at least one diagram, every drawn edge exists in services.csv, and inferred edges are dashed and captioned",
+      "passed": true,
+      "evidence": "All eight nodes appear in the image. Edges cross-checked against services.csv: solid grey calls gateway→order-service, gateway→user-service, order-service→payment-service, order-service→inventory-service, order-service→user-service, payment-service→notification-service, inventory-service→cache, user-service→cache (8, all in the csv); red pushes config-center→gateway, →order-service, →payment-service (3, in the csv and in the timeline's 14:02 push). The only edge not in services.csv, payment→order retry, is dashed, labelled '重试(未核实)' in the image and captioned at L30 (`橙色虚线是群聊所说的重试（服务清单里没有，未核实）`); block C row 12 repeats it as '未核实'."
+    },
+    {
+      "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+      "passed": true,
+      "evidence": "The only diagram is the embedded PNG at L28 (`report.assets/services.png`, file exists, 1512x661 px, inside the checker's 500-2600 px range); diagram_blocks = 0, so no Mermaid. I viewed it at full size and at an 800x350 downscale: node names, team tags, the three '推送' labels, '重试(未核实)' and the in-node status text are all legible, nothing overlaps or is cut off, and no glyph is an empty box (Microsoft YaHei is set in services.dot)."
+    },
+    {
+      "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+      "passed": true,
+      "evidence": "Alt text L28 describes the picture in one sentence. Italic caption L30: '怎么看：灰色箭头是调用，红色箭头是 14:02 的配置推送，橙色虚线是群聊所说的重试（服务清单里没有，未核实）。要点：一次推送同时到了三个服务，没有“先试一小部分”的环节。' Colour meaning: arrow colours are explained in the caption; the coloured nodes state their role in the node text ('CFG-2231 的来源', '连接池上限被改成 20', '重试风暴 CPU 超过 90%'), so no colour is unexplained, although there is no formal in-image legend (user_notes 2.6). Relation: '推送' on the three red edges and '重试(未核实)' on the dashed one; the eight identical call edges are stated once in the caption and in L250. Source: report.assets/services.dot sits beside services.png. Edge list: block C L252-265, 12 rows with a verified column."
+    },
+    {
+      "text": "E1 E2 Honesty: every judgment has a confidence level and its basis; content not in the inputs (assumptions, suggestions, inferences) is labelled as such; unknowns are listed",
+      "passed": true,
+      "evidence": "Confidence with basis: L12 (verdict), L80 '置信度高：线程栈显示线程都在等连接池，配置值是 20，回滚后线程释放、延迟恢复', L127 '这是推断，不是实测，把握：中'. Labelling: the L47 convention line ('没有标注的内容来自时间线或群聊原文；“（推断）”是本报告的判断…'), '（推断）' at L23, L86, L94, L117 (also '待王磊确认'), L138 '“如果当时已有”都是推断', L145 '前提是“观察”会自动卡关（资料没写）', and the assumptions paragraph L151 ('下个迭代排期前'是本报告的假设; no A1-A6 started). Unknowns are listed in §5 (L159-171): four source conflicts with who should verify each, plus two things the sources do not say (gateway/payment pool limits, whether CFG-2231 was reviewed). Minor: the 做得好 remark (L119) and the per-risk severity glyphs carry a basis but no explicit confidence."
+    },
+    {
+      "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (verdict, decisions, top risks, the file path, where to start) and does not paste the document",
+      "passed": true,
+      "evidence": "final_reply.md (about 2 KB) carries: the verdict '🟡 故障已恢复，但让它发生的缺口还没补上' with a two-sentence bottom line; '🧭 需要张伟在下个迭代排期前决定先做哪些改进项' with 17 vs about 10 人天 and the recommended 9-人天 set (A2 后排); three top risks; the file location (outputs folder: report.md, report.assets/services.png and .dot, user_notes.md); and '先读：开头的一屏概览，只做决定的话读到第 4 节'. It adds a short list of the four §5 conflicts and two assumptions, but does not paste the document."
+    },
+    {
+      "text": "F4 Language: the document, its headings, labels and diagram text are in Chinese, the language of the request, and no glyph shows as an empty box (look at the diagram image)",
+      "passed": true,
+      "evidence": "Title, metadata line, every heading, table header, caption, zone and block labels and summaries are in Chinese; the diagram text is Chinese (配置中心, 平台组, 推送, 重试(未核实), 连接池上限被改成 20…). Latin text is limited to identifiers (CFG-2231, P99, SLO, CODEOWNERS, service ids in the edge list). Image inspected: no empty glyph boxes."
+    },
+    {
+      "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+      "passed": true,
+      "evidence": "mechanical.json covers report.md (the only Markdown deliverable; no report.*.md sibling exists, user_notes.md is the executor's notes): blockers 0, majors 0, minors 0, gate passed = true. My re-run of check_doc.py --json on report.md gave the same result (25 internal links, 1 image, 3 details blocks, panel_words 283, human_zone_words 2480)."
+    },
+    {
+      "text": "Root cause and factors right: CFG-2231 changed the order-service connection pool limit from 200 to 20 (meant for test only, applied to the global default); the config centre had no value-range validation; the push had no canary; the 5 s latency alert threshold was too lax; the runbook lacked a check of recent config changes; payment retries without backoff amplified the failure",
+      "passed": true,
+      "evidence": "All six present and correct. L10/L51/L80: CFG-2231 changed the order-service pool limit 200→20, meant for the test environment only but applied to the global default. §2 table (L84-92): row 2 config center has no value-range validation (A1); row 4 pushed all at once with no canary/灰度 (A2); row 5 latency alert threshold 5 s too lax (A3); row 6 runbook lacks '先查最近的配置变更' (A4); row 7 payment retries to order-service without backoff (A5; L54 says the retries drove CPU to 90%). The report adds two more links (no mandatory two-person review, labelled as inference; no per-environment defaults, from chat 15:03) without contradicting the sources."
+    },
+    {
+      "text": "Impact right: 105 minutes (14:02 to 15:47), about 3,800 failed orders, about 1,200 affected users, availability down from 99.97% to 99.93% against a 99.95% SLO",
+      "passed": true,
+      "evidence": "L2/L10 '105 分钟', '约 3,800 笔订单失败、1,200 位用户受影响'; §1 L57-61 '约 3,800 笔订单失败，约 1,200 位用户受影响' and '当月可用性从 99.97% 降到 99.93%，低于 99.95% 的 SLO'. The 14:02 to 15:47 window is carried by the §3 phase table (L106 '14:02–14:09' … L111 '15:25–15:47 … 15:47 错误率低于 0.1%，宣布结束', summing to 105); it is never stated as one '14:02 至 15:47' sentence, but nothing is wrong or missing."
+    },
+    {
+      "text": "Decision for the tech lead: the panel asks Zhang Wei to prioritise the six follow-ups A1-A6, notes that they total about 17 person-days against about 10 available, and recommends which to do first",
+      "passed": true,
+      "evidence": "Panel L16: '张伟 在下个迭代排期前决定先做哪些改进项：6 项估时相加 17 人天，迭代约 10 人天。建议先做 A4 手册、A6 评审、A3 告警、A1 校验、A5 退避（共 9 人天），A2 灰度推送（8 人天）后排，详见第 4 节。' Checks: 3+8+0.5+0.5+4+1 = 17 versus timeline.md's 'about 10 person-days'; the recommended five total 9, leaving 1 as buffer (§4 L147). §4 also gives the A2-first alternative."
+    },
+    {
+      "text": "Raw chat log preserved: the chat excerpt is kept in the archive part or a linked file, not in the human zone, as the user asked",
+      "passed": true,
+      "evidence": "The chat is in archive block B (L202-240), inside a collapsed `<details>` in the archive zone; none of it is in the human zone. I extracted the 28 lines of the code block (L210-237) and compared them with fixtures/postmortem-zh/chat-log.txt: identical text and order."
+    },
+    {
+      "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+      "passed": true,
+      "evidence": "Recall 6/6 = 100%. Recovered: K1, K2, K3, K4, K5, K6. Missed: none."
+    }
+  ],
+  "summary": {
+    "passed": 22,
+    "failed": 1,
+    "total": 23,
+    "pass_rate": 0.96
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "errors_encountered": 0,
+    "output_chars": 0,
+    "transcript_chars": 0,
+    "files_created": [
+      "report.assets/services.dot",
+      "report.assets/services.png",
+      "report.md",
+      "user_notes.md"
+    ],
+    "note": "Copied from outputs/metrics.json. The harness reports no tool-call breakdown, token counts or transcript (none exists)."
+  },
+  "timing": {
+    "executor_duration_seconds": 1822.3,
+    "total_duration_seconds": 1822.3,
+    "note": "executor estimate from file timestamps"
+  },
+  "claims": [
+    {
+      "claim": "Final reply: the checker run reports 0 Blockers and 0 Majors for report.md",
+      "type": "process",
+      "verified": true,
+      "evidence": "Re-ran check_doc.py --json on report.md: blockers 0, majors 0, minors 0; matches mechanical.json."
+    },
+    {
+      "claim": "The 28 raw chat lines in block B are unchanged and in order ('一字未改，已逐行核对')",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Extracted the code block at report.md L210-237 and compared it with fixtures/postmortem-zh/chat-log.txt: 28 lines each, identical text and order."
+    },
+    {
+      "claim": "The diagram is 1512x661 px and shows no empty glyph boxes",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Image size read with System.Drawing: 1512 x 661. Viewed at full size and at an 800 px downscale: every Chinese label renders and nothing overlaps."
+    },
+    {
+      "claim": "The glance panel was cut from 504 to 283 words after the first checker run",
+      "type": "process",
+      "verified": false,
+      "evidence": "The final 283 is confirmed (mechanical.json and my re-run). The 504-word first draft is not available and no transcript exists, so the before-value cannot be verified."
+    },
+    {
+      "claim": "§5 row 1: timeline.md says payment CPU stayed above 90% for about 40 minutes, but the chat timestamps give 69 minutes (14:22 to 15:31)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "timeline.md: '持续约 40 分钟'; chat-log.txt 14:22 '支付服务 CPU 90% 了' and 15:31 '支付服务 CPU 也降下来了'; 14:22 to 15:31 = 69 minutes."
+    },
+    {
+      "claim": "§3/§5 row 2: the database direction took 8 minutes in the chat (14:27 to 14:35), not the timeline's 'about 25 minutes'",
+      "type": "factual",
+      "verified": true,
+      "evidence": "chat-log.txt 14:27 '先看是不是数据库的问题' and 14:35 'DBA-老吴: 数据库连接数、慢查询都正常，不是数据库' = 8 minutes; timeline.md says '这个方向浪费了约 25 分钟'."
+    },
+    {
+      "claim": "services.csv has no payment-service → order-service call (only order → payment)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "services.csv: payment-service calls notification-service only; order-service calls payment-service;inventory-service;user-service."
+    },
+    {
+      "claim": "The six phases in §3 sum to 105 minutes, and the person-day arithmetic in §4 (17 / 9 / 10 / 11) is right",
+      "type": "factual",
+      "verified": true,
+      "evidence": "7+11+38+12+15+22 = 105; A1..A6 = 3+8+0.5+0.5+4+1 = 17; A4+A6+A3+A1+A5 = 0.5+1+0.5+3+4 = 9; A2+A4+A6+A3 = 10; 周杰's A1+A2 = 3+8 = 11."
+    },
+    {
+      "claim": "§4 item 3: lowering the alert threshold to 2 s would move the alert earlier by 'at most about 4 minutes'",
+      "type": "quality",
+      "verified": false,
+      "evidence": "Labelled as inference, but 'at most' is not a valid bound: the sources only say P99 passed 3 s at 14:05; when it crossed 2 s is unknown, so the gain could be larger (or about 0 if a 5-minute persistence rule applies, which §5 row 3 itself raises)."
+    },
+    {
+      "claim": "§5 row 3: the alert text '已持续 5 分钟' implies P99 had been above 5 s since about 14:04",
+      "type": "factual",
+      "verified": true,
+      "evidence": "14:09 minus 5 minutes = 14:04 is correct and the report hedges it ('按字面', '可能'). It sits awkwardly with timeline.md's first 'P99 超过 3 秒' at 14:05, a tension the report does not call out."
+    },
+    {
+      "claim": "Root-cause confidence is high because the thread dump, the config value and the recovery after rollback agree (L80)",
+      "type": "quality",
+      "verified": true,
+      "evidence": "chat-log.txt 14:52 '线程栈里大部分线程都在等连接池', 14:57 '现在是 20', 15:14 '订单服务线程池开始释放了', 15:25 '延迟恢复正常'."
+    },
+    {
+      "claim": "Keeping the chat log inline departs from the skill's size rule (user_notes 2.1)",
+      "type": "process",
+      "verified": true,
+      "evidence": "SKILL.md Step 3 moves long material to a sibling file when AI-input plus archive pass about 60 lines or one block passes about 25. Here the machine zone is 93 lines (75 non-blank) and the chat block is 28 lines; no sibling Markdown file exists."
+    },
+    {
+      "claim": "The human zone is about 2,480 words, just under the 2,500-word advice",
+      "type": "quality",
+      "verified": true,
+      "evidence": "check_doc.py human_zone_words = 2480. Chinese characters count as 0.6 words, so this is about 3,700 Chinese characters (my count of CJK characters in L1-174), which is heavy for a postmortem."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+      "The raw chat log was kept inline in a collapsed block instead of a sibling evidence file (28 lines against the skill's ~25-line rule); the executor thinks inline matches the user's intent but concedes a strict reviewer could count it against A3.",
+      "The prioritisation (A4, A6, A3, A1, A5, then A2) is the executor's judgment; the effects are inferences and the A2-versus-A5 order is a close call (the A2-first alternative is laid out in §4).",
+      "The A1 caveat (one global range check cannot stop a value that is legitimate in test) is inferred from a single chat message (15:03) and may enlarge A1's 3-day estimate.",
+      "Four source conflicts are unresolved: payment CPU 'about 40 minutes' vs 69 minutes between chat timestamps; database direction 'about 25 minutes' vs 8; the alert text '已持续 5 分钟' vs the 5 s threshold explanation; the payment→order retry direction is missing from services.csv.",
+      "Assumptions: none of A1-A6 started since 10-09; the decision deadline is 'before next iteration planning'; the report date 2026-10-17 comes from the system clock; the named verifiers are the right owners.",
+      "The 🟡 verdict glyph is stretched to mean 'resolved, but the gaps are open'; the 300-word budget is ambiguous for Chinese (the executor followed the checker's 283); the document was not rendered in VS Code or Azure DevOps, so CJK heading anchors are untested in Azure DevOps."
+    ],
+    "needs_review": [
+      "§5 items 1-4 need confirmation from 赵敏 and 王磊 before the numbers are quoted.",
+      "The assumed decision deadline and the 'nothing started yet' assumption need the tech lead's confirmation.",
+      "Whether keeping the chat log inline is acceptable under A3 (see the failed expectation)."
+    ],
+    "workarounds": [
+      "Abandoned an in-image legend (Graphviz swatches distorted the layout) and used in-node status words plus the caption instead.",
+      "Added a second `<!-- zone:archive -->` marker before block C so every block starts with a marker.",
+      "Used 从这里开始 plus the 👤 glyph for the 'START HERE' loudness, since uppercase does not exist in Chinese.",
+      "Included an AI-input block although rubric A4 targets handoff documents, because the document will be updated after the decision.",
+      "Cut the glance panel from 504 to 283 words after the first checker run flagged C2 (executor-reported, unverifiable)."
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin ...; long material sits in a sibling file behind a pointer",
+        "reason": "The last clause cannot be judged consistently for this fixture: the 28-line chat log is 3 lines over the skill's ~25-line threshold, the user asked for it 'in the report', and the later assertion accepts 'archive part or a linked file'. The run's verdict hinges on that one borderline clause. Make the fixture clearly long (e.g. 60+ lines) or clearly short, add 'unless the user asked to keep it inline', and consider splitting the structural clauses from the sibling-file clause."
+      },
+      {
+        "assertion": "A1 Zones marked and ordered: ... a human zone whose heading or banner names its audience (a pointer line in the header does not count) ...",
+        "reason": "'Names its audience' is ambiguous against the skeleton's own heading ('👤 START HERE - at a glance'), which marks the zone with a glyph and an instruction instead of naming a reader group. The parenthetical rules out header pointer lines but not header metadata that names the readers (this run has one at L4). State what counts, e.g. 'the zone heading carries the human-zone glyph or says who it is for'."
+      },
+      {
+        "assertion": "B2 Order follows understanding: ... terms are defined before the first section that uses them ...",
+        "reason": "Hard to apply when the glance panel and the first chain steps use terms that a glossary inside section 1 defines a few lines later. Say whether the panel is exempt and whether a glossary placed right after the mental model satisfies the rule."
+      },
+      {
+        "assertion": "C3 Verdict, decisions and risks are complete and loud in the panel ... each decision has who, what, by when and a recommendation",
+        "reason": "C3 requires a 'by when' while C4 forbids invention, and the sources give no deadline. The run assumed 'before next iteration planning' and disclosed it only in §4 and the chat reply, not in the panel. Say what is expected (e.g. 'date not set' or mark the date as assumed in the panel)."
+      },
+      {
+        "reason": "No assertion tests that conflicts between inputs are surfaced. timeline.md says CPU stayed above 90% 'about 40 minutes' (chat: 14:22 to 15:31 = 69 min) and that the database direction 'wasted about 25 minutes' (chat: 14:27 to 14:35 = 8 min), and services.csv has no payment→order edge although the timeline says payment retries order. This run caught all three and listed them in §5, a high-value behaviour; a run that repeated the timeline's numbers silently would pass every current assertion, including 'Impact right' and E1 E2. Suggest an assertion such as 'the report flags at least two conflicts between timeline and chat and says who should verify them'."
+      }
+    ],
+    "overall": "The assertions discriminate well on structure, and the three content checks (root cause, impact, decision) are solid. Several bundle 4-6 clauses (A3, D5 D6, E1 E2), so one borderline clause decides the verdict; clarify the ambiguous wording above and add a conflict-flagging assertion. The Automatic-checks assertion cannot see length bloat: the human zone passes at 2,480 'words' but is about 3,700 Chinese characters."
+  }
+}

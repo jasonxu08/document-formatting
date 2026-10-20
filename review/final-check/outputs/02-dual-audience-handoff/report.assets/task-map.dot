@@ -1,0 +1,67 @@
+// Task map for the exports migration handoff (report.md). Regenerate from the folder that holds report.md:
+//   dot -Tpng -Gdpi=150 report.assets/task-map.dot -o report.assets/task-map.png
+// Task edges and statuses come from tasks.md ("Depends on", "Status"); Q nodes come from open-questions.md.
+// The only inferred edge is the dashed Q5 -> T8 (tasks.md marks T8 "todo", not blocked).
+digraph task_map {
+  rankdir=TB; pad=0.3; nodesep=0.3; ranksep=0.6; bgcolor="white"; newrank=true;
+  graph [fontname="Arial"];
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=15, margin="0.16,0.10",
+        color="#98A2B3", fillcolor="#F2F4F7"];
+  edge [color="#667085", fontname="Arial", fontsize=13, arrowsize=0.8];
+
+  // done
+  node [fillcolor="#D1FADF", color="#12B76A"];
+  "T1" [label="T1 Job definition\ndone"];
+  "T2" [label="T2 Streaming CSV\nwriter\ndone"];
+  "T3" [label="T3 Idempotency key,\nstaging migration\ndone"];
+
+  // blocked
+  node [fillcolor="#FEE4E2", color="#D92D20"];
+  "T4" [label="T4 Migration 0042\nin production\nblocked"];
+  "T5" [label="T5 XLS above\n1M rows\nblocked"];
+  "T6" [label="T6 Pool 3 to 6\nworkers\nblocked"];
+
+  // in progress but waiting
+  node [fillcolor="#FEF0C7", color="#F79009"];
+  "T7" [label="T7 Email template\napproval, wiring\nwaiting"];
+
+  // to do
+  node [fillcolor="#F2F4F7", color="#98A2B3"];
+  "T8"  [label="T8 Map 3 unmapped\ncron jobs\nto do"];
+  "T9"  [label="T9 Per-tenant rollout\ncutover target\nTue 2026-11-10\nto do", penwidth=3, color="#101828"];
+  "T10" [label="T10 Decommission\nlegacy cron\nto do"];
+  subgraph cluster_alone {
+    label="no dependencies"; labelloc=b; labeljust=l; fontname="Arial"; fontsize=13; fontcolor="#667085";
+    color="#D0D5DD"; style="rounded,dashed";
+    "T11" [label="T11 Fix flaky\ntest_export_cancel\nto do, low priority"];
+  }
+
+  // answers needed from people
+  node [shape=ellipse, style="filled", fillcolor="white", color="#344054", penwidth=1.6, margin="0.10,0.06"];
+  "Q4" [label="Q4 Book a DBA slot\n(ticket DBA-5521)"];
+  "Q1" [label="Q1 XLS policy\n(asked Dana)"];
+  "Q2" [label="Q2 Budget for\n6 workers"];
+  "Q3" [label="Q3 Marketing\napproval"];
+  "Q5" [label="Q5 Owners of the\n3 cron jobs"];
+
+  // task dependencies: an arrow means "must finish first"
+  "T1" -> "T2"; "T1" -> "T3";
+  "T3" -> "T4"; "T2" -> "T5"; "T2" -> "T6"; "T2" -> "T7";
+  "T4" -> "T9"; "T5" -> "T9"; "T6" -> "T9"; "T7" -> "T9";
+  "T8" -> "T10"; "T9" -> "T10";
+
+  // answers that unblock a task
+  "Q4" -> "T4" [color="#D92D20", penwidth=1.6];
+  "Q1" -> "T5" [color="#D92D20", penwidth=1.6];
+  "Q2" -> "T6" [color="#D92D20", penwidth=1.6];
+  "Q3" -> "T7" [color="#F79009", penwidth=1.6];
+  "Q5" -> "T8" [style=dashed, color="#667085", label=" owner needed\n (inferred)"];
+
+  // layout only: left-to-right order and rows
+  {rank=same; "T3" -> "T2" [style=invis]}
+  "T3" -> "Q4" [style=invis]; "T2" -> "Q1" [style=invis]; "T2" -> "Q2" [style=invis]; "T2" -> "Q3" [style=invis];
+  {rank=same; "Q4" -> "Q1" -> "Q2" -> "Q3" [style=invis]}
+  {rank=same; "T4" -> "T5" -> "T6" -> "T7" -> "Q5" [style=invis]}
+  {rank=same; "T9" -> "T8" [style=invis]}
+  {rank=same; "T11" -> "T10" [style=invis]}
+}

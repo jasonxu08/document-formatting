@@ -1,0 +1,10 @@
+service,owner_team,criticality,staging_state,rollback_path,depends_on_count,depends_on,direct_dependents_count,direct_dependents,transitive_dependents_count,in_cycle_with
+gateway,Platform,critical,pass,yes,4,auth-service;catalog-service;share-service;connector-service,0,,0,
+auth-service,Identity,critical,fail,no,1,user-store,6,gateway;catalog-service;share-service;connector-service;map-service;notify-service,6,
+user-store,Identity,critical,not tested,no,0,,1,auth-service,7,
+catalog-service,Data,high,pass,yes,3,auth-service;search-index;map-service,4,gateway;share-service;connector-service;map-service,4,map-service
+share-service,Data,high,pass,yes,3,auth-service;catalog-service;notify-service,1,gateway,1,
+connector-service,Integration,medium,pass,yes,2,auth-service;catalog-service,1,gateway,1,
+map-service,Data,medium,pass,yes,2,auth-service;catalog-service,1,catalog-service,4,catalog-service
+search-index,Data,medium,pass,yes,0,,1,catalog-service,5,
+notify-service,Platform,low,pass,yes,1,auth-service,1,share-service,2,

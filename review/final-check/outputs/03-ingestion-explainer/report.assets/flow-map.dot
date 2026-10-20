@@ -1,0 +1,44 @@
+// Figure 1 of report.md: how one upload moves through the platform.
+// Every node and edge comes from architecture-notes.md ("The pieces", "Failure handling"). Nothing is inferred.
+// Encoding: white boxes = the three stage components, grey boxes = other services, cylinders = stores,
+// ovals = people, blue = Catalog (focal), orange = expected failure path, red = infrastructure failure path.
+// Render: dot -Tpng -Gdpi=150 report.assets/flow-map.dot -o report.assets/flow-map.png
+digraph flow {
+  rankdir=TB; pad=0.25; nodesep=0.40; ranksep=0.50; bgcolor="white"; newrank=true;
+  graph [fontname="Arial"];
+  node [shape=box, style="rounded,filled", fillcolor="#F2F4F7", color="#98A2B3",
+        fontname="Arial", fontsize=17, margin="0.18,0.12"];
+  edge [color="#667085", fontname="Arial", fontsize=15, arrowsize=0.9];
+
+  "Customer"         [shape=ellipse, style=filled];
+  "On-call engineer" [shape=ellipse, style=filled, fillcolor="#FEE4E2", color="#D92D20"];
+
+  "Uploader API"      [label="Uploader API\n(stage 1)",      fillcolor="#FFFFFF", color="#475467", penwidth=1.6];
+  "Validation Worker" [label="Validation Worker\n(stage 2)", fillcolor="#FFFFFF", color="#475467", penwidth=1.6];
+  "Transform Worker"  [label="Transform Worker\n(stage 3)",  fillcolor="#FFFFFF", color="#475467", penwidth=1.6];
+
+  "Message Queue" [label="Message Queue\n(at-least-once)"];
+  "DLQ"           [label="Dead-letter queue\n(DLQ)", fillcolor="#FEE4E2", color="#D92D20"];
+
+  "Curated Zone"     [shape=cylinder, label="Curated Zone\n(queryable tables)"];
+  "Quarantine Store" [shape=cylinder, fillcolor="#FEF0C7", color="#DC6803"];
+  "Catalog"          [shape=cylinder, label="Catalog\nsource of truth for status", fillcolor="#D1E9FF", color="#1570EF", penwidth=2.4];
+
+  // keep stage 2 left of stage 3, with the Curated Zone beside stage 3
+  { rank=same; "Validation Worker" -> "Transform Worker" -> "Curated Zone" [style=invis]; }
+
+  "Customer"          -> "Uploader API"      [label=" uploads file"];
+  "Uploader API"      -> "Message Queue"     [label=" queues validate"];
+  "Message Queue"     -> "Validation Worker" [label=" delivers validate"];
+  "Validation Worker" -> "Message Queue"     [label=" queues transform\n (file passed)", constraint=false];
+  "Message Queue"     -> "Transform Worker"  [label=" delivers transform"];
+  "Transform Worker"  -> "Curated Zone"      [label=" writes tables"];
+
+  "Validation Worker" -> "Quarantine Store"  [label=" copies failed\n file", color="#DC6803", fontcolor="#B54708"];
+  "Message Queue"     -> "DLQ"               [label=" dead-letters after\n 3 failed attempts", color="#D92D20", fontcolor="#B42318"];
+  "DLQ"               -> "On-call engineer"  [label=" pages", color="#D92D20", fontcolor="#B42318"];
+
+  "Uploader API"      -> "Catalog" [label="sets received", color="#1570EF", fontcolor="#175CD3"];
+  "Validation Worker" -> "Catalog" [label="sets validated\nor quarantined", color="#1570EF", fontcolor="#175CD3"];
+  "Transform Worker"  -> "Catalog" [label="sets published", color="#1570EF", fontcolor="#175CD3"];
+}

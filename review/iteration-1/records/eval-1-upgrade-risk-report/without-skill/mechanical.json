@@ -1,0 +1,32 @@
+{
+  "file": "<workspace>\\iteration-1\\eval-1-upgrade-risk-report\\without_skill\\run-1\\outputs\\report.md",
+  "errors": [],
+  "warnings": [
+    {
+      "line": 0,
+      "message": "no <!-- zone:... --> markers; human-read and machine/archive content are not marked"
+    },
+    {
+      "line": 1,
+      "message": "fewer than 2 in-document links near the top; add a 'Read next' path"
+    },
+    {
+      "line": 243,
+      "message": "heading 'Appendix B: Q3 incident analysis' is a link target but contains punctuation or emoji; its anchor may differ between viewers - use plain words and digits"
+    },
+    {
+      "line": 284,
+      "message": "heading 'Appendix C: Key dates' is a link target but contains punctuation or emoji; its anchor may differ between viewers - use plain words and digits"
+    }
+  ],
+  "info": [],
+  "stats": {
+    "lines": 298,
+    "headings": 19,
+    "internal_links": 3,
+    "images": 3,
+    "diagram_blocks": 0,
+    "details_blocks": 0,
+    "zones": []
+  }
+}

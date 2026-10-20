@@ -1,0 +1,39 @@
+digraph services {
+  graph [rankdir=LR, pad=0.3, nodesep=0.4, ranksep=0.7, bgcolor="white", fontname="Microsoft YaHei"];
+  node  [shape=box, style="rounded,filled", fillcolor="#F2F4F7", color="#98A2B3",
+         fontname="Microsoft YaHei", fontsize=15, margin="0.2,0.1"];
+  edge  [color="#98A2B3", fontname="Microsoft YaHei", fontsize=13, arrowsize=0.8];
+
+  // 节点: services.csv 的 8 个服务, 小字是 owner 列(负责团队)
+  "config-center"        [label=<<table border="0" cellborder="0" cellspacing="0" cellpadding="2"><tr><td><b>配置中心</b></td></tr><tr><td><font point-size="11" color="#667085">平台组</font></td></tr><tr><td><font point-size="12" color="#6938EF"><b>CFG-2231 的来源</b></font></td></tr></table>>,
+                          fillcolor="#EBE9FE", color="#6938EF", penwidth=2];
+  "gateway"              [label=<<table border="0" cellborder="0" cellspacing="0" cellpadding="2"><tr><td><b>网关</b></td></tr><tr><td><font point-size="11" color="#667085">平台组</font></td></tr></table>>];
+  "order-service"        [label=<<table border="0" cellborder="0" cellspacing="0" cellpadding="2"><tr><td><b>订单服务</b></td></tr><tr><td><font point-size="11" color="#667085">交易组</font></td></tr><tr><td><font point-size="12" color="#D92D20"><b>连接池上限</b></font></td></tr><tr><td><font point-size="12" color="#D92D20"><b>被改成 20</b></font></td></tr></table>>,
+                          fillcolor="#FEE4E2", color="#D92D20", penwidth=3];
+  "payment-service"      [label=<<table border="0" cellborder="0" cellspacing="0" cellpadding="2"><tr><td><b>支付服务</b></td></tr><tr><td><font point-size="11" color="#667085">交易组</font></td></tr><tr><td><font point-size="12" color="#B54708"><b>重试风暴</b></font></td></tr><tr><td><font point-size="12" color="#B54708"><b>CPU 超过 90%</b></font></td></tr></table>>,
+                          fillcolor="#FEF0C7", color="#DC6803", penwidth=2];
+  "inventory-service"    [label=<<table border="0" cellborder="0" cellspacing="0" cellpadding="2"><tr><td><b>库存服务</b></td></tr><tr><td><font point-size="11" color="#667085">交易组</font></td></tr></table>>];
+  "user-service"         [label=<<table border="0" cellborder="0" cellspacing="0" cellpadding="2"><tr><td><b>用户服务</b></td></tr><tr><td><font point-size="11" color="#667085">账号组</font></td></tr></table>>];
+  "notification-service" [label=<<table border="0" cellborder="0" cellspacing="0" cellpadding="2"><tr><td><b>通知服务</b></td></tr><tr><td><font point-size="11" color="#667085">平台组</font></td></tr></table>>];
+  "cache"                [label=<<table border="0" cellborder="0" cellspacing="0" cellpadding="2"><tr><td><b>缓存</b></td></tr><tr><td><font point-size="11" color="#667085">平台组</font></td></tr></table>>];
+
+  { rank=same; "config-center"; "gateway"; }
+
+  // 调用: services.csv 的 calls 列, 含义相同, 不逐条标注
+  "gateway"           -> "order-service";
+  "gateway"           -> "user-service";
+  "order-service"     -> "payment-service";
+  "order-service"     -> "inventory-service";
+  "order-service"     -> "user-service";
+  "payment-service"   -> "notification-service";
+  "inventory-service" -> "cache";
+  "user-service"      -> "cache";
+
+  // 14:02 配置推送: timeline.md 写明推送到订单服务/支付服务/网关, services.csv 列出同样三个目标
+  "config-center" -> "gateway"         [label="推送   ", color="#D92D20", fontcolor="#D92D20", penwidth=2.2];
+  "config-center" -> "order-service"   [label="推送", color="#D92D20", fontcolor="#D92D20", penwidth=2.2];
+  "config-center" -> "payment-service" [label="推送", color="#D92D20", fontcolor="#D92D20", penwidth=2.2];
+
+  // 重试: 只见于 timeline.md 和群聊 14:22, 不在 services.csv, 未核实, 画虚线
+  "payment-service" -> "order-service" [label="重试(未核实)", style=dashed, color="#DC6803", fontcolor="#DC6803", penwidth=2];
+}

@@ -1,0 +1,22 @@
+{
+  "eval_id": 2,
+  "eval_name": "dual-audience-handoff",
+  "prompt": "I'm on leave from tomorrow for three weeks (back 7 Nov). My notes on the exports migration are in <workspace>\\fixtures\\handoff\\ (work log, task list, open questions). Turn them into a handoff document. My manager Dana will skim it to see where things stand and what she needs to decide, and an AI coding agent will pick up the remaining work next week from this same document, so it has to be able to continue without asking me anything.",
+  "assertions": [
+    "Zones labeled: the document labels a part for human reading and a separate part for AI-input / archive / evidence material, using explicit headings or banners that name the audience (a bare 'Appendix' does not count), and the two parts do not interleave",
+    "Human part highlighted: the part written for humans is marked by a prominent banner or heading that says it is for people or where to start (for example an emoji-led 'start here' heading), so a reader cannot miss it",
+    "Glance first: the first section after the title is a one-screen overview that states the conclusion itself (what is true or what to do), not merely what the document covers; no background, method or table of contents comes before it",
+    "Reading path: within the first screen (about 60 lines) there is a reading path or 'read next' list with at least 3 working links to sections, each saying what the reader gets",
+    "Links work: every in-document link and every image path resolves (scripts/check_doc.py reports no ERROR lines)",
+    "Relationship diagram: the eleven tasks T1-T11 and their dependencies are shown as a diagram (embedded image or Mermaid) that includes all eleven tasks and draws the dependency edges",
+    "Diagram portable: the diagram a human sees first is an embedded image file that exists on disk (PNG or SVG), not only a Mermaid or other code block, because the reader's VS Code preview and Azure DevOps repo pages do not render Mermaid",
+    "Diagram readable: the diagram has a caption or how-to-read line, and viewing the rendered image shows legible labels with no overlapping or cut-off text",
+    "Evidence out of the way: bulky raw material (the chronological log, dead-end stories, long command listings) is not in the part written for Dana; it sits in the archive/machine part or in a linked file",
+    "Headings tell the story: at least half of the body headings state a claim, finding or question rather than a generic topic label like 'Overview', 'Status' or 'Details'",
+    "Dana's view: the first screen says where things stand (how many of the 11 tasks are done, blocked or open) and lists the decisions Dana must make (XLS above 1M rows, pool size and its cost, DBA window, email template, owner of the 3 cron jobs) with options or a recommendation",
+    "Cutover risk: states that the 10 Nov cutover depends on tasks T4-T7 (the blocked ones) and is at risk if decisions slip past about 30 Oct",
+    "Agent-ready: the agent-facing part holds exact commands and paths from the log (for example pytest tests/exports -q, the staging deploy command, jobs/export-dataset.yaml) and an ordered next-steps list that respects the task dependencies",
+    "Guardrails: the agent-facing part says what not to do (do not retry the in-memory or OFFSET approaches, do not apply migration 0042 in production without the DBA window, do not copy secrets from the vault path)",
+    "No leakage: the part written for Dana contains no shell commands or code blocks, and the dead-end stories (OOM, OFFSET paging) are archived rather than narrated in it"
+  ]
+}

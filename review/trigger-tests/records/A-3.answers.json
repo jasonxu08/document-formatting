@@ -1,0 +1,26 @@
+{
+  "answers": [
+    {"id": 1, "skills": ["document-formatting"], "why": "Large findings write-up for managers needing prioritized decisions; matches document-formatting."},
+    {"id": 2, "skills": ["document-formatting"], "why": "Root-cause write-up is a large report; human-first formatting applies."},
+    {"id": 3, "skills": ["document-formatting"], "why": "Design/decision doc with options and recommendation for board review."},
+    {"id": 4, "skills": ["pr-reviewer", "document-formatting"], "why": "PR review skill first, then organized review-findings report formatting."},
+    {"id": 5, "skills": ["document-formatting"], "why": "Investigation findings and decisions for non-technical reader; large human-read document."},
+    {"id": 6, "skills": ["document-formatting"], "why": "Handoff note for humans and an agent; separates reading material from AI input."},
+    {"id": 7, "skills": ["document-formatting"], "why": "Test report with verdict for go/no-go decision; large report to read."},
+    {"id": 8, "skills": ["document-formatting"], "why": "Explainer doc with six related components; needs relationship diagram."},
+    {"id": 9, "skills": ["document-formatting"], "why": "Security assessment with findings by severity is a large assessment report."},
+    {"id": 10, "skills": ["document-formatting"], "why": "Detailed team post-mortem report with multi-service call relationships needing a diagram."},
+    {"id": 11, "skills": ["docx"], "why": "Word document conversion and styling; document-formatting explicitly excludes this."},
+    {"id": 12, "skills": [], "why": "Tiny README typo fix; not writing a large document."},
+    {"id": 13, "skills": [], "why": "Single paragraph rewrite; not a large document."},
+    {"id": 14, "skills": [], "why": "Small diagram addition with three entities to an existing doc."},
+    {"id": 15, "skills": [], "why": "Writing a unit test; no document or skill matches."},
+    {"id": 16, "skills": ["pdf"], "why": "Script generating PDF output; the pdf skill matches, not document writing."},
+    {"id": 17, "skills": ["xlsx"], "why": "Creating an Excel spreadsheet with a chart."},
+    {"id": 18, "skills": [], "why": "Proofreading only, explicitly no restructuring; not writing a large document."},
+    {"id": 19, "skills": [], "why": "Short three-bullet chat summary; not a large document."},
+    {"id": 20, "skills": ["pdf"], "why": "Extracting tables from an existing PDF file."},
+    {"id": 21, "skills": ["document-formatting"], "why": "Restructuring a long doc: separate archive, surface decisions and open items."},
+    {"id": 22, "skills": ["document-formatting"], "why": "Rewrite long post-mortem into glanceable overview plus detail for different readers."}
+  ]
+}

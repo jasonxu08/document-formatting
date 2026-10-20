@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "dir": "01-upgrade-risk-report",
+    "eval": "eval-1-upgrade-risk-report",
+    "short": "Upgrade risk",
+    "title": "Upgrade risk report",
+    "kind": "Decision report",
+    "language": "English",
+    "summary": "An engineering lead must decide by Friday whether to upgrade nine services before a code freeze or push everything to January. The input is the platform team's notes, a service dependency inventory and a quarter of incident records.",
+    "inputs": [
+      ["upgrade-notes.md", "the platform team's notes: staging results, estimates, constraints"],
+      ["services.csv", "nine services and their dependencies"],
+      ["incidents-q3.csv", "36 incident records from last quarter"]
+    ],
+    "look_for": [
+      "A verdict with a glyph, a confidence line and its basis, then three decisions that each say who, what, by when and what is recommended.",
+      "A ranked risk table with a severity glyph and a link from every risk to the section that handles it.",
+      "A dependency map of the nine services with the hub highlighted, built as an image so it renders everywhere, with its source file beside it.",
+      "The raw incident rows and checksummed copies of the inputs in a collapsed archive zone, because the user asked to keep the supporting data."
+    ]
+  },
+  {
+    "id": 2,
+    "dir": "02-dual-audience-handoff",
+    "eval": "eval-2-dual-audience-handoff",
+    "short": "Handoff",
+    "title": "Dual-audience handoff",
+    "kind": "Status and handoff",
+    "language": "English",
+    "summary": "An engineer goes on leave. A manager will skim the handoff; an AI agent will continue the work from it. The input is a work log, a task list and a list of open questions.",
+    "inputs": [
+      ["work-log.md", "the engineer's running notes"],
+      ["tasks.md", "eleven tasks with dependencies"],
+      ["open-questions.md", "six questions that need other people"]
+    ],
+    "look_for": [
+      "One document with two readers: a human panel for the manager (status, blockers, decisions) and a self-sufficient AI-input block for the agent (paths, commands, constraints, what not to do, definition of done).",
+      "A task dependency graph that shows which blockers stop which tasks.",
+      "Decisions that say when the source gives no deadline instead of inventing one, and suggested dates marked as suggested."
+    ]
+  },
+  {
+    "id": 3,
+    "dir": "03-ingestion-explainer",
+    "eval": "eval-3-ingestion-explainer",
+    "short": "Explainer",
+    "title": "Platform explainer for a new hire",
+    "kind": "Explainer",
+    "language": "English",
+    "summary": "A new engineer needs to understand how a file upload becomes a published table on an ingestion platform with eleven components. The input is architecture notes and an onboarding checklist.",
+    "inputs": [
+      ["architecture-notes.md", "an unedited brain dump: components, concepts, numbers, failure handling, gotchas"],
+      ["onboarding-checklist.md", "what the new hire should do in week one"]
+    ],
+    "look_for": [
+      "No verdict to invent: the first screen opens with the mental model as one sentence, then a picture and the handful of things that matter, each with the trap if it is missed.",
+      "A glossary placed before the first section that uses its terms (concepts before flows).",
+      "A component map with eleven nodes that stays legible because it is split into an overview and a zoom."
+    ]
+  },
+  {
+    "id": 4,
+    "dir": "04-postmortem-zh",
+    "eval": "eval-4-postmortem-zh",
+    "short": "Post-mortem (zh)",
+    "title": "Post-mortem in Chinese",
+    "kind": "Root-cause report",
+    "language": "Chinese",
+    "summary": "A production outage has been handled. The tech lead must decide which follow-up items to do first. The request, the notes and the raw chat log are all in Chinese, and the raw chat log must stay in the report.",
+    "inputs": [
+      ["timeline.md", "the incident timeline"],
+      ["services.csv", "the services involved"],
+      ["chat-log.txt", "the raw group chat during the incident"]
+    ],
+    "look_for": [
+      "The document, its headings, labels and diagram text are in the reader's language, with no empty glyph boxes in the picture (the skill documents the CJK font pitfall).",
+      "A root cause with confidence and basis, the impact, and the decision the tech lead has to take, all on the first screen.",
+      "The raw chat log preserved in a collapsed archive block."
+    ]
+  }
+]

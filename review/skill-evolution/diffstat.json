@@ -1,0 +1,22 @@
+[
+  {
+    "from": "v0.1",
+    "to": "v0.2",
+    "stat": " {a => b}/SKILL.md                          |  59 +++++---\n {a => b}/assets/skeleton.md                |  40 ++++--\n {a => b}/references/diagrams.md            |  15 +-\n /dev/null => b/references/review-rubric.md |  86 +++++++++++\n {a => b}/scripts/check_doc.py              | 382 +++++++++++++++++++++++++++++++++++--------------\n 5 files changed, 434 insertions(+), 148 deletions(-)\n"
+  },
+  {
+    "from": "v0.2",
+    "to": "v0.3",
+    "stat": " {a => b}/SKILL.md                    | 12 ++++++------\n {a => b}/assets/skeleton.md          |  5 ++++-\n {a => b}/references/diagrams.md      |  1 +\n {a => b}/references/review-rubric.md |  4 ++--\n {a => b}/scripts/check_doc.py        | 11 +++++++----\n 5 files changed, 20 insertions(+), 13 deletions(-)\n"
+  },
+  {
+    "from": "v0.3",
+    "to": "v0.4",
+    "stat": " {a => b}/SKILL.md                      |  22 ++---\n {a => b}/assets/skeleton.md            |   2 +-\n {a => b}/references/diagrams.md        |   4 +-\n {a => b}/references/review-rubric.md   |  44 +++++----\n /dev/null => b/references/rewriting.md |  43 +++++++++\n {a => b}/scripts/check_doc.py          |  26 ++++--\n /dev/null => b/scripts/source_set.py   | 259 +++++++++++++++++++++++++++++++++++++++++++++++++++++\n 7 files changed, 360 insertions(+), 40 deletions(-)\n"
+  },
+  {
+    "from": "v0.4",
+    "to": "v1.0.0",
+    "stat": " {a => b}/SKILL.md                    | 10 ++++++++--\n {a => b}/references/review-rubric.md |  6 +++---\n {a => b}/references/rewriting.md     |  5 +++--\n {a => b}/scripts/check_doc.py        |  8 ++++++--\n {a => b}/scripts/source_set.py       |  3 ++-\n 5 files changed, 22 insertions(+), 10 deletions(-)\n"
+  }
+]

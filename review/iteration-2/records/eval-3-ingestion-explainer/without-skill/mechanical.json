@@ -1,0 +1,80 @@
+{
+  "files": {
+    "report.md": {
+      "file": "<workspace>\\iteration-2\\eval-3-ingestion-explainer\\without_skill\\run-1\\outputs\\report.md",
+      "stats": {
+        "lines": 290,
+        "headings": 21,
+        "internal_links": 28,
+        "images": 2,
+        "diagram_blocks": 0,
+        "details_blocks": 0,
+        "zones": [],
+        "panel_words": 239,
+        "human_zone_words": 3331
+      },
+      "gate": {
+        "blockers": 0,
+        "majors": 4,
+        "minors": 5
+      },
+      "blockers": [],
+      "majors": [
+        {
+          "rule": "A1",
+          "line": 0,
+          "message": "no <!-- zone:... --> markers; human-read and machine/archive content are not marked (for a large document with raw material this is a Blocker)"
+        },
+        {
+          "rule": "C1",
+          "line": 1,
+          "message": "25 lines of text come before the first panel element; the conclusion should open the document, ahead of background, provenance or reading guides"
+        },
+        {
+          "rule": "D4",
+          "line": 62,
+          "message": "diagrams/pipeline.png is 2760 px wide; its labels shrink to a speck at 800 px - split the diagram or use fewer, larger labels"
+        },
+        {
+          "rule": "A2",
+          "line": 239,
+          "message": "20-row table in the human zone; summarise it and move the full table to the archive"
+        }
+      ],
+      "minors": [
+        {
+          "rule": "F2",
+          "line": 1,
+          "message": "the human zone runs to about 3331 words (advice: 2500); check that detail only some readers need has moved to the archive"
+        },
+        {
+          "rule": "E3",
+          "line": 1,
+          "message": "no date near the title; add a line with date, author or agent, status, audience"
+        },
+        {
+          "rule": "B6",
+          "line": 78,
+          "message": "heading 'Stage 2: Validate' is a link target but contains punctuation or emoji; its anchor may differ between viewers - use plain words and digits"
+        },
+        {
+          "rule": "A2",
+          "line": 176,
+          "message": "shell commands in the human zone; move them to the AI-input block unless the reader must run them"
+        },
+        {
+          "rule": "B6",
+          "line": 235,
+          "message": "heading 'Reference: settings' is a link target but contains punctuation or emoji; its anchor may differ between viewers - use plain words and digits"
+        }
+      ]
+    }
+  },
+  "gate": {
+    "blockers": 0,
+    "majors": 4,
+    "minors": 5,
+    "passed": false
+  },
+  "note": "Blocker/Major/Minor findings of scripts/check_doc.py; passed = no Blocker and at most 2 Majors."
+}

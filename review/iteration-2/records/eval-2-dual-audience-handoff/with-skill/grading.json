@@ -1,0 +1,265 @@
+{
+  "expectations": [
+    {
+      "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input or archive material sits last in its own labelled zone; nothing for people follows machine content",
+      "passed": true,
+      "evidence": "report.md L1 has <!-- zone:human -->; L2 title; L4 metadata line ends 'for Dana (manager) and the AI agent that continues the work'; L6 opens the human zone with a real zone heading, 'START HERE - at a glance' with the person glyph (the skill's own human-zone heading, not a header pointer line). The machine zone starts at L178 (<!-- zone:ai-input -->) under the heading 'Machine and archive zone - skip unless you need the evidence or are an agent continuing this work'; block A is labelled 'AI input' (L185), archive blocks B (L340-345) and C (L347-373) follow. Nothing for people follows L178 (sections 1-4 all end at L174). CLOSE CALL: the human heading names its audience only through the glyph plus 'START HERE' (Dana is named in the L4 metadata line, not in the heading); accepted because that is the skeleton heading and both zones are marked visibly and with markers. Checker reports no A1 finding."
+    },
+    {
+      "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+      "passed": true,
+      "evidence": "Block A (L183-338): plain heading 'A Handoff context for the next agent'; opening line L185 starts '[robot glyph] AI input - lets you continue the migration without asking Alex ... Supports sections 2 and 3.'; content is inside <details> L187 ... </details> L338. Block B (L341-345): 'Archive - benchmarks, XLS options, dead ends, a dated digest ... supports sections 1 to 4.' followed by the one-line pointer 'Full evidence: [report.evidence.md](report.evidence.md) - ...'; the sibling file exists, starts with <!-- zone:archive --> and an 'Archive - supports report.md' line. Block C (L347-373): 'Archive - how the task map in the panel was built ...' inside <details>. The ~150-line AI block stays inline but collapsed, which the request ('the agent will pick up the work from this same document') and the skill's stated exception allow; the long archive material is in the sibling file."
+    },
+    {
+      "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+      "passed": true,
+      "evidence": "Title at L2. 'Read next' at L37-43 has 5 section links (L39-43), each with what the reader gets and minutes, e.g. '[2 The six decisions](#2-six-decisions-are-open-and-four-of-them-block-the-rollout) - options, evidence, recommendation, 4 min' and '[A Handoff context](#a-handoff-context-for-the-next-agent) - everything an agent needs, agent only'. L45: 'Only deciding? Stop after 2. Agent? Go straight to A.' All within 45 lines of the title; all anchors resolve (my own link check: 22 links in report.md, none unresolved)."
+    },
+    {
+      "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive",
+      "passed": true,
+      "evidence": "The panel (L6-45) gives the conclusion and the task-map picture as the mental model; section 1 (L47-75) then says what exists today and holds a 'Terms' table (JobRunner, Pool, Legacy cron, Tenant flag, Idempotency key, Acme and the SLA, DBA window, Cutover, T1-T11/Q1-Q6 IDs) before the decision, calendar and assumption sections 2-4 that use those terms. The human zone is organised by decision (Q1-Q6) and forward calendar, not by what happened when; the dated work-log digest is in report.evidence.md ('Chronology lives here on purpose'). Minor: the panel itself already uses 'DBA window', 'SLA' and T/Q IDs before the glossary, but it is the pre-section glance block and the glossary follows at once."
+    },
+    {
+      "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+      "passed": true,
+      "evidence": "H1 + H2s of the human zone read alone: 'Exports migration handoff: staging works, the 10 Nov cutover needs four answers by 30 Oct' / 'START HERE - at a glance' / '1 Three of eleven tasks are done and production is untouched' / '2 Six decisions are open and four of them block the rollout' / '3 The 10 Nov date holds only if the blockers clear by 30 Oct' / '4 What is assumed and what is still unknown' - that is the argument (status, decisions, date condition, trust). Decision headings (H3) carry the answer or ask: 'Q1 XLS above 1M rows needs a policy and a ZIP of files is recommended', 'Q2 Three workers miss the Acme SLA and six are expected to fix it', 'Q4 Migration 0042 needs a booked DBA window and a person on call', 'Q6 Keep or move the 10 Nov cutover is decided on 30 Oct'. H2 '4' is a topic-style heading but still an accurate outline entry."
+    },
+    {
+      "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the conclusion itself, not what the document covers",
+      "passed": true,
+      "evidence": "L2 title, L4 one metadata line, L6 panel heading, L8 verdict 'Go with conditions - 10 Nov holds only if four blockers clear by 30 Oct', L10 'Bottom line: CSV exports run on the new JobRunner platform in staging; none of it is in production. Four of six open decisions block the rollout; Alex is on leave 17 Oct to 6 Nov and an AI agent continues unblocked work.' - a conclusion, not a statement of coverage. Checker: no C1 finding (no more than 12 text lines before the first panel element)."
+    },
+    {
+      "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words), one line per decision and per risk, and verdict, decisions and top risks fit the first screen",
+      "passed": true,
+      "evidence": "mechanical.json panel_words = 298 (my re-run of check_doc.py gives the same; my own rough count of L6-45 minus tables and image is about 301 including headings, i.e. about 300). Each of the 6 decisions is one bullet (L16-21) and each of the 5 risks one table row (L27-31) with short cells. Verdict (L8-12), decisions (L14-23) and risks (L25-31) all sit within the first 31 lines. At the limit: 298 of 300 words, reached by dropping the optional Key facts slot (user_notes.md)."
+    },
+    {
+      "text": "C3 Verdict, decisions and risks are complete and loud in the panel: the verdict has a glyph, confidence and basis; each decision has who, what, by when and a recommendation; at most 5 ranked risks, each with severity and consequence",
+      "passed": true,
+      "evidence": "Verdict L8: yellow glyph + 'Go with conditions' as a heading-sized blockquote line; L12 'Confidence: medium - Alex's notes up to 15 Oct, not re-checked; rollout duration is unestimated.' (confidence + basis). Decisions L16-21, each with who, what, by when and 'recommend:', e.g. 'Q2 - Dana decides on +1,200 USD/month for 6 workers by 30 Oct - recommend: approve', 'Q3 - Marketing approves email wording and logo by 30 Oct - recommend: Dana chases now'; invented dates are marked '(suggested)'; L23 states the cost of being wrong once. Risks L25-31: exactly 5 rows ranked by glyph (1 red, 3 orange, 1 yellow), each with an Impact column (e.g. 'No rollout can start, so 10 Nov slips') and a link to where it is handled."
+    },
+    {
+      "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+      "passed": true,
+      "evidence": "The six decisions map one-to-one to open-questions.md items 1-6 (XLS, pool size, email template, DBA window, cron owner, cutover date). The verdict rests on tasks.md (T4-T7 blocked or waiting, T9 depends on them) and open question 6 (30 Oct). Risks 1-4 trace to tasks.md/work-log (T9 dependencies; 21 min vs 15 min SLA on 2026-10-09; XLS stub on 10-06; 3 unmapped cron jobs on 10-15); risk 5 (stale or unpushed work) is grounded in the missing branch/push information and listed under 'Assumed' in section 4 (L162-166). Added dates (20 Oct, 6 Nov, Tue 27 Oct) are labelled '(suggested)'. The empty Key facts slot was omitted. Ranking is traceable through the Impact column and sources, but no explicit ranking criterion is stated. Small stretch: L28 'Monday mornings are the peak' (the log only says Acme 'runs several on Monday mornings')."
+    },
+    {
+      "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived, merged or de-duplicated numbers say so",
+      "passed": true,
+      "evidence": "Spot-checks against the fixtures, all correct: 21 min with 3 parallel exports vs 15-minute SLA (work-log 2026-10-09); +1,200 USD/month for 6 workers (work-log 10-09, open-questions 2); 30 Oct deadline (open-questions 6); 3 unmapped cron jobs (work-log 10-15); 4.2M rows (10-06); 10 Nov cutover (work-log header); 'four blockers' = T4-T7 (tasks.md). Derived items are flagged: '(suggested)' beside 20 Oct and 6 Nov in the panel; report.evidence.md has a table 'Where each number in the panel comes from' that marks '4 of 6' (Q4/T4, Q1/T5, Q2/T6, Q3/T7) as derived from the Depends-on/Status columns, '5 files' as derived (4.2M/1M rounded up; I confirmed 5 at both 1,000,000 and 1,048,576), and the suggested dates. Calendar arithmetic re-verified by script: 30 Oct Fri, 10 Nov Tue, 7 Nov Sat, DBA windows Tue 20/Thu 22/Tue 27/Thu 29 Oct and Tue 3/Thu 5 Nov, 25 Oct is the clock change."
+    },
+    {
+      "text": "D1 Diagram drawn: the eleven related tasks T1-T11 and their dependencies are shown in at least one diagram",
+      "passed": true,
+      "evidence": "report.assets/tasks.png (embedded at L33) was opened and shows T1-T11 as boxes with 12 dependency arrows (T1->T2, T1->T3, T3->T4, T2->T5/T6/T7, T4/T5/T6/T7->T9, T8->T10, T9->T10) and T11 standing alone. 11 related entities with a web of dependencies, so the diagram is warranted."
+    },
+    {
+      "text": "D2 Coverage and truth: every one of the eleven tasks appears in at least one diagram, every drawn dependency edge exists in tasks.md, and inferred edges are dashed and captioned",
+      "passed": true,
+      "evidence": "All eleven nodes T1-T11 are visible in tasks.png. Compared the 12 drawn edges (also in report.assets/tasks.dot and the block C table) with the 'Depends on' column of tasks.md: T2<-T1, T3<-T1, T4<-T3, T5<-T2, T6<-T2, T7<-T2, T9<-T4,T5,T6,T7, T10<-T8,T9, T8 and T11 none - exact match, no extra or missing edge. No edge is inferred (block C states 'none is inferred'), so no dashed edge is required; the only dashed element is the T11 node outline (low priority), not an edge. Node statuses match tasks.md (T7 'waiting', T8-T11 'to do')."
+    },
+    {
+      "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+      "passed": true,
+      "evidence": "The first (and only) diagram is the embedded PNG at L33, ![...](report.assets/tasks.png); the file exists (131,539 bytes, 1381x1056 px, inside the 500-2600 px range); stats show diagram_blocks = 0 (no Mermaid). I viewed it at native size and at a scratch 800 px-wide copy (deleted afterwards): every node label and status line reads clearly (roughly 18 px text at 800 px), boxes and arrows do not overlap, text is Latin only so there are no empty glyph boxes."
+    },
+    {
+      "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+      "passed": true,
+      "evidence": "Alt text (L33): 'Task map: three tasks are done, four blocked or waiting tasks all feed the production rollout T9, which feeds the legacy cron switch-off T10'. Caption (L35): 'Arrows mean \"must finish before\"; green is done, red is blocked on a person, amber is waiting on Marketing, grey is to do. Takeaway: the production rollout (thick outline) needs all of T4 to T7, and each needs someone else's answer.' - how to read, colour legend, relation stated once, takeaway, one focal point (T9 thick outline). Source report.assets/tasks.dot sits beside tasks.png (header gives the re-render command). Edge list: block C (L347-373) table From / Relation / To / Verified for all 12 edges plus a link to tasks.dot. Nit: the white/dashed style of T11 is not in the legend, but its label says 'to do, low priority'."
+    },
+    {
+      "text": "E1 E2 Honesty: every judgment has a confidence level and its basis; content not in the inputs (assumptions, suggestions, inferences) is labelled as such; unknowns are listed",
+      "passed": true,
+      "evidence": "The verdict carries 'Confidence: medium - Alex's notes up to 15 Oct, not re-checked; rollout duration is unestimated.' (L12). A label system is declared in section 4 (L157: 'Alex' / 'derived' / 'suggested') and applied: Q2 fallback '(inferred)', Q4 slots 'derived', Q5 '(inferred, not checked)', Q6 '(suggested, not in the notes)', section 3 table 'Basis' column, block A 'Done when (suggested)', 'suggested pre-flight, not in Alex's notes', 'Assumption: the notes name no approver, so Dana is it', Rule 12 '(suggested; ...)'. Unknowns are listed: section 4 'Unknown, and it could change a decision' (4 bullets), block A 'Not in the notes' (10 bullets), and report.evidence.md flags that the 5M-row/1-worker and 4.2M-row/3-worker runs are not comparable and that the 6-worker case was never measured. CLOSE CALL: some procedural additions in block A (rules 5, 6, 13; steps 6-8) are not individually marked as suggested, and risk severities carry no separate confidence; the overall verdict and every recommendation do carry basis."
+    },
+    {
+      "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (verdict, decisions, top risks, the file path, where to start) and does not paste the document",
+      "passed": true,
+      "evidence": "final_reply.md (about 270 words): verdict 'Go with conditions' with the 10 Nov / 30 Oct condition; six one-line decisions Q1-Q6 with dates and recommendations; three top risks (blockers wait on people, 3 workers miss the 15-minute SLA at 21 min, XLS above 1M rows is a stub); 'Where to read: report.md has the glance panel first. Dana can stop after section 2. The agent goes straight to block A ...'; 'Files are in outputs: report.md, report.evidence.md, ...'; plus brief 'Before you leave' and 'What I assumed' notes. It does not paste the document. The path is given as the relative folder 'outputs' plus the file name, not an absolute path."
+    },
+    {
+      "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+      "passed": true,
+      "evidence": "mechanical.json gate.passed = true: report.md 0 Blocker / 0 Major / 0 Minor; report.evidence.md 0 / 0 / 1 (informational A1 Minor 'machine/archive-only file: human-zone rules skipped'). I re-ran scripts/check_doc.py on both files and got identical output. Totals: 0 Blockers, 0 Majors."
+    },
+    {
+      "text": "Dana's view: the panel says where things stand (how many of the 11 tasks are done, blocked and open) and lists the decisions she must make (XLS above 1M rows, pool size and its cost, DBA window, email template, owner of the 3 cron jobs), each with an option or a recommendation",
+      "passed": true,
+      "evidence": "Where things stand: L8/L10 'none of it is in production', 'four blockers'; the panel picture (L33) labels every one of the 11 tasks with its status (3 'done', 3 'blocked', 1 'waiting: Marketing', 4 'to do'), the alt text says 'three tasks are done, four blocked or waiting tasks', and the first heading under the panel (L47) says 'Three of eleven tasks are done and production is untouched'. Counts match tasks.md (T1-T3 done; T4-T6 blocked, T7 in progress waiting; T8-T11 todo). Decisions L16-21: XLS above 1M rows (recommend ZIP of files), +1,200 USD/month for 6 workers (recommend approve), email wording and logo (Marketing; recommend Dana chases now), DBA window for 0042 (recommend Tue 27 Oct), owner of the 3 unmapped cron jobs (recommend agent investigates first), plus the cutover keep/move call - each with a recommendation. CLOSE CALL: the open (to do) count and the total of 11 are carried by the picture and the L47 heading, not by a prose tally inside the panel text."
+    },
+    {
+      "text": "Cutover risk: states that the 10 Nov cutover depends on tasks T4 to T7 and slips if the decisions land after about 30 Oct",
+      "passed": true,
+      "evidence": "Verdict L8: '10 Nov holds only if four blockers clear by 30 Oct'; risk row L27: 'Four blockers wait on people, not on code | No rollout can start, so 10 Nov slips'; caption L35: 'the production rollout (thick outline) needs all of T4 to T7'; H2 '3 The 10 Nov date holds only if the blockers clear by 30 Oct'; Q6 (L125): 'The rollout (T9) cannot start until T4 to T7 are done, and Alex's notes put the date at risk if decisions slip past 30 Oct.' Matches open-questions.md item 6 and the T9 row of tasks.md."
+    },
+    {
+      "text": "Agent-ready: the AI-input part holds exact commands and paths from the log (for example pytest tests/exports -q, the staging deploy command, jobs/export-dataset.yaml) and an ordered next-steps list that respects the task dependencies",
+      "passed": true,
+      "evidence": "Block A contains, verbatim from the log: 'pytest tests/exports -q', './scripts/deploy.ps1 -Env staging -Service exports-runner', 'docker compose up -d postgres', 'python -m exports.cli run --dataset demo --format csv --rows 100000', 'kubectl get pods -n exports'; paths jobs/export-dataset.yaml, src/exports/streaming_csv.py, src/exports/xls_writer.py, migrations/0042_export_runs.sql, templates/export_ready.html, legacy/crontab.txt, docs/cron-mapping.md, with the repo root stated once (L185). Ordered steps L254-269: 1-5 need no decision (checks, T8, T4 prep, T11, optional dashboards); 6-9 are triggered by answers (T5, T6, T7, T4); step 10 'T4 to T7 done and Dana's written go-ahead: do T9'; step 11 'T8 and T9 done and ...: do T10' - consistent with every Depends-on in tasks.md. The Task board (L234-250) mirrors tasks.md statuses and dependencies."
+    },
+    {
+      "text": "Guardrails and protocol: the AI-input part says what not to do (no in-memory or OFFSET retries, no migration 0042 in production outside the DBA window, no copying secrets) and what to do while decisions are open and where answers are recorded",
+      "passed": true,
+      "evidence": "Rules L271-285: rule 7 'Dead ends, do not retry: loading all rows into memory before writing ... and LIMIT/OFFSET paging'; rule 8 'Never copy production secrets (kv://nimbus/exports/prod/*) anywhere' (also in Mission L192); rule 1 'Do not run a production action yourself (migration, deploy, tenant switch, pool resize, cron change) without Dana's written OK. T4 is run by a DBA in the window', with step 9 'a human DBA applies migration 0042 in the window (T4)' and rule 3 (0042 is staging only) - this covers 'no 0042 in production outside the DBA window', phrased as 'never run it yourself, a DBA applies it in the window' rather than the literal 'outside the window'. 'While decisions are open' (L287-292): work only on steps 1-5, record every question and answer in the Decision log (date, who, their words, source), re-ask Dana at the 19/27/30 Oct checkpoints, set 'asked, no channel' if she is unreachable. Decision log table L294-303 (Q1-Q6 with owner, needed by, status, answer, date, source)."
+    },
+    {
+      "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+      "passed": true,
+      "evidence": "Recall 5/6 = 83%. Recovered: K1, K2, K3, K4, K5. Missed: The agent can continue work that needs no decision (for example mapping the 3 cron jobs) but must not touch production.. The panel says the agent investigates the unmapped cron jobs first, but not what the agent may do alone or that it must not touch production."
+    }
+  ],
+  "summary": {
+    "passed": 22,
+    "failed": 0,
+    "total": 22,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 0,
+    "errors_encountered": 0,
+    "output_chars": 0,
+    "transcript_chars": 0,
+    "files_created": [
+      "report.assets/tasks.dot",
+      "report.assets/tasks.png",
+      "report.evidence.md",
+      "report.md",
+      "user_notes.md"
+    ],
+    "note": "Copied from outputs/metrics.json; no transcript exists for this run, so tool-call and step counts are not available (0 here means unknown) and transcript_chars is 0."
+  },
+  "timing": {
+    "executor_duration_seconds": 1817.5,
+    "total_duration_seconds": 1817.5,
+    "note": "executor estimate from file timestamps"
+  },
+  "claims": [
+    {
+      "claim": "report.md passes check_doc.py with 0 Blocker / 0 Major / 0 Minor (panel 298 words, human zone about 2,140 words); the sibling gets only the informational A1 Minor",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Re-ran scripts/check_doc.py on report.md and report.evidence.md: identical results (panel_words 298, human_zone_words 2140; sibling 0/0/1 informational A1)."
+    },
+    {
+      "claim": "The task map draws 11 tasks and 12 dependencies, every edge taken from the Depends-on column of tasks.md and none inferred",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Compared tasks.dot, the PNG and the block C edge table with tasks.md: exact match, 12 edges, T8 and T11 have no incoming edges."
+    },
+    {
+      "claim": "All 25 links and anchors resolve (executor's own validation, user_notes.md)",
+      "type": "process",
+      "verified": true,
+      "evidence": "My script found 22 links/images in report.md and 3 in report.evidence.md (25 total); none unresolved (anchors, sibling file, image and dot file all exist)."
+    },
+    {
+      "claim": "The diagram was re-laid out from 2,397 px wide (about 10 px text at 800 px) to a 1,381 px top-to-bottom layout that is legible at 800 px",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Final tasks.png is 1381x1056 px and reads cleanly at 800 px (viewed). The earlier 2,397 px draft cannot be inspected (no transcript), so that part is unverifiable."
+    },
+    {
+      "claim": "Calendar facts in the doc: 30 Oct is a Friday, 10 Nov a Tuesday, 7 Nov a Saturday, DBA windows are Tue 20 / Thu 22 / Tue 27 / Thu 29 Oct and Tue 3 / Thu 5 Nov, six working days remain after 30 Oct, 22:00-23:00 UTC becomes 23:00-00:00 CET after the clocks change on Sun 25 Oct",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Verified by script (weekdays) and by counting (2-6 Nov plus 9 Nov = 6 working days; 25 Oct 2026 is the last Sunday of October, so the EU clock change)."
+    },
+    {
+      "claim": "Acme's largest dataset needs about 5 XLS files under option (a) (derived)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "ceil(4.2M / 1M) = 5 and ceil(4.2M / 1,048,576) = 5; labelled 'derived' in report.md Q1 and report.evidence.md."
+    },
+    {
+      "claim": "Four of the six open decisions block the rollout (Q4 -> T4, Q1 -> T5, Q2 -> T6, Q3 -> T7); Q5 blocks T10 and Q6 sets the date",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Consistent with tasks.md (T4-T7 blocked/waiting, T9 depends on them; T10 depends on T8) and open-questions.md items 1-6; the Q-to-T mapping is the writer's derivation and is documented in report.evidence.md."
+    },
+    {
+      "claim": "Panel risk row: 'Monday mornings are the peak' for Acme's parallel exports",
+      "type": "factual",
+      "verified": false,
+      "evidence": "work-log 2026-10-09 only says 'Acme runs several on Monday mornings'; calling it the peak is an unsourced embellishment (minor)."
+    },
+    {
+      "claim": "Final reply: 'It has no unresolved checker findings.'",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Checker gate passed with 0 Blocker, 0 Major, 0 Minor on report.md."
+    },
+    {
+      "claim": "The notes do not name Alex's branch or say whether his code is pushed (final reply and block A 'Not in the notes')",
+      "type": "factual",
+      "verified": true,
+      "evidence": "work-log.md gives only the repo path C:/work/nimbus-exports and no branch, commit or push information."
+    },
+    {
+      "claim": "Process claims in user_notes.md (first draft panel 464 words then trimmed; skill files read; skeleton followed)",
+      "type": "process",
+      "verified": false,
+      "evidence": "UNVERIFIABLE: no transcript exists. The delivered files are consistent with them (panel 298 words, skeleton structure, zone markers) but the intermediate drafts cannot be inspected."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+      "Today's date: system clock says 2026-10-17 while the user says leave starts 'tomorrow'; the doc uses 'Status as of 2026-10-15' (last log entry).",
+      "Who decides Q2-Q6: the notes name Dana only for Q1; the doc assumes she decides or routes all of them (stated in section 4 and rule 1).",
+      "Meaning of 'cutover': assumed to be every customer on JobRunner (T9 done), with T10 after it.",
+      "All statuses are as Alex reported; repo, staging and production were not opened (branch and push state unknown).",
+      "Notes inconsistency flagged but unresolved: 5M rows in 6 min on 1 worker vs 4.2M rows in 9.5 min on 3 workers, so 'six workers fix it' is unproven.",
+      "Rendering in VS Code / Azure DevOps was not seen; collapsed blocks with #### headings and tables inside <details> are expected to render.",
+      "Human zone is about 2,140 words: under the 2,500 limit but long for a skim."
+    ],
+    "needs_review": [
+      "Suggested content that is not in the notes and may be unwelcome: dates 20 Oct, 27 Oct, 6 Nov; DBA booking recommendation; staging re-test before enabling Acme; T4 pre-flight; 20-run rule for the flaky test; branch/PR rule; rollback hint; the idea of starting the internal-tenant stage after T4 alone.",
+      "Alex must push his work and add the branch name to block A before leaving (final reply, 'Before you leave')."
+    ],
+    "workarounds": [
+      "Panel first drafted at 464 words (a Major); trimmed to 298 by dropping the optional Key facts slot and shortening captions and link texts.",
+      "Diagram re-laid top-to-bottom (2,397 px to 1,381 px) because its text was only about 10 px high at 800 px.",
+      "Used punctuation-free decision headings instead of the skill's example 'Q1 Allow XLS above 1M rows? Recommend: split', because the headings are link targets.",
+      "Kept the AI-input block inline (collapsed) under the skill's one-self-sufficient-document exception and moved only the archive to report.evidence.md.",
+      "Reported skill friction: panel budget vs six decisions, 'write each fact once' vs a self-sufficient AI block, and no check on effective diagram font size at 800 px."
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Dana's view: the panel says where things stand (how many of the 11 tasks are done, blocked and open) ...",
+        "reason": "Ambiguous whether the picture can carry the task tally. This panel gives 'three done / four blocked or waiting' only in image alt text and per-node labels, and 'Three of eleven' only in the H2 just below the panel; the open count (4) and the total (11) are never stated in panel prose. Reword to say 'in text or in the picture', or require a prose tally such as '3 of 11 done, 4 blocked or waiting, 4 to do', and add a correctness check of those counts (T1-T3 done; T4-T6 blocked and T7 waiting; T8-T11 to do)."
+      },
+      {
+        "assertion": "A1 Zones marked and ordered: ... heading or banner names its audience (a pointer line in the header does not count) ...",
+        "reason": "The skill's own skeleton heading ('START HERE - at a glance' with a person glyph) names no reader in words, while the L4 metadata line ('for Dana (manager) and the AI agent') is a header audience line; a strict grader could fail the skeleton itself. State whether glyph plus 'START HERE' counts or require wording such as 'for Dana' in the zone heading."
+      },
+      {
+        "reason": "Nothing checks date and derived-number correctness. This run's weekdays, DBA windows, six working days after 30 Oct and the DST shift were all right, but a wrong weekday would pass every assertion. Add a date-sanity assertion (10 Nov is a Tuesday, windows are Tue/Thu, 7 Nov is a Saturday)."
+      },
+      {
+        "reason": "Nothing checks that invented deadlines are presented as suggestions rather than as the user's. The doc adds 20 Oct, 27 Oct and 6 Nov and labels them '(suggested)'; an unlabelled version would still pass C4/E1/E2 as written. Add an assertion that dates absent from the inputs are labelled."
+      },
+      {
+        "assertion": "D2 Coverage and truth: ... inferred edges are dashed and captioned",
+        "reason": "Passes vacuously when no edge is inferred. The Q labels on nodes (T4-Q4, T5-Q1, T6-Q2, T7-Q3, T8-Q5) are derived mappings that tasks.md does not state; add a check that they agree with open-questions.md."
+      },
+      {
+        "assertion": "C2 Compact panel: about 300 words of prose or fewer ...",
+        "reason": "Passed at 298 of 300 words, but the word cap is met partly by dropping the Key facts slot, which is why the task tally is picture-only. The assertion cannot tell whether essential facts were cut; pair it with a key-facts-present check (the cold-reader test partly covers this)."
+      },
+      {
+        "assertion": "F3 Chat reply: ... the file path ...",
+        "reason": "The harness defines no expected path format; the reply says only 'Files are in outputs'. State whether a relative folder plus file name is enough."
+      },
+      {
+        "reason": "Not asserted but observed and worth keeping: block A states the repo root once with repo-relative paths, has a definition of done, a Decision log with a refresh-the-panel protocol, and the final reply asks Alex to push his branch before leaving. These A4-style behaviours have no dedicated assertion, so a regression there would go unnoticed."
+      }
+    ],
+    "overall": "Assertions are mostly structural and match the rubric; the content checks (Dana's view, cutover risk, agent-ready, guardrails) are discriminating. Main gaps: ambiguity about whether the picture can satisfy a text tally (Dana's view) and what 'names its audience' means (A1), plus no checks on date arithmetic, derived-number labelling or A4 completeness."
+  }
+}

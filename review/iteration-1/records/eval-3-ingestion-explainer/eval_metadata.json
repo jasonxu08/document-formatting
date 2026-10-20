@@ -1,0 +1,22 @@
+{
+  "eval_id": 3,
+  "eval_name": "ingestion-explainer",
+  "prompt": "New engineer Priya starts on the ingestion team on Monday. She's a strong backend dev but knows nothing about our platform. Using the notes in <workspace>\\fixtures\\explainer\\, write an explainer of how the ingestion platform works so she's productive in her first week. Save it as a doc we can drop into the team wiki repo.",
+  "assertions": [
+    "Zones labeled: the document labels a part for human reading and a separate part for AI-input / archive / evidence / reference material, using explicit headings or banners that name the audience (a bare 'Appendix' does not count), and the two parts do not interleave",
+    "Human part highlighted: the part written for humans is marked by a prominent banner or heading that says it is for people or where to start (for example an emoji-led 'start here' heading), so a reader cannot miss it",
+    "Glance first: the first section after the title is a one-screen overview that states the bottom line itself (how the platform works in a sentence or two), not merely what the document covers; no background, method or table of contents comes before it",
+    "Reading path: within the first screen (about 60 lines) there is a reading path or 'read next' list with at least 3 working links to sections, each saying what the reader gets",
+    "Links work: every in-document link and every image path resolves (scripts/check_doc.py reports no ERROR lines)",
+    "Relationship diagram: the eleven platform components and how they connect are shown as a diagram (embedded image or Mermaid) that includes all eleven components and labels or clearly draws the relationships",
+    "Diagram portable: the diagram a human sees first is an embedded image file that exists on disk (PNG or SVG), not only a Mermaid or other code block, because the reader's VS Code preview and Azure DevOps repo pages do not render Mermaid",
+    "Diagram readable: the diagram has a caption or how-to-read line, and viewing the rendered image shows legible labels with no overlapping or cut-off text",
+    "Evidence out of the way: bulky raw material (the 20-row configuration table) is not in the human reading flow; it sits in the reference/machine part or in a linked file",
+    "Headings tell the story: at least half of the body headings state a claim, finding or question rather than a generic topic label like 'Overview', 'Components' or 'Details'",
+    "No invented verdict: the document does not fabricate a verdict, a 'decision needed' block or a risk table; the first screen gives a bottom line and mental model instead",
+    "Mental model first: the first screen has a diagram of the eleven components and their flow with a one-line bottom line, and calls out that the Catalog (not the queue) is the source of truth for status",
+    "Concepts before flows: Dataset, Version, Schema contract, Quarantine, Lineage record and Tenant are defined (glossary or equivalent) before the detailed step-by-step flow",
+    "Week-one use: includes the six gotchas and what to do in week one (runbooks, starter tickets INGEST-310 and INGEST-322, the weekly sync)",
+    "Figures are right: states the correct retry behaviour (3 attempts with 30 s, 2 min, 10 min backoff, then the dead-letter queue) and the 15-minute publish target for files up to 1 GB"
+  ]
+}

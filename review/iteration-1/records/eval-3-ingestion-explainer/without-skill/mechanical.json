@@ -1,0 +1,28 @@
+{
+  "file": "<workspace>\\iteration-1\\eval-3-ingestion-explainer\\without_skill\\run-1\\outputs\\report.md",
+  "errors": [],
+  "warnings": [
+    {
+      "line": 0,
+      "message": "no <!-- zone:... --> markers; human-read and machine/archive content are not marked"
+    },
+    {
+      "line": 64,
+      "message": "heading 'The pipeline, stage by stage' is a link target but contains punctuation or emoji; its anchor may differ between viewers - use plain words and digits"
+    },
+    {
+      "line": 281,
+      "message": "heading 'Appendix B: assumptions and open questions' is a link target but contains punctuation or emoji; its anchor may differ between viewers - use plain words and digits"
+    }
+  ],
+  "info": [],
+  "stats": {
+    "lines": 305,
+    "headings": 25,
+    "internal_links": 24,
+    "images": 2,
+    "diagram_blocks": 0,
+    "details_blocks": 0,
+    "zones": []
+  }
+}

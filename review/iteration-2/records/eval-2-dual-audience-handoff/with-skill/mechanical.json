@@ -1,0 +1,67 @@
+{
+  "files": {
+    "report.md": {
+      "file": "<workspace>\\iteration-2\\eval-2-dual-audience-handoff\\with_skill\\run-1\\outputs\\report.md",
+      "stats": {
+        "lines": 373,
+        "headings": 28,
+        "internal_links": 17,
+        "images": 1,
+        "diagram_blocks": 0,
+        "details_blocks": 2,
+        "zones": [
+          "human",
+          "ai-input",
+          "archive"
+        ],
+        "panel_words": 298,
+        "human_zone_words": 2140
+      },
+      "gate": {
+        "blockers": 0,
+        "majors": 0,
+        "minors": 0
+      },
+      "blockers": [],
+      "majors": [],
+      "minors": []
+    },
+    "report.evidence.md": {
+      "file": "<workspace>\\iteration-2\\eval-2-dual-audience-handoff\\with_skill\\run-1\\outputs\\report.evidence.md",
+      "stats": {
+        "lines": 105,
+        "headings": 8,
+        "internal_links": 0,
+        "images": 0,
+        "diagram_blocks": 0,
+        "details_blocks": 0,
+        "zones": [
+          "archive"
+        ],
+        "panel_words": 0,
+        "human_zone_words": 0
+      },
+      "gate": {
+        "blockers": 0,
+        "majors": 0,
+        "minors": 1
+      },
+      "blockers": [],
+      "majors": [],
+      "minors": [
+        {
+          "rule": "A1",
+          "line": 0,
+          "message": "machine/archive-only file: human-zone rules skipped"
+        }
+      ]
+    }
+  },
+  "gate": {
+    "blockers": 0,
+    "majors": 0,
+    "minors": 1,
+    "passed": true
+  },
+  "note": "Blocker/Major/Minor findings of scripts/check_doc.py; passed = no Blocker and at most 2 Majors."
+}

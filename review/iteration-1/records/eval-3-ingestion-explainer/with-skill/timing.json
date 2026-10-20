@@ -1,0 +1,7 @@
+{
+  "total_duration_seconds": 1745.7,
+  "duration_ms": 1745749,
+  "executor_start": "2026-10-16T16:05:55Z",
+  "executor_end": "2026-10-16T16:35:00Z",
+  "note": "Estimated from file timestamps; the harness reports no token counts."
+}

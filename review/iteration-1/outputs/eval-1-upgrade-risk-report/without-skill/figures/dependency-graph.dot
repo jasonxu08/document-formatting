@@ -1,0 +1,29 @@
+digraph services {
+  graph [rankdir=TB, fontname="Arial", nodesep=0.5, ranksep=0.8, pad=0.25, labelloc=b, labeljust=c, label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="4" CELLPADDING="2"><TR><TD WIDTH="18" HEIGHT="14" FIXEDSIZE="TRUE" BGCOLOR="#D5EFE6" BORDER="2" COLOR="#009E73"></TD><TD ALIGN="LEFT"><FONT POINT-SIZE="11">Passed staging, rollback in 10 to 15 minutes</FONT></TD><TD WIDTH="18" HEIGHT="14" FIXEDSIZE="TRUE" BGCOLOR="#F6D5C4" BORDER="2" COLOR="#D55E00"></TD><TD ALIGN="LEFT"><FONT POINT-SIZE="11">Failed staging, no rollback path</FONT></TD><TD WIDTH="18" HEIGHT="14" FIXEDSIZE="TRUE" BGCOLOR="#FBE5B6" BORDER="2" COLOR="#E69F00"></TD><TD ALIGN="LEFT"><FONT POINT-SIZE="11">Not tested, no rollback path</FONT></TD></TR><TR><TD COLSPAN="6" ALIGN="LEFT"><FONT POINT-SIZE="11">An arrow points from a service to a service it depends on. Red arrows point at auth-service.</FONT></TD></TR></TABLE>>];
+  node [shape=box, style="rounded,filled", fontname="Arial", margin="0.16,0.09", penwidth=1.8];
+  edge [color="#8A94A1", arrowsize=0.8, penwidth=1.2];
+  "gateway" [label=<<B>gateway</B><BR/><FONT POINT-SIZE="11">Platform, critical</FONT><BR/><FONT POINT-SIZE="11">Passed staging, rollback yes</FONT>>, fillcolor="#D5EFE6", color="#009E73"];
+  "auth-service" [label=<<B>auth-service</B><BR/><FONT POINT-SIZE="11">Identity, critical</FONT><BR/><FONT POINT-SIZE="11">Failed staging (2 of 148), no rollback</FONT>>, fillcolor="#F6D5C4", color="#D55E00"];
+  "user-store" [label=<<B>user-store</B><BR/><FONT POINT-SIZE="11">Identity, critical</FONT><BR/><FONT POINT-SIZE="11">Not tested, no rollback</FONT>>, fillcolor="#FBE5B6", color="#E69F00"];
+  "catalog-service" [label=<<B>catalog-service</B><BR/><FONT POINT-SIZE="11">Data, high</FONT><BR/><FONT POINT-SIZE="11">Passed staging, rollback yes</FONT>>, fillcolor="#D5EFE6", color="#009E73"];
+  "share-service" [label=<<B>share-service</B><BR/><FONT POINT-SIZE="11">Data, high</FONT><BR/><FONT POINT-SIZE="11">Passed staging, rollback yes</FONT>>, fillcolor="#D5EFE6", color="#009E73"];
+  "connector-service" [label=<<B>connector-service</B><BR/><FONT POINT-SIZE="11">Integration, medium</FONT><BR/><FONT POINT-SIZE="11">Passed staging, rollback yes</FONT>>, fillcolor="#D5EFE6", color="#009E73"];
+  "map-service" [label=<<B>map-service</B><BR/><FONT POINT-SIZE="11">Data, medium</FONT><BR/><FONT POINT-SIZE="11">Passed staging, rollback yes</FONT>>, fillcolor="#D5EFE6", color="#009E73"];
+  "search-index" [label=<<B>search-index</B><BR/><FONT POINT-SIZE="11">Data, medium</FONT><BR/><FONT POINT-SIZE="11">Passed staging, rollback yes</FONT>>, fillcolor="#D5EFE6", color="#009E73"];
+  "notify-service" [label=<<B>notify-service</B><BR/><FONT POINT-SIZE="11">Platform, low</FONT><BR/><FONT POINT-SIZE="11">Passed staging, rollback yes</FONT>>, fillcolor="#D5EFE6", color="#009E73"];
+  "gateway" -> "auth-service" [color="#D55E00", penwidth=1.6];
+  "gateway" -> "catalog-service";
+  "gateway" -> "share-service";
+  "gateway" -> "connector-service";
+  "auth-service" -> "user-store";
+  "catalog-service" -> "auth-service" [color="#D55E00", penwidth=1.6];
+  "catalog-service" -> "search-index";
+  "catalog-service" -> "map-service" [dir=both, penwidth=1.8, color="#4A5563", fontname="Arial", fontsize=11, label="  call each other"];
+  "share-service" -> "auth-service" [color="#D55E00", penwidth=1.6];
+  "share-service" -> "catalog-service";
+  "share-service" -> "notify-service";
+  "connector-service" -> "auth-service" [color="#D55E00", penwidth=1.6];
+  "connector-service" -> "catalog-service";
+  "map-service" -> "auth-service" [color="#D55E00", penwidth=1.6];
+  "notify-service" -> "auth-service" [color="#D55E00", penwidth=1.6];
+}

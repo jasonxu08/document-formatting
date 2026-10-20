@@ -1,0 +1,82 @@
+// Ingestion platform: components and the flow of one upload.
+// Hand-placed layout (neato with pinned positions, units = inches).
+// Regenerate:  neato -Tpng -Gdpi=150 architecture-overview.dot -o architecture-overview.png
+//
+// Step numbers on the arrows match "The pipeline, stage by stage" in the explainer.
+// Solid = main flow and writes, dashed = reads and supporting calls, red = failure path.
+// The *_a nodes are invisible anchors that let several arrows meet a tall bar at different heights.
+
+digraph ingestion {
+  layout=neato;
+  graph [splines=line, fontname="Arial", pad=0.2, bgcolor="white", outputorder=edgesfirst];
+  node  [fontname="Arial", fontsize=12, shape=box, style="rounded,filled",
+         color="#44546A", fillcolor="#FFFFFF", penwidth=1.3, margin="0.12,0.07"];
+  edge  [fontname="Arial", fontsize=11, color="#44546A", fontcolor="#222222",
+         arrowsize=0.75, penwidth=1.3];
+
+  // ---------- main chain (top to bottom) ----------
+  customer [pos="0,0!",    label="Customer (a tenant)", shape=ellipse, fillcolor="#EDEDED"];
+  uploader [pos="0,-1.4!", label=<<B>Uploader API</B><BR/>only public entry point>, fillcolor="#DAE8FC", color="#3B6FB6"];
+  qv       [pos="0,-2.8!", shape=plain, style="", label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EDEDED" COLOR="#44546A">
+      <TR><TD>Message Queue: <B>validate</B></TD></TR>
+      <TR><TD BGCOLOR="#FDE2E0"><FONT COLOR="#B03024" POINT-SIZE="10.5">3 failed attempts → DLQ<BR/>(pages on-call)</FONT></TD></TR>
+    </TABLE>>];
+  vworker  [pos="0,-4.2!", label=<<B>Validation Worker</B>>, fillcolor="#DAE8FC", color="#3B6FB6"];
+  qt       [pos="0,-5.6!", shape=plain, style="", label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EDEDED" COLOR="#44546A">
+      <TR><TD>Message Queue: <B>transform</B></TD></TR>
+      <TR><TD BGCOLOR="#FDE2E0"><FONT COLOR="#B03024" POINT-SIZE="10.5">3 failed attempts → DLQ<BR/>(pages on-call)</FONT></TD></TR>
+    </TABLE>>];
+  tworker  [pos="0,-7!",   label=<<B>Transform Worker</B>>, fillcolor="#DAE8FC", color="#3B6FB6"];
+  curated  [pos="0,-8.6!", label=<<B>Curated Zone</B><BR/>lakehouse tables<BR/>customers query these>, shape=cylinder, fillcolor="#D5ECD4", color="#4E8F4B"];
+
+  // ---------- left: Raw Zone bar + satellites ----------
+  rawbar [pos="-4.85,-4.2!", label=<<B>Raw Zone</B><BR/><BR/>immutable<BR/>blobs<BR/><BR/>every<BR/>original<BR/>upload,<BR/>kept 1 year>,
+          shape=box, width=1.3, height=6.9, fixedsize=true, fillcolor="#D5ECD4", color="#4E8F4B"];
+  raw_a1 [pos="-4.2,-1.4!", shape=point, width=0.01, style=invis];
+  raw_a2 [pos="-4.2,-4.2!", shape=point, width=0.01, style=invis];
+  raw_a3 [pos="-4.2,-7!",   shape=point, width=0.01, style=invis];
+
+  registry   [pos="-2.6,-2.8!",  label=<<B>Schema Registry</B><BR/>versioned Schema contracts>, fillcolor="#FFF2CC", color="#B8860B"];
+  quarantine [pos="-2.6,-5.75!", label=<<B>Quarantine Store</B><BR/>failed files<BR/>kept 30 days>, shape=cylinder, fillcolor="#FDE2E0", color="#C0392B"];
+
+  // ---------- right: Catalog bar + satellites ----------
+  catbar [pos="4.85,-4.2!", label=<<B>Catalog</B><BR/><BR/>Datasets,<BR/>Versions,<BR/>status,<BR/>lineage,<BR/>owners<BR/><BR/><I>source of<BR/>truth for<BR/>status</I>>,
+          shape=box, width=1.3, height=6.9, fixedsize=true, fillcolor="#FFF2CC", color="#B8860B"];
+  cat_a1 [pos="4.2,-1.4!", shape=point, width=0.01, style=invis];
+  cat_a2 [pos="4.2,-4.2!", shape=point, width=0.01, style=invis];
+  cat_a3 [pos="4.2,-7!",   shape=point, width=0.01, style=invis];
+
+  policy   [pos="2.65,-2.8!", label=<<B>Policy Engine</B><BR/><FONT POINT-SIZE="10.5">upload rights (Uploader API)<BR/>dataset visibility (Catalog)<BR/>row-level rules (Curated Zone)</FONT>>, fillcolor="#FFF2CC", color="#B8860B"];
+  notifier [pos="2.65,-5.6!", label=<<B>Notifier</B><BR/>email + webhooks<BR/>fire-and-forget>, fillcolor="#FFF2CC", color="#B8860B"];
+
+  // ---------- legend ----------
+  legend [pos="0,-9.75!", shape=plain, style="", label=<
+    <FONT POINT-SIZE="11" COLOR="#444444">Arrows point the way data or requests travel.<BR/>Solid = main flow and writes · dashed = reads and supporting calls · red = failure path.<BR/>Numbers match the steps in “The pipeline, stage by stage”.</FONT>>];
+
+  // ---------- spine ----------
+  customer -> uploader [label=<<B>1</B> upload  >];
+  uploader -> qv       [label=<<B>5</B> enqueue  >];
+  qv -> vworker;
+  vworker -> qt        [label=<<B>7a</B> pass  >];
+  qt -> tworker;
+  tworker -> curated   [label=<<B>8</B> write tables  >];
+
+  // ---------- Raw Zone ----------
+  uploader -> raw_a1 [label=<<B>3</B> stream file>, color="#4E8F4B", fontcolor="#2E6B2B"];
+  raw_a2 -> vworker  [label=<<B>6</B> read file>, color="#4E8F4B", fontcolor="#2E6B2B", style=dashed];
+  raw_a3 -> tworker  [label=<<B>8</B> read file>, color="#4E8F4B", fontcolor="#2E6B2B", style=dashed];
+
+  // ---------- Catalog ----------
+  uploader -> cat_a1 [label=<<B>4</B> Version: received>, color="#B8860B", fontcolor="#7A5A00"];
+  vworker  -> cat_a2 [label=<<B>7a</B> validated  |  <B>7b</B> quarantined>, color="#B8860B", fontcolor="#7A5A00"];
+  tworker  -> cat_a3 [label=<<B>9</B> Lineage record + published>, color="#B8860B", fontcolor="#7A5A00"];
+
+  // ---------- supporting calls (diagonal arrows: labels get a white backing) ----------
+  uploader -> policy     [style=dashed, label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1" BGCOLOR="white"><TR><TD><B>2</B> may upload?</TD></TR></TABLE>>];
+  registry -> vworker    [style=dashed, label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1" BGCOLOR="white"><TR><TD><B>6</B> get contract</TD></TR></TABLE>>];
+  vworker  -> quarantine [color="#C0392B", label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1" BGCOLOR="white"><TR><TD><FONT COLOR="#B03024"><B>7b</B> copy file</FONT></TD></TR></TABLE>>];
+  vworker  -> notifier   [color="#C0392B", style=dashed, label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1" BGCOLOR="white"><TR><TD><FONT COLOR="#B03024"><B>7b</B> tell owner</FONT></TD></TR></TABLE>>];
+  tworker  -> notifier   [style=dashed, label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1" BGCOLOR="white"><TR><TD><B>10</B> email owner</TD></TR></TABLE>>];
+}

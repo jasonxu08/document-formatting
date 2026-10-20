@@ -1,0 +1,65 @@
+{
+  "files": {
+    "report.md": {
+      "file": "<workspace>\\iteration-2\\eval-2-dual-audience-handoff\\without_skill\\run-1\\outputs\\report.md",
+      "stats": {
+        "lines": 297,
+        "headings": 23,
+        "internal_links": 0,
+        "images": 1,
+        "diagram_blocks": 0,
+        "details_blocks": 0,
+        "zones": [],
+        "panel_words": 677,
+        "human_zone_words": 4229
+      },
+      "gate": {
+        "blockers": 0,
+        "majors": 4,
+        "minors": 2
+      },
+      "blockers": [],
+      "majors": [
+        {
+          "rule": "A1",
+          "line": 0,
+          "message": "no <!-- zone:... --> markers; human-read and machine/archive content are not marked (for a large document with raw material this is a Blocker)"
+        },
+        {
+          "rule": "B5",
+          "line": 0,
+          "message": "a large document needs navigation: 0 in-document link(s), expected at least 5"
+        },
+        {
+          "rule": "B1",
+          "line": 1,
+          "message": "only 0 in-document link(s) in the 60 lines after the title; give a 'Read next' path with at least 3"
+        },
+        {
+          "rule": "C2",
+          "line": 11,
+          "message": "the first section runs to about 677 words (budget 300, tables and picture excluded); keep the panel short and link to detail"
+        }
+      ],
+      "minors": [
+        {
+          "rule": "F2",
+          "line": 1,
+          "message": "the human zone runs to about 4229 words (advice: 2500); check that detail only some readers need has moved to the archive"
+        },
+        {
+          "rule": "A2",
+          "line": 119,
+          "message": "shell commands in the human zone; move them to the AI-input block unless the reader must run them"
+        }
+      ]
+    }
+  },
+  "gate": {
+    "blockers": 0,
+    "majors": 4,
+    "minors": 2,
+    "passed": false
+  },
+  "note": "Blocker/Major/Minor findings of scripts/check_doc.py; passed = no Blocker and at most 2 Majors."
+}

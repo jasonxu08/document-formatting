@@ -1,0 +1,209 @@
+{
+  "expectations": [
+    {
+      "text": "Zones labeled: the document labels a part for human reading and a separate part for AI-input / archive / evidence / reference material, using explicit headings or banners that name the audience (a bare 'Appendix' does not count), and the two parts do not interleave",
+      "passed": false,
+      "evidence": "No part is labelled for an audience. mechanical.json warns 'no <!-- zone:... --> markers; human-read and machine/archive content are not marked' (stats.zones = []). The only reference-type parts are the trailing 'Appendix A: configuration reference' (L254) and 'Appendix B: assumptions and open questions' (L281), i.e. topic-labelled appendices that do not name an audience, and nothing labels the human-reading part. Reference material is also interleaved with the human flow: L15 says 'As reference: Shared services and stores, Numbers to know, Gotchas', and those sections (L100, L153, L182) sit between 'The life of a Version' / 'When things go wrong' / 'Running it locally' and 'Your first week'."
+    },
+    {
+      "text": "Human part highlighted: the part written for humans is marked by a prominent banner or heading that says it is for people or where to start (for example an emoji-led 'start here' heading), so a reader cannot miss it",
+      "passed": false,
+      "evidence": "No banner, callout or emoji heading marks a human part. The nearest thing is the plain H2 '## How to use this page' (L11), styled like the other 24 headings; its text is a reading guide ('On day one, read ...') and it neither says it is for people nor 'start here'. L7 'Audience: new ingestion engineers' is a low-key metadata bullet, not a prominent banner. With no machine/reference zone to contrast against and no zone markers (mechanical.json), nothing is highlighted as the human part."
+    },
+    {
+      "text": "Glance first: the first section after the title is a one-screen overview that states the bottom line itself (how the platform works in a sentence or two), not merely what the document covers; no background, method or table of contents comes before it",
+      "passed": false,
+      "evidence": "The first section after the title is '## How to use this page' (L11-18), a link-list reading guide (a TOC-like navigation list), and it is preceded by a preamble (L3-9) with a what-the-document-covers sentence ('After reading this you should be able to explain how an uploaded file becomes a published table...'), 'Based on: the team's architecture notes and week-one checklist' (source/method) and 'Reading time'. The bottom line only starts in the second section, '## What the platform does' (L20-26: 'The platform checks each file against an agreed schema, transforms it and publishes it as a queryable table...'; L24 'upload -> validate -> transform -> publish, with a quarantine exit')."
+    },
+    {
+      "text": "Reading path: within the first screen (about 60 lines) there is a reading path or 'read next' list with at least 3 working links to sections, each saying what the reader gets",
+      "passed": true,
+      "evidence": "L11-18 ('## How to use this page') sit inside the first 60 lines and hold 9 working section links (L13-16), each bullet annotated with its purpose: 'On day one, read [What the platform does] through [The pipeline, stage by stage]. That is the mental model everything else hangs off.'; 'Before you need them: read [The life of a Version] and [When things go wrong] before you shadow on-call, and [Running it locally] before your first PR.'; 'Your week: [Your first week] turns the onboarding checklist into a day-by-day plan.' All anchors resolve (independent check: 27/27 link and image targets OK; mechanical.json errors = []). Caveat: the 'As reference: ...' bullet (L15) names only a category, and the #the-pipeline-stage-by-stage link carries a fragile-anchor warning, but at least 3 working links with a stated purpose remain."
+    },
+    {
+      "text": "Links work: every in-document link and every image path resolves (scripts/check_doc.py reports no ERROR lines)",
+      "passed": true,
+      "evidence": "mechanical.json: 'errors': [] with stats internal_links 24, images 2. Only warnings: no zone markers, plus fragile-anchor notes for 'The pipeline, stage by stage' (L64) and 'Appendix B: assumptions and open questions' (L281). My own re-check of all 27 targets (anchors, images/architecture-overview.png, images/version-lifecycle.png, the images/ folder link) found none broken; both PNGs exist in outputs/images."
+    },
+    {
+      "text": "Relationship diagram: the eleven platform components and how they connect are shown as a diagram (embedded image or Mermaid) that includes all eleven components and labels or clearly draws the relationships",
+      "passed": true,
+      "evidence": "images/architecture-overview.png (embedded at L39) draws all eleven components from architecture-notes.md: Uploader API, Message Queue (validate and transform boxes), Validation Worker, Transform Worker, Schema Registry, Quarantine Store, Raw Zone, Curated Zone, Catalog, Policy Engine, Notifier (plus Customer). Relationships are drawn as labelled, numbered arrows ('3 stream file', '4 Version: received', '2 may upload?', '5 enqueue', '6 get contract', '6 read file', '7a validated | 7b quarantined', '7b copy file', '7b tell owner', '8 write tables', '9 Lineage record + published', '10 email owner'). Minor: the Catalog and Curated Zone calls to the Policy Engine appear only as text inside the Policy Engine node, not as arrows."
+    },
+    {
+      "text": "Diagram portable: the diagram a human sees first is an embedded image file that exists on disk (PNG or SVG), not only a Mermaid or other code block, because the reader's VS Code preview and Azure DevOps repo pages do not render Mermaid",
+      "passed": true,
+      "evidence": "L39 embeds the first diagram as ![...](images/architecture-overview.png), a 1710x1595 PNG that exists in outputs/images. mechanical.json stats: diagram_blocks 0, images 2, so there is no Mermaid or other code-block diagram; the second diagram (L117) is also an embedded PNG."
+    },
+    {
+      "text": "Diagram readable: the diagram has a caption or how-to-read line, and viewing the rendered image shows legible labels with no overlapping or cut-off text",
+      "passed": true,
+      "evidence": "Caption at L41: 'Figure 1. The components and the path of one upload. The step numbers are explained in [The pipeline, stage by stage].' The image also carries a legend: 'Arrows point the way data or requests travel. Solid = main flow and writes; dashed = reads and supporting calls; red = failure path. Numbers match the steps in The pipeline, stage by stage.' I viewed a copy downscaled from 1710 px to 800 px wide: every node and edge label stayed readable (smallest text, the Policy Engine caller list, DLQ notes and legend, is about 9-10 px but legible), nothing is clipped, and no text overlaps other text (the dashed line only breaks behind the '2 may upload?' label). Figure 2 (version-lifecycle.png, caption L119) is equally legible."
+    },
+    {
+      "text": "Evidence out of the way: bulky raw material (the 20-row configuration table) is not in the human reading flow; it sits in the reference/machine part or in a linked file",
+      "passed": true,
+      "evidence": "The full 20-row settings table (checked: 20 rows, all values match architecture-notes.md) appears only in '## Appendix A: configuration reference' (L254-279), after 'Your first week' and the self-check, and L9 flags it: 'The appendices are reference material.' The main flow carries only an 8-row 'Numbers to know' summary (L153-164) and short inline 'Settings:' lines. Caveat: it is a plain appendix in the same file, not a labelled machine zone or a linked file."
+    },
+    {
+      "text": "Headings tell the story: at least half of the body headings state a claim, finding or question rather than a generic topic label like 'Overview', 'Components' or 'Details'",
+      "passed": false,
+      "evidence": "There are 24 body headings (25 incl. the H1) and nearly all are generic topic labels: 'How to use this page', 'What the platform does', 'The big picture', 'Core concepts', 'The pipeline, stage by stage', 'Stage 1: upload (Uploader API)', 'Stage 2: validate ...', 'Stage 3: transform and publish ...', 'Shared services and stores', 'The life of a Version', 'When things go wrong', 'Quick triage', 'Numbers to know', 'Running it locally', 'Gotchas', 'Your first week', 'The repos', 'A suggested plan', 'Appendix A: configuration reference', 'Appendix B: assumptions and open questions', 'Assumptions made in this page', 'Open questions'. Only 'Six ideas that explain most of the design' (L28) and 'You've got it when you can answer these' (L245) carry a claim or criterion, about 8% even when counted generously, far below half."
+    },
+    {
+      "text": "No invented verdict: the document does not fabricate a verdict, a 'decision needed' block or a risk table; the first screen gives a bottom line and mental model instead",
+      "passed": true,
+      "evidence": "There is no verdict, recommendation, 'decision needed' block or risk table anywhere. The 'Assumption' and 'Open question' callouts (e.g. L138 'three attempts or three retries?') flag real ambiguities in Sam's notes and are labelled as such, and derived items are marked ('This row is derived from the pipeline, not taken from a runbook' L150; 'derived here, not stated in the notes' in Numbers to know). The first 60 lines give a bottom line (L22-24) and a mental model ('Six ideas that explain most of the design' L28-35, diagram L39) instead."
+    },
+    {
+      "text": "Mental model first: the first screen has a diagram of the eleven components and their flow with a one-line bottom line, and calls out that the Catalog (not the queue) is the source of truth for status",
+      "passed": true,
+      "evidence": "Inside the first 60 lines: the diagram of all eleven components and the upload flow at L39 (Figure 1), the one-line bottom line at L24 ('upload -> validate -> transform -> publish, with a quarantine exit for files that fail validation.'), and the Catalog call-out at L31 ('The Catalog is the source of truth for status, not the queue. If the two disagree, trust the Catalog.'), echoed in the diagram's Catalog node ('source of truth for status'). Borderline: all of this comes after the preamble, reading guide, overview and six ideas, so when rendered the diagram sits roughly 1.3 screens down; it passes by the 60-line yardstick only."
+    },
+    {
+      "text": "Concepts before flows: Dataset, Version, Schema contract, Quarantine, Lineage record and Tenant are defined (glossary or equivalent) before the detailed step-by-step flow",
+      "passed": true,
+      "evidence": "'## Core concepts' (L45-56) is a definition table covering Tenant, Dataset, Version, Schema contract, Quarantine and Lineage record, all six, with definitions matching Sam's notes (e.g. Dataset 'A named collection a tenant owns, with a Schema contract. Example: acme/orders.'; Version 'Immutable. Re-uploading creates a new Version and never overwrites.'). It precedes the step-by-step flow '## The pipeline, stage by stage' (L64) and Stages 1-3 (L68-98)."
+    },
+    {
+      "text": "Week-one use: includes the six gotchas and what to do in week one (runbooks, starter tickets INGEST-310 and INGEST-322, the weekly sync)",
+      "passed": true,
+      "evidence": "'## Gotchas' (L182-189) lists all six: Versions immutable (L184); breaking schema change needs a new dataset major version; all timestamps UTC; local runs allow-all unless POLICY_MODE=strict; Notifier fire-and-forget; quarantine 30 days vs Raw Zone 1 year (L189). 'Your first week' (L191-252) turns all eight checklist items into a Monday-Friday plan: runbooks replay-dlq and quarantine-release (L219), INGEST-310 and INGEST-322 (L232-233), the weekly ingestion sync 'Wednesdays, 10:00 CET' (L227) and the Friday incident review (L238)."
+    },
+    {
+      "text": "Figures are right: states the correct retry behaviour (3 attempts with 30 s, 2 min, 10 min backoff, then the dead-letter queue) and the 15-minute publish target for files up to 1 GB",
+      "passed": true,
+      "evidence": "Retry: L104 'A message gets 3 attempts, then goes to the DLQ'; L136 'retried with back-off delays of 30 s, 2 min and 10 min. After the last failed attempt it goes to the DLQ, and a DLQ depth of 1 or more pages the on-call engineer'; L162 'Retry back-off | 30 s, 2 min, 10 min, then the DLQ'; Appendix A QUEUE_MAX_ATTEMPTS 3 / QUEUE_BACKOFF_S 30,120,600. Target: L26 'publish a file within 15 minutes for files up to 1 GB' and L161 'Published within 15 min, for files up to 1 GB'. All match architecture-notes.md. L138 additionally flags that '3 attempts' vs three back-off delays is ambiguous in the source, an honest hedge rather than a misstatement."
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 4,
+    "total": 15,
+    "pass_rate": 0.73
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 0,
+    "errors_encountered": 0,
+    "output_chars": 0,
+    "transcript_chars": 0,
+    "files_created": [
+      "images/architecture-overview.dot",
+      "images/architecture-overview.png",
+      "images/version-lifecycle.dot",
+      "images/version-lifecycle.png",
+      "report.md",
+      "user_notes.md"
+    ],
+    "note": "No transcript exists for this run; tool-call and step counts are not reported by the harness (metrics.json shows total_tool_calls 0)."
+  },
+  "timing": {
+    "executor_duration_seconds": 2425.0,
+    "total_duration_seconds": 2425.0,
+    "note": "executor estimate from file timestamps"
+  },
+  "claims": [
+    {
+      "claim": "'All eight checklist items are here.' (L193: the first-week plan covers every item in onboarding-checklist.md)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Access and clone repos (Monday), local stack plus smoke test with POLICY_MODE=strict and the two runbooks (Tuesday), pass/fail sample uploads (Wednesday), starter ticket (Thursday), weekly sync (Wednesday) and Friday incident review (Friday), on-call shadow ('Whenever the rota allows'): all eight checklist items appear."
+    },
+    {
+      "claim": "Appendix A reproduces the 20 configuration settings with the same defaults as the notes (executor says 'checked programmatically: every setting and default matches the notes')",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Compared all 20 rows of the Appendix A table (L260-279) against the 'Config values I always have to look up' table in architecture-notes.md: names and defaults are identical (e.g. MAX_UPLOAD_MB 5120, QUEUE_BACKOFF_S 30,120,600, MAX_ROW_BYTES 1048576)."
+    },
+    {
+      "claim": "The numbered steps in Figure 1 match the numbered steps in 'The pipeline, stage by stage'",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Diagram labels 1 upload, 2 may upload?, 3 stream file, 4 Version: received, 5 enqueue, 6 get contract/read file, 7a validated / 7b quarantined, 8 read file/write tables, 9 Lineage record + published, 10 email owner correspond to steps 1-10 in Stages 1-3 (L72-96) and to the 'Set by' step references in the Version status table (step 4, 7a, 7b, 9)."
+    },
+    {
+      "claim": "The component inventory in the text is complete: three workers/API, one queue, three stores and four supporting services (L43)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Uploader API, Validation Worker, Transform Worker (3) + Message Queue (1) + Raw Zone, Quarantine Store, Curated Zone (3) + Catalog, Schema Registry, Policy Engine, Notifier (4) = 11, matching the notes' list of pieces."
+    },
+    {
+      "claim": "Derived timing arithmetic (L168, 'Numbers to know'): 40 s + 6 min is about 6 min 40 s for a 1 GB file, leaving about 8 minutes of the 15-minute target; a single 10-minute back-off would blow the target; a 5 GB file at 6 min/GB is about 30 minutes, equal to TRANSFORM_TIMEOUT_S (1800 s)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Arithmetic is correct (6:40 + 10:00 = 16:40 > 15:00; 5 x 6 min = 30 min = 1800 s). The doc labels these as derived rather than stated in the notes, so they are not presented as source facts."
+    },
+    {
+      "claim": "Reading time: 'about 20 minutes for the main text' (L9)",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Main text (L1-253) is about 3,450 words, roughly 14-17 minutes of silent reading plus time for two diagrams and several tables, so 'about 20 minutes' is plausible, if slightly generous; it cannot be measured exactly."
+    },
+    {
+      "claim": "Each .dot source starts with the command that regenerates its PNG (footer, L305), and diagrams carry alt text with a text equivalent in the prose",
+      "type": "process",
+      "verified": true,
+      "evidence": "Both architecture-overview.dot and version-lifecycle.dot begin with '// Regenerate:  neato -Tpng -Gdpi=150 <name>.dot -o <name>.png'. Both image tags (L39, L117) have long descriptive alt text, and the stage-by-stage prose repeats the flow."
+    },
+    {
+      "claim": "While previewing the page, one browser-tool call wrote two scratch files into a .playwright-mcp folder at the root of the git repo the executor started in; both files and the folder were deleted straight away (user_notes.md)",
+      "type": "process",
+      "verified": false,
+      "evidence": "UNVERIFIABLE: there is no transcript. Only consistent evidence is available: no .playwright-mcp folder exists at <repo>, though that may not be the repo the executor started in."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+      "Retry semantics: the notes say both '3 attempts' and 'retried 3 times' and list three back-off delays; left unresolved and flagged in the doc",
+      "Catalog status while a message sits in the DLQ: assumed no fifth status, so the Version keeps its last status",
+      "Repo contents inferred from names only",
+      "What quarantine-release does to the status, and whether a released file is re-validated",
+      "Where MAX_ROW_BYTES is enforced and whether one over-long row fails the whole file",
+      "Which components the ingestion team owns versus merely uses",
+      "What the local stack contains, whether week-one sample uploads go to the local stack or to ingestion-dev, and the exact smoke-test command",
+      "Derived statements (15-minute budget arithmetic, 5 GB vs TRANSFORM_TIMEOUT_S, the stuck-in-received/validated triage row, the cache-delay note) are the executor's own inferences, each labelled as derived",
+      "Day-by-day order is a suggestion; '10:00 CET' taken as written because the clock change on 25 October 2026 makes the invite authoritative"
+    ],
+    "needs_review": [
+      "Naming Sam as the source in the footer and open questions; remove if unwanted",
+      "Heading anchors assume GitHub-style slugs and '- [ ]' task lists only render as checkboxes in GitHub-flavoured renderers (the intended viewers are VS Code preview and Azure DevOps)",
+      "Files are UTF-8 with CRLF line endings; convert if the wiki repo enforces LF",
+      "Side effect: a browser-tool call briefly wrote scratch files into a .playwright-mcp folder at the root of a git repo (reported as deleted; unverifiable here)"
+    ],
+    "workarounds": [
+      "Chose PNG diagrams rendered with Graphviz (neato with pinned positions, .dot sources kept) instead of Mermaid because the wiki renderer is unknown",
+      "Used plain blockquotes for callouts instead of GitHub-only alert syntax for the same reason",
+      "Wrote the doc for any new joiner rather than Priya by name so it outlives her first week"
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Zones labeled / Human part highlighted",
+        "reason": "Both fail this run because it lacks the specific zone convention (audience-naming banners, zone markers), even though it has a sensible conventional structure: a reading guide at the top and a labelled 'configuration reference' appendix at the end. If the goal is the outcome (a reader can tell the human narrative from machine/reference material), say so; if it is the convention, name it explicitly in the assertion. 'Zones labeled' also bundles three conditions (human part labelled, reference part labelled, no interleaving), so split it to show which part a run gets right."
+      },
+      {
+        "assertion": "Mental model first",
+        "reason": "The 60-line yardstick lets this run pass with the diagram at L39, behind a preamble, a reading guide, an overview and six ideas (roughly 1.3 rendered screens down because the PNG is 1710 px wide), while 'Glance first' fails the same ordering. Consider anchoring the check to rendered position, or to the diagram being the first block after the overview."
+      },
+      {
+        "assertion": "No invented verdict",
+        "reason": "Any explainer passes this, because there is no verdict to invent, so it does not discriminate here. More telling for this eval: whether inferences are presented as source facts. This run added unstated content (repo contents inferred from names, the day-by-day order, a derived 'Quick triage' row, 'Policy Engine runs strict everywhere except local dev') but labelled most of it; an assertion on unflagged inventions would catch the difference."
+      },
+      {
+        "assertion": "Figures are right",
+        "reason": "The notes are genuinely ambiguous ('3 attempts' vs 'retried 3 times' vs three back-off delays). The assertion fixes one reading, but does not say how a document should handle the ambiguity. This run quoted every figure and raised an explicit open question (L138), a good behaviour no assertion rewards, and a doc that silently chose 'three retries' while listing the same delays would pass equally."
+      },
+      {
+        "assertion": "Links work",
+        "reason": "Passing on 'no ERROR lines' hides that check_doc.py warns two link targets may not resolve in Azure DevOps (headings with a comma or colon). One of them, #the-pipeline-stage-by-stage, is in the reading path at L13. Since ADO is a named target viewer, consider treating the fragile-anchor warning as a failure for links in the first screen."
+      },
+      {
+        "reason": "No assertion covers length or proportion for a first-week explainer: this run is about 4,100 words and 305 lines, with a second diagram, a seven-item quick-triage and self-check section, and an Appendix B of eight open questions that sits next to the reference material. An assertion on reading time or on keeping the human flow lean would catch padding."
+      }
+    ],
+    "overall": "Solid on content (all 11 components, all figures, glossary, gotchas and week-one actions are correct) but the formatting-structure assertions (zones, human banner, glance-first, claim headings) are the discriminating ones and this run, written without the skill, fails exactly those four. 'No invented verdict' and 'Diagram portable' are close to trivially satisfied here."
+  }
+}

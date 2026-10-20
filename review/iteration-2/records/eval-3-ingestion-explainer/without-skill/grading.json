@@ -1,0 +1,254 @@
+{
+  "expectations": [
+    {
+      "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input, archive or reference material sits last in its own labelled zone; nothing for people follows machine content",
+      "passed": false,
+      "evidence": "No zone heading, banner or marker anywhere. After the title (line 1), line 3 is a what-this-is paragraph and line 5 is an 'Audience:' bullet inside the header metadata, which the assertion says does not count. mechanical.json has zones: [] and flags A1 ('no <!-- zone:... --> markers'). Reference material is not in a labelled zone: '## Reference: settings' (line 235, a 20-row table) is followed by the people-facing '## Assumptions and open questions' (line 264), so content for people comes after the reference block."
+    },
+    {
+      "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+      "passed": false,
+      "evidence": "mechanical.json stats show details_blocks: 0 and the file contains no <details> tag. There is no AI-input or archive block and no sibling archive file (outputs holds report.md, diagrams/ and the executor's user_notes.md, which report.md never points to). Raw/reference material sits inline in the human body: the 20-row settings table (lines 235-260, flagged A2 Major at line 239) and the 11-item open-questions list (lines 264-286)."
+    },
+    {
+      "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+      "passed": false,
+      "evidence": "The first 60 lines hold 12 section links (line 3, line 8 and the Contents list at lines 12-21), but the 10 Contents entries are bare titles such as '- [Gotchas](#gotchas)' with no statement of what the reader gets. Only line 3 annotates one link ('The week-one plan is in [Your first week]'). Line 3 says 'Read the first three sections on your first day (about 15 minutes) and keep the rest as a reference', a day-one stop point, but nothing says who can stop where or what each link delivers."
+    },
+    {
+      "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive",
+      "passed": true,
+      "evidence": "Close call, passes. The mental model is the first content section: '## The short version' (line 23) gives the flow 'Upload -> Validate -> Transform and publish' (line 27) plus five rules. '## Vocabulary' (line 37, table lines 43-48) defines the key terms before '## How a file moves through the platform' (line 58), the components (line 124), failure handling (line 142) and gotchas (line 188). Overall order is flow, components, failures, local run, gotchas, first week, reference, open questions, and the human zone contains no discovery chronology. Caveat: the opener uses 'Version', 'Catalog' and 'Policy Engine' (lines 27, 31, 35) before Vocabulary, though each is explained in context (rule 3 defines Version)."
+    },
+    {
+      "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+      "passed": true,
+      "evidence": "Close call, passes. Read alone, the ten H2s give a usable outline: The short version / Vocabulary / How a file moves through the platform / The components / When things go wrong / Running it locally / Gotchas / Your first week / Reference: settings / Assumptions and open questions. There are no question or decision headings that lack an answer. Caveat: they are topic labels rather than claims, so they give the outline but not the argument."
+    },
+    {
+      "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the mental model itself, not what the document covers",
+      "passed": false,
+      "evidence": "Lines 3-21 (a what-the-guide-is paragraph, four Audience/Scope/Based on/Markers bullets and a 10-link Contents list) come before the mental model, which starts at line 23. mechanical.json flags C1: '25 lines of text come before the first panel element'. Line 3 opens with what the document covers ('A guide for engineers joining the ingestion team...'); the model ('three stages joined by a message queue', line 27) only appears after the header block."
+    },
+    {
+      "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words), and the mental model, the few things that matter and the reading path fit the first screen or two",
+      "passed": true,
+      "evidence": "mechanical.json panel_words is 239 (budget 300; it counts the prose of the first H2, 'The short version'). The mental model (lines 25-27), the five rules (lines 29-35) and the reading aids (line 3 and the Contents, lines 10-21) all sit within the first 36 lines, i.e. within a screen or two. This passes on compactness and fit only; the panel is not first (see C1) and the reading path is weak (see B1)."
+    },
+    {
+      "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+      "passed": true,
+      "evidence": "The document has no verdict, decision or risk block and no empty template slots. Claims trace to architecture-notes.md and onboarding-checklist.md, and gaps are labelled (Assumption callouts at lines 110, 172, 217, 228, 262). The only ranking, 'Confirm first (the notes conflict or the numbers look risky)' (line 268), is traceable: each item cites the notes text it rests on (item 3 derives 6 min/GB x 5 GB = 30 min = TRANSFORM_TIMEOUT_S 1800 s and says the notes do not state linear scaling)."
+    },
+    {
+      "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived or inferred numbers say so",
+      "passed": true,
+      "evidence": "Panel numbers trace to the notes: 'up to 5 GB' (line 25) = 'Maximum: 5 GB'; 'publish within 15 minutes for files up to 1 GB' (line 25) = 'Target: published within 15 minutes for files up to 1 GB'; 'October 2026' (line 7) = 'true as of October 2026'. 'Three stages' and 'Five rules' are the guide's own counts of its structure. Caveat: the 'about 15 minutes' reading time in line 3 is an unsourced estimate marked only by 'about', and it sits in the header rather than the panel."
+    },
+    {
+      "text": "D1 Diagram drawn: the eleven related platform components (Uploader API, Message Queue, Validation Worker, Schema Registry, Quarantine Store, Transform Worker, Raw Zone, Curated Zone, Catalog, Policy Engine, Notifier) are shown in at least one diagram",
+      "passed": true,
+      "evidence": "Figure 1 (diagrams/pipeline.png, embedded at line 62) shows all eleven: Uploader API, Message Queue (drawn twice for validate and transform, footnoted as one queue), Validation Worker, Schema Registry, Quarantine Store, Transform Worker, Raw Zone, Curated Zone, Catalog, Policy Engine and Notifier. Viewed directly in the PNG."
+    },
+    {
+      "text": "D2 Coverage and truth: every one of the eleven components appears in at least one diagram (a single diagram or an overview plus zoomed views, the overview's caption saying what it leaves out), every drawn edge exists in the notes, and inferred edges are dashed and captioned",
+      "passed": true,
+      "evidence": "All eleven components appear in Figure 1. I checked the 18 drawn edges against architecture-notes.md and each exists, e.g. Uploader API -> Policy Engine 'may upload?', Catalog -> Policy Engine 'who can see a dataset', Validation Worker -> Schema Registry 'get contract', Validation Worker -> Quarantine Store 'fail: copy file', Transform Worker -> Notifier 'on publish', Raw Zone -> both workers 'read'. No inferred edge is drawn, so none needs dashing; the legend says dashes mean 'call to a supporting service'. What the single diagram leaves out is stated in its in-image footnote ('The Policy Engine is also called by the Curated Zone, for row-level access rules')."
+    },
+    {
+      "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+      "passed": false,
+      "evidence": "D3 holds: Figures 1 and 2 are embedded PNGs that exist (lines 62 and 99; diagrams/pipeline.png and version-lifecycle.png) and no Mermaid is used. D4 fails its size bound: pipeline.png, the diagram seen first, is 2760 px wide, over the rubric's 500-2600 px limit, and mechanical.json flags D4 Major at line 62. I viewed an 800 px downscale: node titles read (about 12 px), with no overlap or empty glyph boxes, but sub-labels, edge labels and the footnote render at about 8-10 px (SVG fonts 14-17 px at 0.58 scale). Legible with effort and borderline, but it fails the rule's width bound. version-lifecycle.png (2480 px) is within bounds."
+    },
+    {
+      "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+      "passed": false,
+      "evidence": "Present: descriptive alt text on both images (lines 62, 99), an in-image legend, verbs on edges ('may upload?', 'get contract', 'stream file'), and sources beside the images (pipeline.svg, version-lifecycle.svg, build_diagrams.py). Missing: the captions say how to read (Figure 1: solid, dashed, red) but give no takeaway ('The platform at a glance'; Figure 2: 'Open this figure side by side with the Catalog UI...'), and there is no edge list or text equivalent in an archive because the document has no archive. The closest equivalent is the 'Who talks to it' column of the Components table, which is in the human zone."
+    },
+    {
+      "text": "E1 E2 Honesty: content not in the inputs (assumptions, suggestions, inferences) is labelled as such; ambiguities in the notes are flagged rather than silently resolved; unknowns are listed",
+      "passed": true,
+      "evidence": "Close call, passes. Markers are defined at line 8 and used: Assumption callouts (lines 110, 172, 217, 228, 262) and Check callouts for the notes' ambiguities: '3 attempts' vs 'retried 3 times' vs three delays (line 156), POLICY_MODE strict default vs allow-all locally (line 184), 'CET' summer-time ambiguity (line 215). Unknowns are listed (items 7-11, lines 282-286), plus 'The notes set no target for files above 1 GB' (line 122) and 'The notes do not include the smoke-test command' (line 182). Caveat: a few additions are unlabelled, notably the 'By Friday you should be able to' goals (lines 199-204) and 'Do this first' (line 208)."
+    },
+    {
+      "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (the mental model, the few things that matter, the file path, where to start) and does not paste the document",
+      "passed": false,
+      "evidence": "final_reply.md gives the file path and a start point ('The first three sections take about 15 minutes to read; the rest is reference') and does not paste the document. It has no mental model: 'It covers upload to publish for an engineer new to the team, with a week-one checklist and starter tickets' is scope, and nothing says the Catalog is the source of truth, Versions are immutable or the flow is Upload -> Validate -> Transform. Its 'few things' are three open questions for Sam. It also says all three are 'marked Check in the guide', but only two inline Check callouts exist (lines 156, 184); the 5 GB item appears only in the open-questions list (line 272)."
+    },
+    {
+      "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+      "passed": false,
+      "evidence": "mechanical.json gate: passed false, 0 Blockers, 4 Majors (limit is 2), 5 Minors. Majors: A1 (no zone markers); C1 ('25 lines of text come before the first panel element'); D4 ('pipeline.png is 2760 px wide'); A2 ('20-row table in the human zone', line 239). Only report.md is covered (no report.*.md siblings exist)."
+    },
+    {
+      "text": "Mental model first: the first screen or two has a diagram showing the main flow (at least the eight core components) and calls out that the Catalog, not the queue, is the source of truth for status",
+      "passed": false,
+      "evidence": "The first image (Figure 1) is at line 62, after the header, Contents, short version, Vocabulary table and callout, so the first 60 lines and roughly the first two screens of rendered content contain no diagram. The Catalog call-out is present early (line 31: 'The Catalog is the source of truth for status, not the queue'), but the diagram half of the expectation is not met."
+    },
+    {
+      "text": "Concepts before flows: Dataset, Version, Schema contract, Quarantine, Lineage record and Tenant are defined (glossary or definition on first use) before the step-by-step flow that uses them",
+      "passed": true,
+      "evidence": "'## Vocabulary' (lines 37-48) defines all six in the notes' own terms: Tenant, Dataset ('Example: acme/orders'), Version ('One upload of a dataset. Immutable'), Schema contract, Quarantine and Lineage record. It precedes the step-by-step flow ('## How a file moves through the platform' at line 58; Stages 1-3 at lines 66-95). A 'Version means three different things' callout (lines 50-56) follows."
+    },
+    {
+      "text": "Week-one use: includes the six gotchas and what to do in week one (runbooks, starter tickets INGEST-310 and INGEST-322, the weekly sync)",
+      "passed": true,
+      "evidence": "Six Gotchas at lines 190-195 match the notes: a Version cannot be fixed; a breaking schema change needs a new dataset major version; timestamps are UTC; local runs are allow-all so run the smoke test with POLICY_MODE=strict; the Notifier is fire-and-forget; quarantine 30 days vs Raw Zone 1 year. Week one (lines 197-233): checklist with the runbooks replay-dlq and quarantine-release (line 211), starter tickets INGEST-310 and INGEST-322 (lines 214, 232-233), and the weekly ingestion sync (Wednesdays 10:00 CET) plus the Friday incident review (line 215)."
+    },
+    {
+      "text": "Figures: retry behaviour (3 attempts, backoff 30 s, 2 min, 10 min, then the dead-letter queue) and the 15-minute publish target for files up to 1 GB are right, and the notes' ambiguity between attempts and retries is flagged or handled without silently contradicting the notes",
+      "passed": true,
+      "evidence": "Line 154: 'retried with backoff delays of 30 seconds, 2 minutes and 10 minutes (QUEUE_BACKOFF_S), up to QUEUE_MAX_ATTEMPTS = 3, and then goes to the DLQ', matching the notes. The 15-minute target for files up to 1 GB is right at lines 25 and 120. The attempts-versus-retries ambiguity is flagged in the Check callout at line 156 ('Three attempts have only two gaps between them, so it is unclear whether the first delivery counts towards the three') and in open question 1 (line 270) rather than silently resolved."
+    },
+    {
+      "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+      "passed": true,
+      "evidence": "Recall 6/6 = 100%. Recovered: K1, K2, K3, K4, K5, K6. Missed: none. K1 is borderline: asynchrony is only implied by 'stages joined by a message queue'."
+    }
+  ],
+  "summary": {
+    "passed": 12,
+    "failed": 9,
+    "total": 21,
+    "pass_rate": 0.57
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 0,
+    "errors_encountered": 0,
+    "output_chars": 0,
+    "transcript_chars": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 2650.8,
+    "total_duration_seconds": 2650.8,
+    "note": "executor estimate from file timestamps"
+  },
+  "claims": [
+    {
+      "claim": "All 20 settings and defaults in the guide match the notes (user_notes.md, 'Fidelity')",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Compared the settings table in report.md (lines 239-260) with the 20-row config table in architecture-notes.md: every name and default is identical (e.g. MAX_UPLOAD_MB 5120, QUEUE_BACKOFF_S 30,120,600, POLICY_MODE strict, RAW_RETENTION_DAYS 365)."
+    },
+    {
+      "claim": "Every code-formatted platform identifier in the guide exists in the notes, so nothing was invented (user_notes.md)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Extracted 41 unique inline code spans from report.md; 40 occur in architecture-notes.md or onboarding-checklist.md. The only exception is diagrams/build_diagrams.py, the deliverable's own file."
+    },
+    {
+      "claim": "The first three sections take about 15 minutes to read (report.md line 3; final_reply.md)",
+      "type": "quality",
+      "verified": false,
+      "evidence": "Sections 1-3 are about 700 words of prose plus three small tables (roughly 1,000 words, about 5-6 minutes at 200 wpm). user_notes.md concedes the figure is 'an estimate, not measured'. It is not supported by the sources and looks overstated."
+    },
+    {
+      "claim": "Figure 1 is dense: its text is readable at page width but small (user_notes.md)",
+      "type": "quality",
+      "verified": true,
+      "evidence": "pipeline.png is 2760 px wide; at 800 px display width the SVG fonts (14-21 px on a 1380 px canvas) render at about 8-12 px. Labels are readable with effort, consistent with the executor's own caveat."
+    },
+    {
+      "claim": "Every edge drawn in Figure 1 comes from the notes",
+      "type": "factual",
+      "verified": true,
+      "evidence": "All 18 arrows match statements in architecture-notes.md. The Curated Zone -> Policy Engine call is not drawn but is stated in the image footnote."
+    },
+    {
+      "claim": "'The Catalog is the source of truth for status, not the queue' (report.md line 31)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Matches the notes: 'The Catalog is the source of truth for status, NOT the queue' and 'If status in the Catalog and what you see in the queue disagree, trust the Catalog.'"
+    },
+    {
+      "claim": "Three notes ambiguities are 'marked Check in the guide': retry count, POLICY_MODE default and 5 GB transform time (final_reply.md)",
+      "type": "process",
+      "verified": false,
+      "evidence": "Only two inline '> **Check:**' callouts exist (lines 156 and 184). The 5 GB transform item appears only as item 3 of the 'Confirm first' list (line 272), not as a Check callout."
+    },
+    {
+      "claim": "A 5 GB file at 6 min/GB would take about 30 minutes, equal to TRANSFORM_TIMEOUT_S (1,800 s) (report.md line 272)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Arithmetic is right (6 x 5 = 30 min = 1,800 s) and both inputs are in the notes. The guide itself flags that linear scaling is not stated, so it is presented as a question, not a fact."
+    },
+    {
+      "claim": "'Version' means three different things: a Version, a Schema contract version and a dataset major version (callout, lines 50-56)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Grounded in the notes' wording (Lineage record: 'schema contract version'; Gotcha 2: 'new dataset major version, not a new Version'). user_notes.md calls the callout 'my synthesis', but the guide does not label it as such."
+    },
+    {
+      "claim": "The file uses CRLF line endings (user_notes.md)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Byte count of report.md: 290 CRLF and 0 bare LF."
+    },
+    {
+      "claim": "In-page links resolve (28 internal links, GitHub-style anchors)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "mechanical.json reports internal_links: 28 and no B4 finding (no broken link or image path); both image files exist."
+    },
+    {
+      "claim": "The guide embeds PNGs because they render in every wiki engine (report.md line 290)",
+      "type": "quality",
+      "verified": false,
+      "evidence": "Unverifiable overgeneralisation; PNG embeds render in VS Code preview and Azure DevOps repo pages, but 'every wiki engine' cannot be checked. user_notes.md separately warns that heading anchors may slug differently in Azure DevOps."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+      "Notes say both '3 attempts' and 'retried 3 times' while listing three backoff delays",
+      "POLICY_MODE default is strict in the settings table but the local stack is described as allow-all; assumed the compose setup overrides it",
+      "A 5 GB file at the 6 min/GB transform p95 would reach the 1,800 s transform timeout",
+      "Repo contents inferred from names; a Version is assumed to keep its last status while its message is retried or dead-lettered; cache-TTL reading; settings grouped by area by the executor",
+      "'CET' could mean local time or fixed UTC+1; incident review has no stated time",
+      "The 15-minute reading time is an unmeasured estimate"
+    ],
+    "needs_review": [
+      "Heading anchors are GitHub-style; Azure DevOps wiki slugs may differ",
+      "File uses CRLF line endings",
+      "Figure 1 is dense and its text is small",
+      "Rename report.md for the wiki and keep diagrams/ beside it (or fix the two image paths)",
+      "The 'three kinds of version' callout is the executor's synthesis"
+    ],
+    "workarounds": [
+      "Tried Graphviz first, but shared stores (Catalog, Raw Zone) caused crossing lines, so the figures were hand-laid-out as SVG in three bands and rasterised with headless Edge or Chrome",
+      "No day-by-day schedule beyond the two fixed meetings; the suggested week-one pacing is labelled as a suggestion"
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "D3 D4 Image-first and legible",
+        "reason": "The assertion text omits the 500-2600 px width bound that rule D4 and the checker apply. This run's Figure 1 (2760 px) is readable-but-small at 800 px, so the verdict turned on a 160 px overshoot rather than on the reader's experience. State the bound in the assertion, or use a measurable criterion such as a minimum rendered font size (for example 9 px at 800 px)."
+      },
+      {
+        "assertion": "C2 Compact panel",
+        "reason": "Passes trivially when no glance panel exists: panel_words counts the prose of the first H2, so any document whose first section is short passes (here 239 words for 'The short version', sitting behind 20 lines of header). Pair it with C1 or measure from the title."
+      },
+      {
+        "assertion": "Mental model first",
+        "reason": "Compound of two checks (diagram within the first screen or two, and the Catalog-not-queue call-out). This run met the call-out but not the diagram, and the verdict hides which half failed. Split into two assertions."
+      },
+      {
+        "assertion": "D5 D6 Explained and reproducible",
+        "reason": "Six sub-claims in one pass/fail. 'Edge list in the archive' cannot be met when the document has no archive, and 'takeaway' is subjective. Split D5 from D6 and define the minimum (for example, the caption contains a sentence stating the takeaway)."
+      },
+      {
+        "assertion": "E1 E2 Honesty",
+        "reason": "The universal clause ('content not in the inputs is labelled') is falsified by a single unlabelled addition (the 'By Friday' goals), yet a conscientious baseline like this one otherwise meets it. Test the specific planted ambiguities (attempts vs retries, POLICY_MODE default, CET) and the unknowns list instead; as written it barely separates skill from no-skill."
+      },
+      {
+        "reason": "No assertion checks fidelity of the 20-row config table or other transcribed figures beyond retries and the 15-minute target. A wrong default would go uncaught; add a spot-check of at least five settings against architecture-notes.md."
+      },
+      {
+        "reason": "Human-zone length (about 3,331 words against the 2,500 advisory, rule F2) and the 20-row inline table (rule A2) surface only inside the aggregate 'Automatic checks' count. Consider an explicit proportionality assertion for explainers."
+      }
+    ],
+    "overall": "Structural assertions (A1, A3, B1, C1, Mental model first) discriminate well: this competent no-skill run fails all of them. Content assertions (D1, D2, Concepts before flows, Week-one use, Figures) are met by a careful baseline, so they check correctness but do not separate skill from no-skill. Several compound assertions (D3 D4, D5 D6, Mental model first) hide which sub-claim decided the verdict."
+  }
+}

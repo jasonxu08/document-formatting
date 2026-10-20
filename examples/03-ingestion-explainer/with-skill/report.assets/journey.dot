@@ -1,0 +1,29 @@
+digraph journey {
+  rankdir=TB; pad=0.3; nodesep=0.5; ranksep=0.65; bgcolor="white";
+  graph [fontname="Arial"];
+  node [shape=box, style="rounded,filled", fillcolor="#F2F4F7", color="#98A2B3",
+        fontname="Arial", fontsize=15, margin="0.18,0.10"];
+  edge [color="#667085", fontname="Arial", fontsize=13, arrowsize=0.9];
+
+  "Customer"          [shape=ellipse, fillcolor="white"];
+  "Uploader API";
+  "Message Queue"     [shape=cds];
+  "DLQ"               [label="Dead-letter queue (DLQ)\npages on-call", shape=cds];
+  "Validation Worker";
+  "Transform Worker";
+  "Quarantine Store"  [label="Quarantine Store\nkept 30 days", shape=cylinder];
+  "Curated Zone"      [label="Curated Zone\ntables customers query", shape=cylinder];
+  "Catalog"           [label="Catalog\nsource of truth for status", fillcolor="#FEF0C7", color="#B54708", penwidth=2.5];
+
+  "Customer"          -> "Uploader API"      [label="uploads file"];
+  "Uploader API"      -> "Message Queue"     [label="sends validate\nmessage"];
+  "Message Queue"     -> "Validation Worker" [label="delivers validate\nmessage"];
+  "Validation Worker" -> "Message Queue"     [label="sends transform message\nif the file is valid"];
+  "Message Queue"     -> "Transform Worker"  [label="delivers transform\nmessage"];
+  "Message Queue"     -> "DLQ"               [label="after 3 failed\nattempts"];
+  "Validation Worker" -> "Quarantine Store"  [label="copies invalid file"];
+  "Transform Worker"  -> "Curated Zone"      [label="writes tables"];
+  "Uploader API"      -> "Catalog"           [label="creates Version:\nreceived", color="#B54708", fontcolor="#B54708"];
+  "Validation Worker" -> "Catalog"           [label="sets validated\nor quarantined", color="#B54708", fontcolor="#B54708"];
+  "Transform Worker"  -> "Catalog"           [label="writes lineage,\nsets published", color="#B54708", fontcolor="#B54708"];
+}

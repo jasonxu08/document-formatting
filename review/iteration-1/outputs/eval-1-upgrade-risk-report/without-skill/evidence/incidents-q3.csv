@@ -1,0 +1,37 @@
+date,service,severity,duration_min,cause,summary
+2026-07-02,auth-service,SEV2,34,token-validation-timeout,Token validation p99 above 5s during morning peak
+2026-07-05,gateway,SEV3,12,downstream-timeout,Gateway 504s while auth-service slow
+2026-07-09,catalog-service,SEV3,20,config,Wrong connection string after config rollout
+2026-07-11,auth-service,SEV1,78,token-validation-timeout,Login failures for 78 minutes after cache eviction storm
+2026-07-11,gateway,SEV1,78,downstream-timeout,Gateway returned 503 for all authenticated routes (caused by auth-service SEV1)
+2026-07-14,share-service,SEV3,15,deploy,Failed rollout; rolled back within 15 minutes
+2026-07-18,connector-service,SEV3,25,dependency,Upstream partner API schema change
+2026-07-21,auth-service,SEV2,41,token-refresh-bug,Refresh tokens rejected after clock skew on one node
+2026-07-23,notify-service,SEV3,9,queue-backlog,Notification queue backlog after batch share
+2026-07-25,catalog-service,SEV2,52,dependency,Search index lag made catalog listings stale
+2026-07-29,gateway,SEV3,18,downstream-timeout,Intermittent 504s from share-service
+2026-08-01,auth-service,SEV3,22,config,Signing key rotated before dependents refreshed
+2026-08-03,map-service,SEV3,14,deploy,Failed rollout; rolled back within 14 minutes
+2026-08-06,auth-service,SEV2,37,token-validation-timeout,Token validation timeouts under load test traffic
+2026-08-08,share-service,SEV2,45,dependency,Catalog latency stalled share creation
+2026-08-12,gateway,SEV3,11,config,Rate-limit rule misconfigured for one tenant
+2026-08-14,auth-service,SEV3,19,token-refresh-bug,Refresh token reuse detection false positives
+2026-08-19,catalog-service,SEV3,16,runtime-gc,GC pauses on large dataset listing
+2026-08-21,connector-service,SEV3,28,dependency,Partner API throttling
+2026-08-24,auth-service,SEV2,29,token-validation-timeout,Cache miss storm after deploy
+2026-08-27,gateway,SEV3,13,downstream-timeout,504s while auth-service cache warmed
+2026-08-29,share-service,SEV3,10,deploy,Failed rollout; rolled back within 10 minutes
+2026-09-02,auth-service,SEV2,48,runtime-gc,Long GC pauses blocked token endpoint
+2026-09-04,user-store,SEV2,33,config,Connection pool exhausted after pool size change
+2026-09-08,catalog-service,SEV3,21,dependency,Map-service latency slowed dataset detail pages
+2026-09-10,notify-service,SEV3,8,queue-backlog,Retry storm after provider outage
+2026-09-12,auth-service,SEV3,17,config,Wrong audience setting in one environment
+2026-09-15,gateway,SEV2,36,downstream-timeout,504s traced to auth-service latency
+2026-09-17,connector-service,SEV3,19,deploy,Failed rollout; rolled back within 19 minutes
+2026-09-19,map-service,SEV3,12,dependency,Catalog-service latency caused timeouts
+2026-09-22,share-service,SEV3,14,downstream-timeout,Timeout calling notify-service
+2026-09-24,auth-service,SEV2,43,token-validation-timeout,Token validation timeouts during onboarding batch
+2026-09-25,gateway,SEV3,10,config,Wrong upstream URL after environment swap
+2026-09-26,search-index,SEV3,18,runtime-gc,Index rebuild paused by GC
+2026-09-27,catalog-service,SEV3,15,deploy,Failed rollout; rolled back within 15 minutes
+2026-09-28,auth-service,SEV3,12,token-refresh-bug,Intermittent refresh failures after deploy

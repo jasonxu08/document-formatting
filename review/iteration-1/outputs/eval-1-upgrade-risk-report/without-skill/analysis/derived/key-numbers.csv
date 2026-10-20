@@ -1,0 +1,40 @@
+id,value,definition
+incident_rows,36,Rows in incidents-q3.csv
+incident_events,35,Distinct events: rows minus rows that restate another logged incident
+duplicate_rows,1,Rows excluded as duplicates (2026-07-11 gateway SEV1 restates the auth-service SEV1)
+incident_minutes_rows,932,Sum of duration_min over all rows
+incident_minutes_events,854,Sum of duration_min over distinct events
+auth_events,11,Distinct events logged against auth-service
+auth_minutes,380,Minutes of those events
+auth_share_of_events_pct,31.4,auth_events / incident_events
+auth_share_of_minutes_pct,44.5,auth_minutes / incident_minutes_events
+traced_to_auth_events,3,"Non-auth events whose summary points to auth-service, e.g. 504s while auth-service was slow (all gateway)"
+traced_to_auth_minutes,61,Minutes of those events
+auth_involved_events,14,auth_events + traced_to_auth_events
+auth_involved_share_of_events_pct,40.0,auth_involved_events / incident_events
+auth_involved_minutes,441,auth_minutes + traced_to_auth_minutes
+auth_involved_share_of_minutes_pct,51.6,auth_involved_minutes / incident_minutes_events
+sev1_events,1,"Distinct SEV1 events (2 rows, 1 event)"
+sev1_rows,2,SEV1 rows before de-duplication
+sev1_sev2_events,11,Distinct SEV1 + SEV2 events
+sev1_sev2_auth_events,7,"Of those, logged against auth-service"
+longest_auth_incident_min,78,Longest auth-service event (2026-07-11 SEV1)
+token_refresh_bug_events,3,Events with cause token-refresh-bug (all auth-service)
+token_refresh_bug_minutes,72,Minutes of those events
+runtime_gc_events,3,Events with cause runtime-gc
+failed_rollout_events,5,Events with cause deploy (every summary says rolled back)
+failed_rollout_min_range,10-19,Shortest-longest minutes of those events
+failed_rollout_median_min,15,Median minutes of those events
+change_related_events,11,Events with cause config or deploy
+propagated_events,11,Events with cause dependency or downstream-timeout
+q3_days,92,Days from 2026-07-01 to 2026-09-30 inclusive
+auth_days_between_events,8.4,q3_days / auth_events
+leave_days,19,Days from 2026-10-26 to 2026-11-13 inclusive
+auth_expected_events_in_leave,2.3,Q3 auth-service rate applied to the leave window (illustration only)
+rto_vs_longest_auth_incident_x,3.1,240 min estimated RTO / longest auth-service event
+rto_share_of_auth_q3_minutes_pct,63,240 min / auth_minutes
+auth_dependents,6,Services that list auth-service in depends_on
+catalog_dependents,4,Services that list catalog-service in depends_on
+mutual_dependencies,catalog-service <-> map-service,Pairs that list each other in depends_on
+events_jul_aug_sep,10/11/14,Distinct events per month
+freeze_days_inclusive,66,2026-11-01 to 2027-01-05 inclusive

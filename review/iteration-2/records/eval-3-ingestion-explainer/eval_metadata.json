@@ -1,0 +1,28 @@
+{
+  "eval_id": 3,
+  "eval_name": "ingestion-explainer",
+  "prompt": "New engineer Priya starts on the ingestion team on Monday. She's a strong backend dev but knows nothing about our platform. Using the notes in <workspace>\\fixtures\\explainer\\, write an explainer of how the ingestion platform works so she's productive in her first week. Save it as a doc we can drop into the team wiki repo.",
+  "assertions": [
+    "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input, archive or reference material sits last in its own labelled zone; nothing for people follows machine content",
+    "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+    "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+    "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive",
+    "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+    "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the mental model itself, not what the document covers",
+    "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words), and the mental model, the few things that matter and the reading path fit the first screen or two",
+    "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+    "C5 Numbers in the panel trace to the sources (spot-check at least three); derived or inferred numbers say so",
+    "D1 Diagram drawn: the eleven related platform components (Uploader API, Message Queue, Validation Worker, Schema Registry, Quarantine Store, Transform Worker, Raw Zone, Curated Zone, Catalog, Policy Engine, Notifier) are shown in at least one diagram",
+    "D2 Coverage and truth: every one of the eleven components appears in at least one diagram (a single diagram or an overview plus zoomed views, the overview's caption saying what it leaves out), every drawn edge exists in the notes, and inferred edges are dashed and captioned",
+    "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+    "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+    "E1 E2 Honesty: content not in the inputs (assumptions, suggestions, inferences) is labelled as such; ambiguities in the notes are flagged rather than silently resolved; unknowns are listed",
+    "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (the mental model, the few things that matter, the file path, where to start) and does not paste the document",
+    "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+    "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+    "Mental model first: the first screen or two has a diagram showing the main flow (at least the eight core components) and calls out that the Catalog, not the queue, is the source of truth for status",
+    "Concepts before flows: Dataset, Version, Schema contract, Quarantine, Lineage record and Tenant are defined (glossary or definition on first use) before the step-by-step flow that uses them",
+    "Week-one use: includes the six gotchas and what to do in week one (runbooks, starter tickets INGEST-310 and INGEST-322, the weekly sync)",
+    "Figures: retry behaviour (3 attempts, backoff 30 s, 2 min, 10 min, then the dead-letter queue) and the 15-minute publish target for files up to 1 GB are right, and the notes' ambiguity between attempts and retries is flagged or handled without silently contradicting the notes"
+  ]
+}

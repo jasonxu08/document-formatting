@@ -1,0 +1,39 @@
+// Dependency map of the nine services. Source of truth: report.data/services.csv (column depends_on).
+// An arrow means "depends on" (caller -> callee). All 16 edges come from the CSV; none is inferred.
+// catalog-service and map-service depend on each other: drawn once as a two-way arrow.
+// Render: dot -Tpng -Gdpi=150 report.assets/dependency-map.dot -o report.assets/dependency-map.png
+digraph deps {
+  rankdir=TB; pad=0.3; nodesep=0.5; ranksep=0.75; bgcolor="white";
+  graph [fontname="Arial", fontsize=15, labelloc=b, labeljust=l,
+         label="Arrow = depends on. Grey = the seven (passed staging, rollback in 10 to 15 min).\lRed and amber = the Identity pair (defer to January). Orange = mutual dependency.\l"];
+  node [shape=box, style="rounded,filled", fillcolor="#F2F4F7", color="#98A2B3",
+        fontname="Arial", fontsize=17, margin="0.22,0.12"];
+  edge [color="#667085", fontname="Arial", fontsize=14, arrowsize=0.9];
+
+  // Declaration order sets the left-to-right order inside each row.
+  "gateway"; "share-service"; "connector-service"; "notify-service"; "map-service"; "catalog-service"; "search-index";
+
+  "auth-service" [label="auth-service\n6 services depend on it\n2 of 148 tests fail, no rollback",
+                  fillcolor="#FEE4E2", color="#D92D20", penwidth=3];
+  "user-store"   [label="user-store\nnot tested, no rollback",
+                  fillcolor="#FEF0C7", color="#DC6803", penwidth=2.5];
+
+  { rank=same; "notify-service" -> "catalog-service" -> "map-service" [style=invis]; }
+  { rank=same; "share-service" -> "connector-service" [style=invis]; }
+
+  "gateway" -> "auth-service";
+  "gateway" -> "catalog-service";
+  "gateway" -> "share-service";
+  "gateway" -> "connector-service";
+  "auth-service" -> "user-store";
+  "catalog-service" -> "auth-service";
+  "catalog-service" -> "search-index";
+  "catalog-service" -> "map-service" [dir=both, color="#DC6803", penwidth=2.4];
+  "map-service" -> "auth-service";
+  "share-service" -> "auth-service";
+  "share-service" -> "catalog-service";
+  "share-service" -> "notify-service";
+  "connector-service" -> "auth-service";
+  "connector-service" -> "catalog-service";
+  "notify-service" -> "auth-service";
+}

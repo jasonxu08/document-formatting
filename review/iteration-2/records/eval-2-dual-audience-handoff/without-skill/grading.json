@@ -1,0 +1,250 @@
+{
+  "expectations": [
+    {
+      "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input or archive material sits last in its own labelled zone; nothing for people follows machine content",
+      "passed": true,
+      "evidence": "Two zones whose headings name their audience, human first and machine last. L11 '## Part A: Status and decisions (for Dana)' opens the human zone (A1 bottom line, A2 asks table, A3 dates, A4 Q1/Q2 detail; no logs, listings or long code). L75 '## Part B: Continuing the work (for the AI agent)' is the last H2 and holds all agent material (B1 rules, B2 commands, B3 task cards, B4 dead ends, B5 gaps, B6 logs). The L6 'Who reads what' pointer line was not what I credited; the two headings were. Close call: there is no separate archive zone, Part A sends Dana into Part B for the live status table (B3) and the Decision log (B6), and mechanical.json flags missing <!-- zone: --> markers (A1 Major). The assertion, however, asks for a heading/banner naming the audience, which is present."
+    },
+    {
+      "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+      "passed": false,
+      "evidence": "mechanical.json: details_blocks = 0. Part B (L75-L297, about 3,300 words: command block, tables, eight task cards, logs) is fully expanded inline; there is no <details>/<summary> anywhere. No opening line names a bin ('AI input' or 'archive') and what it supports (L77 opens 'You are picking this up from Alex...'). Nothing long sits behind a pointer in a sibling file: outputs holds only report.md, user_notes.md (not referenced from report.md) and assets/."
+    },
+    {
+      "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+      "passed": false,
+      "evidence": "mechanical.json: internal_links = 0 and a B1 Major ('only 0 in-document link(s) in the 60 lines after the title'). L6-L7 are plain-text lines: 'Who reads what: Dana reads Part A ...; the AI coding agent reads Part A for context, then works from Part B' and 'Contents: Part A: A1 bottom line, A2 what is needed, ...'. They list section names only: no links, nothing saying what the reader gets from each section, and the stop point is only implied."
+    },
+    {
+      "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive",
+      "passed": false,
+      "evidence": "Not clearly met on any of the three clauses. (1) The system's mental model ('What this is: ... 14 legacy cron jobs to JobRunner, the new job platform: YAML definitions in jobs/, executed by workers in a runner pool', L107) arrives after Part A (L11-L74) and after the B1 ground rules (L79-L103); Part A opens with status. (2) Terms are used before they are defined: 'JobRunner' (L1, L62) is first explained at L107; 'cutover' (L4, L5, L17, A2, A3) is first defined, as an [Assumption], at L220; B1 leans on forward references ('the dead ends in B4', 'Decision log, B6'). (3) There is no archive zone; the dated measurements table and the Update log sit inside the AI zone. In its favour: the work-log chronology was not copied; the document is organised by status, ask and task."
+    },
+    {
+      "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+      "passed": false,
+      "evidence": "Only two H2s exist: 'Part A: Status and decisions (for Dana)' and 'Part B: Continuing the work (for the AI agent)'. The human zone's single H2 is a topic label. Its H3s ('A1. Bottom line', 'A2. What is needed from Dana', 'A3. Key dates', 'A4. Detail behind the two decisions') and H4s ('Q1: XLS above 1,048,576 rows', 'Q2: pool size') are labels too; none carries a conclusion or the ask. Read alone they give a table of contents, not the argument."
+    },
+    {
+      "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the conclusion itself, not what the document covers",
+      "passed": false,
+      "evidence": "The conclusion is not straight after the title and one metadata line. Before 'A1. Bottom line' (L13) come five header bullets (L3-L7: status date, leave dates, cutover target, 'Who reads what', 'Contents', the last two describing what the document covers), a 'Convention' blockquote (L9) and the Part A heading (L11): about 184 words by my count of L1-L10. The bottom line itself opens with a description ('Where it stands. Built: the export job, a streaming CSV writer ...', L15); the conclusion ('The 2026-11-10 cutover is at risk if Q1 to Q4 are not settled by Fri 2026-10-30', L17) is the third bullet and there is no verdict line. The content is conclusion-bearing and sits within the first 20 lines, but the placement test is not met. Mechanical C1 did not fire because check_doc.py treats the L9 blockquote as the first panel element (only 5 text lines before it)."
+    },
+    {
+      "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words), one line per decision and per risk, and verdict, decisions and top risks fit the first screen",
+      "passed": false,
+      "evidence": "mechanical.json: panel_words = 677 against a budget of about 300 (C2 Major at L11: 'the first section runs to about 677 words'). There is no short panel: the human zone is a run of sections (A1 about 208 words of bullets; A2 table plus three prose paragraphs at L37-L41; A3; A4 detail). Decision rows are multi-sentence rather than one line (Q1 L29 has three sentences, Q5 L33 four), and there is no per-risk line. The bottom line, the asks table and the single risk do start inside the first 60 lines (L15-L19, L27-L35), but not compactly."
+    },
+    {
+      "text": "C3 Verdict, decisions and risks are complete and loud in the panel: the verdict has a glyph, confidence and basis; each decision has who, what, by when and a recommendation; at most 5 ranked risks, each with severity and consequence",
+      "passed": false,
+      "evidence": "No verdict glyph and no confidence anywhere (a grep for confidence/high/medium/severity/consequence and status glyphs finds only 'low priority' for T11). The only verdict-like statement is the L17 'Risk' bullet: the cutover is 'at risk if Q1 to Q4 are not settled by Fri 2026-10-30 (Alex's estimate ...)'; it gives a basis but no confidence and no consequence. The A2 decisions (L29-L35) carry what and by when ('who' only through the table heading), but 'Alex's view', the recommendation column, is '-' for Q3, Q4, Q5 and Q7. Only one risk is stated; none is ranked or given a severity."
+    },
+    {
+      "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+      "passed": false,
+      "evidence": "Most of the panel is grounded: the 3/1/3/4 status counts match tasks.md, Q1-Q6 map one-to-one to open-questions.md items 1-6, and the 30 Oct risk comes from item 6 (the Q1-Q4 reading is flagged at L37). But (a) Q7 ('Confirm who the agent escalates to ...', L35) is a decision block with no grounding in the three input files; the document itself says 'Q7 is not in Alex's notes' (L37), and its 'By when', Mon 2026-10-19, appears in no source. (b) Empty slots are not omitted: 'Alex's view' is '-' for Q3, Q4, Q5 and Q7 (L31, L32, L33, L35) and Q5's date reads 'No date'. The additions are disclosed, but the assertion is literal about ungrounded decision blocks and empty slots."
+    },
+    {
+      "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived, merged or de-duplicated numbers say so",
+      "passed": true,
+      "evidence": "Spot-checked six panel numbers: 3 done / 1 in progress / 3 blocked / 4 todo of 11 (tasks.md: T1-T3 done, T7 in progress, T4-T6 blocked, T8-T11 todo); 20 CSV exports on staging (work log 10-13); Acme 4.2M rows and the 1,048,576-row cap (10-06, 10-09); about +1,200 USD/month and the 15-minute SLA (10-09); the 2026-10-30 risk date (open-questions item 6). Derived dates are weekday arithmetic, which L9 says ('calendar arithmetic on them'), and I verified them (7 Nov Saturday, 30 Oct Friday, 10 Nov Tuesday, DBA Tue/Thu dates correct). The status tally is a plain count of the task table and is checkable in the figure and B3, not a merged number. Minor: '5 files for Acme' (L63) is derived and unlabelled, but sits in A4, outside the panel."
+    },
+    {
+      "text": "D1 Diagram drawn: the eleven related tasks T1-T11 and their dependencies are shown in at least one diagram",
+      "passed": true,
+      "evidence": "A dependency diagram of the task web is drawn: assets/task-status.png (L21) has 9 nodes and 10 edges: a 'T1 to T3' DONE node, T4, T5, T6 (BLOCKED), T7 (IN PROGRESS), T8, T9, T10 (TODO) and T11 (isolated, low priority), with arrows T1-T3 -> T4..T7 -> T9 -> T10 and T8 -> T10, which matches the Depends-on column of tasks.md at that level. Close call: T1-T3 are collapsed into one node, so this is a coarsened version of the eleven-task web; that coverage defect is judged under D2."
+    },
+    {
+      "text": "D2 Coverage and truth: every one of the eleven tasks appears in at least one diagram, every drawn dependency edge exists in tasks.md, and inferred edges are dashed and captioned",
+      "passed": false,
+      "evidence": "Not every task appears on its own. The PNG and assets/task-status.dot (node 'built') collapse T1, T2 and T3 into one 'T1 to T3' node: T2 never appears as a task ID or node, and the T1->T2 and T1->T3 dependencies of tasks.md are not drawn. The single node's four outgoing edges to T4-T7 blur tasks.md (T4 depends on T3 only; T5, T6 and T7 depend on T2 only), and the grouping is not captioned as a simplification (caption L23 only says snapshot and source). The other drawn edges (T4-T7 -> T9, T9 -> T10, T8 -> T10) exist in tasks.md and no edge is invented; there are no inferred edges, so none needed dashing. With the burden on the assertion ('every one of the eleven tasks appears'), the merged node does not meet it."
+    },
+    {
+      "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+      "passed": true,
+      "evidence": "L21 embeds ![...](assets/task-status.png); the file exists (1573 x 471 px, inside the 500-2600 range) and is the first and only diagram; there is no Mermaid block (mechanical.json diagram_blocks = 0). I viewed it downscaled to 800 px wide: the title, the four-item legend and the node labels (for example T4 'BLOCKED: DBA window (Q4)', T9 'TODO: needs T4 to T7') are readable though small; no overlapping text, no edge crossing a label, nothing cut off, no empty glyph boxes (odd letter-spacing such as 'Decom mission' in the PNG does not hinder reading)."
+    },
+    {
+      "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+      "passed": false,
+      "evidence": "Partly met, so not met. Present: long informative alt text (L21); an in-image colour legend (done / in progress / blocked on a person / not started); the source assets/task-status.dot beside the PNG, with a regenerate command; the Depends-on column of the B3 table (L152-L164) is a text equivalent of the edge list, though it sits in Part B, not in an archive. Missing: the visible caption (L23, 'Snapshot of 2026-10-17, drawn from assets/task-status.dot. The table in B3 is the live status.') says neither how to read the diagram nor what it shows; edges are unlabelled arrows and no visible text says what an arrow means (only the alt text says 'must finish before'). The document has no archive for the edge list."
+    },
+    {
+      "text": "E1 E2 Honesty: every judgment has a confidence level and its basis; content not in the inputs (assumptions, suggestions, inferences) is labelled as such; unknowns are listed",
+      "passed": false,
+      "evidence": "E2 is largely met: the Convention (L9) defines [Assumption] and [Suggestion] and they are used throughout (for example L19, L67, L73, L81, L103, L147, L170-L174, L220, L249); unknowns are listed in B5 'Not in the notes' (L264-L277, ten rows) and in 'Not measured' / 'Not recorded' notes (L72, L248). Gaps: some additions are untagged (L181 T4 'Write the pre-checks and post-checks', L199 T6 'If Dana keeps 3 workers ... close T6', L205, L221 runbook). E1 is not met: no judgment carries a confidence level (no 'confidence', 'high', 'medium' or 'low' anywhere). The main judgment, cutover 'at risk if Q1 to Q4 are not settled by Fri 2026-10-30' (L17), cites a basis (Alex's estimate) but no confidence; 'People, not code' (L16) has neither."
+    },
+    {
+      "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (verdict, decisions, top risks, the file path, where to start) and does not paste the document",
+      "passed": false,
+      "evidence": "final_reply.md describes the document's structure instead of giving its panel in miniature, though it does not paste the document. Missing: any verdict or status (no '3 of 11 done, 3 blocked', no 'cutover at risk'), the decisions themselves (only 'a table of the seven things she needs to decide or unblock (each with a deadline)' with none named), and the top risk. Present: the outputs folder path and file list. Where to start is only implied ('Part A is for Dana'). The rest of the reply asks the user to check the date arithmetic, the reading of the 30 Oct deadline and the Q7 escalation assumption."
+    },
+    {
+      "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+      "passed": false,
+      "evidence": "mechanical.json gate.passed = false: 0 Blockers, 4 Majors (A1 no <!-- zone: --> markers; B5 0 in-document links, at least 5 expected; B1 0 links in the 60 lines after the title; C2 first section about 677 words vs 300) and 2 Minors (F2 human zone about 4,229 words; A2 shell commands in the human zone at L119). Only report.md was scanned (there are no report.*.md siblings; user_notes.md is not one). Four Majors already exceed the limit of two."
+    },
+    {
+      "text": "Dana's view: the panel says where things stand (how many of the 11 tasks are done, blocked and open) and lists the decisions she must make (XLS above 1M rows, pool size and its cost, DBA window, email template, owner of the 3 cron jobs), each with an option or a recommendation",
+      "passed": true,
+      "evidence": "L15 gives the position: '3 of 11 tasks are done, 1 is in progress, 3 are blocked and 4 have not started' (matches tasks.md). The A2 table (L27-L35, inside the first 60 lines) lists all five required decisions, each with an option or a recommended action: Q1 XLS above 1,048,576 rows, '(a) a ZIP of several XLS files, or (b) CSV only', Alex prefers (a); Q2 pool, '6 workers instead of 3 (about +1,200 USD/month)'; Q3 email template, 'Chase Marketing's approval of the wording and logo'; Q4 DBA window, 'Arrange a DBA window ... (ticket DBA-5521)' with the Tue/Thu windows dated in A3; Q5 cron owners, 'Find the owners of 3 legacy cron jobs' (export_weekly_xls, export_audit, export_adhoc), 'mapped or retired'. Close call on Q3-Q5, whose 'Alex's view' cell is '-': the ask itself is the recommended action. It also adds Q6 (cutover date) and Q7 (escalation contact)."
+    },
+    {
+      "text": "Cutover risk: states that the 10 Nov cutover depends on tasks T4 to T7 and slips if the decisions land after about 30 Oct",
+      "passed": true,
+      "evidence": "L17: 'The 2026-11-10 cutover is at risk if Q1 to Q4 are not settled by Fri 2026-10-30', backed by L16 'The production rollout cannot start until all four are done' (the four are T5, T6, T7 and T4) and by the figure, whose T9 node reads 'TODO: needs T4 to T7' (alt text L21: 'all four must finish before T9 (rollout)'). This matches open-questions item 6. The document flags its reading of 'the decisions' as Q1 to Q4 (L37) and of 'cutover' as T9 finished (L220). Note T4 to T7 appear by task ID in the figure rather than in the bullet text."
+    },
+    {
+      "text": "Agent-ready: the AI-input part holds exact commands and paths from the log (for example pytest tests/exports -q, the staging deploy command, jobs/export-dataset.yaml) and an ordered next-steps list that respects the task dependencies",
+      "passed": true,
+      "evidence": "The B2 command block (L119-L126) holds exact commands from the log: 'docker compose up -d postgres', 'python -m exports.cli run --dataset demo --format csv --rows 100000', 'pytest tests/exports -q' (L123), './scripts/deploy.ps1 -Env staging -Service exports-runner' (L124, repo root, needs VPN) and 'kubectl get pods -n exports'. The 'Where things are' table (L130-L141) gives repo-relative paths: jobs/export-dataset.yaml, src/exports/streaming_csv.py, src/exports/xls_writer.py, migrations/0042_export_runs.sql, templates/export_ready.html, tests/exports/, legacy/crontab.txt, docs/cron-mapping.md. 'Order of work (steps 1 to 5 need no decision)' (L166-L175) is ordered by dependency: first-session checklist, T8 (no dependencies), prep work, T11 last, then T5/T6/T7/T4 only once their decision is logged, and step 8 'Do not start blocked work'. T9 'starts only when T4, T5, T6 and T7 are done' and T10 needs T8 and T9 (cards L216-L228); T9/T10 are not in the numbered list but their cards state the prerequisites, and every card ends with 'Done when'."
+    },
+    {
+      "text": "Guardrails and protocol: the AI-input part says what not to do (no in-memory or OFFSET retries, no migration 0042 in production outside the DBA window, no copying secrets) and what to do while decisions are open and where answers are recorded",
+      "passed": true,
+      "evidence": "B1 (L79-L103): 'Never: Copy, print, log or commit anything from the vault path kv://nimbus/exports/prod/*' (L93); 'Retry the dead ends in B4' (L94), where B4 lists 'Load all rows into memory ... OOM-killed' and 'LIMIT/OFFSET paging' (L261-L262); production migration 0042 needs a recorded human go-ahead plus a DBA window (L85; T4 card L180: 'DBA windows are Tue and Thu, 22:00 to 23:00 UTC ... You cannot do this step yourself'). While decisions are open: 'Treat Q1 to Q4 as answered before the Decision log says so' (L95), 'Do not implement anything before Q1 is in the Decision log' (L187), keep working on unblocked items (L77, L166-L175), say so when access is missing, escalate with a 'NEEDS DANA:' Update-log row (L100), and 'When everything unblocked is done, log it and stop. Do not start blocked work.' (L175). Answers are recorded in the Decision log (A2 L39 'How to answer'; B6 L281: 'A decision counts only once it is written here')."
+    },
+    {
+      "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+      "passed": true,
+      "evidence": "Recall 6/6 = 100%. Recovered: K1, K2, K3, K4, K5, K6. Missed: none. K6 is borderline: credited from 'T8 can start now' plus 'who approves production steps'."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 13,
+    "total": 22,
+    "pass_rate": 0.41
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": null,
+    "errors_encountered": 0,
+    "output_chars": 0,
+    "transcript_chars": null,
+    "files_created": [
+      "assets/task-status.dot",
+      "assets/task-status.png",
+      "report.md",
+      "user_notes.md"
+    ],
+    "note": "Copied from outputs/metrics.json; the harness reported no tool-call counts and no transcript exists, so total_tool_calls = 0 means not measured."
+  },
+  "timing": {
+    "executor_duration_seconds": 2019.4,
+    "total_duration_seconds": 2019.4,
+    "note": "executor estimate from file timestamps"
+  },
+  "claims": [
+    {
+      "claim": "3 of 11 tasks are done, 1 is in progress, 3 are blocked and 4 have not started (report.md L15)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "tasks.md: T1-T3 done; T7 in progress; T4-T6 blocked; T8-T11 todo."
+    },
+    {
+      "claim": "7 Nov 2026 is a Saturday so the first working day is Mon 9 Nov; 30 Oct is a Friday; DBA windows fall on Tue 20 and 27 Oct, 3 Nov and Thu 22 and 29 Oct, 5 Nov; EU clocks go back on Sun 25 Oct (report.md L4, A3 table, L147)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Checked with System.DateTime weekday arithmetic: 2026-11-07 Saturday, 2026-11-09 Monday, 2026-10-30 Friday, 2026-11-10 Tuesday, 2026-10-25 Sunday (last Sunday of October); every listed DBA date is a Tuesday or Thursday."
+    },
+    {
+      "claim": "Everything beyond your notes is tagged [Assumption] or [Suggestion] (final_reply.md)",
+      "type": "quality",
+      "verified": false,
+      "evidence": "Several additions carry no tag: L181 (T4 'Write the pre-checks and post-checks'), L199 (T6 'If Dana keeps 3 workers ... close T6 as decided: no change'), L205 (T7 one-email-after-retry check), L221 (T9 runbook). Q7 and its Mon 2026-10-19 date are disclosed only in prose (L37). L9 does say in general that structure, checklists and order of work were added, so the claim is mostly but not strictly true."
+    },
+    {
+      "claim": "A table of the seven things she needs to decide or unblock (each with a deadline) (final_reply.md)",
+      "type": "factual",
+      "verified": false,
+      "evidence": "A2 has seven rows (L29-L35), but Q5's 'By when' is 'No date (needed before T10)' (L33); six of seven carry a date."
+    },
+    {
+      "claim": "About 4,600 words in total; Part A about 1,300 with tables and alt text (user_notes.md)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Whitespace word count of report.md is 4,610. Part A (L11-L74) counts 1,123, somewhat under the 1,300 stated (not material). mechanical.json counts 4,229 prose words for the whole file."
+    },
+    {
+      "claim": "T1-T11 and Q1-Q6 keep the IDs of the notes and Q7 is the only addition (user_notes.md)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Q1-Q6 follow open-questions.md items 1-6 in order (XLS, pool, email, DBA window, cron owners, cutover date); T-IDs, statuses and Depends-on entries match tasks.md in the B3 table; Q7 appears in no source."
+    },
+    {
+      "claim": "Acme's 4.2M-row export takes 9.5 min alone and 21 min with three at once on 3 workers, and 5M rows took 6 min on one worker, figures that do not line up (A4 Q2, B4)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Work log 2026-10-05 (5M rows, 6 min, one worker) and 2026-10-09 (4.2M rows, 9.5 min alone, 21 min with three concurrent, pool of 3). The remark that they do not line up is a fair reading and is tagged [Assumption]."
+    },
+    {
+      "claim": "Nothing is live in production (report.md L15)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Work log 2026-10-07 (migration 0042 'NOT applied in production') and 2026-10-13 ('Nothing done in production yet')."
+    },
+    {
+      "claim": "'5 files for Acme' for option (a), a ZIP of 1M-row XLS files (report.md L63)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Derived, not stated in the sources: 4.2M rows / 1,048,576 is about 4.006, so 5 files. Correct but not labelled as derived."
+    },
+    {
+      "claim": "Rendered the Markdown to HTML and checked it in headless Chrome; the figure text is small at narrow widths (user_notes.md)",
+      "type": "process",
+      "verified": false,
+      "evidence": "Unverifiable: no transcript exists. My own 800 px rendering of the PNG showed readable but small text, consistent with the remark."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+      "Leave dates: the work log says leave runs 2026-10-17 to 2026-11-06 and the user said back 7 Nov, a Saturday, so the first working day was written as Mon 2026-11-09.",
+      "'If the decisions slip past 2026-10-30' was read as Q1 to Q4 (the four things T9 waits for); stated as an assumption under the A2 table.",
+      "'Cutover' was assumed to mean T9 finished, with T10 later and undated.",
+      "Who decides Q2 (budget) and who the agent escalates to were assumed to be Dana; production changes were assumed to need a human go-ahead.",
+      "Numbers that do not line up: 5M rows in 6 min on one worker (10-05) vs 4.2M rows in 9.5 min on three (10-09); the 21-minute run lacks dataset sizes; '212 pass, 1 xfail' on 10-05 refers to an xfail added on 10-08. All flagged, none resolved.",
+      "Things the notes imply but do not say: whether the 11 mapped cron jobs exist as separate YAML definitions, how legacy cron and JobRunner avoid double runs, which branch holds the work and whether it is pushed, and what CET means across the 2026-10-25 clock change."
+    ],
+    "needs_review": [
+      "Dates (first working day Mon 2026-11-09), the Q1-Q4 reading of the 30 Oct deadline, and Dana as escalation contact (Q7) should be confirmed before the document goes to Dana.",
+      "Executor extras tagged [Suggestion] (staging 6-worker test, XLS timing spike, observability, per-stage checks, a 30 Oct status note) can be deleted by the user.",
+      "Length of about 4,600 words may be trimmed; the executor kept Part B detailed because the agent cannot ask the user."
+    ],
+    "workarounds": [
+      "Rendered Markdown to HTML and viewed it in headless Chrome to check tables, figure and code block; could not check GitHub or an Azure DevOps wiki.",
+      "A browser-tool call wrote two scratch files into the starting repository's .playwright-mcp folder (deleted; the folder is absent when I looked), and a temporary preview server on 127.0.0.1:8765 was stopped."
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "D1 Diagram drawn / D2 Coverage and truth",
+        "reason": "Neither says whether one node that groups several tasks counts. This run merged three finished tasks into a single 'T1 to T3' node: a legitimate simplification, yet it hides T1->T2 and T1->T3 and which predecessor feeds T4 versus T5-T7. I passed D1 and failed D2, but another grader could go either way. State the rule ('each of T1...T11 has its own node or ID' or 'grouped done tasks are allowed if edges stay faithful'). D1 and D2 also overlap on coverage."
+      },
+      {
+        "assertion": "A1 Zones marked and ordered",
+        "reason": "The assertion text (a heading or banner naming the audience) is met by 'Part A (for Dana)' and 'Part B (for the AI agent)', but check_doc.py's A1 check demands <!-- zone: --> markers, so the judged result (pass) and the mechanical result (Major) disagree. Decide whether audience-named H2s are enough or the markers are required."
+      },
+      {
+        "assertion": "C1 Conclusion first",
+        "reason": "The judged placement ('straight after the title and one metadata line') is not what the checker measures. It counts text lines before the first blockquote, table or image, and here a 'Convention' blockquote at L9 hid five header bullets (two of them reading and contents pointers) before the bottom line. A numeric limit would make this repeatable, for example a bottom line within N lines of the title with no contents or pointer lines before it."
+      },
+      {
+        "assertion": "D5 D6 Explained and reproducible / E1 E2 Honesty",
+        "reason": "Both bundle several rules, so a run that satisfies most of them fails outright. D5/D6 here had alt text, legend, a .dot source and a text equivalent but no reading caption or relation statement. E1/E2 here had strong E2 (tags, unknowns table) and no E1 (no confidence levels). Splitting them would show which part the skill actually improves."
+      },
+      {
+        "assertion": "C4 Nothing invented / Dana's view",
+        "reason": "No assertion checks that the decision list equals the six open questions with extras labelled. This run re-labelled Q3-Q6 (all 'need a human decision' in open-questions.md) as 'unblock others' and added an unsourced Q7 with an invented date; C4 catches it only by interpretation, and Dana's view passes regardless. An explicit check such as 'decision list = open questions 1-6, additions marked as the author's proposal' would score this consistently."
+      },
+      {
+        "assertion": "Cutover risk",
+        "reason": "It passes when the bullet says 'Q1 to Q4' and only the figure says 'T4 to T7'. Require the dependency and the 30 Oct threshold to be stated in the panel text itself if that is what is intended."
+      }
+    ],
+    "overall": "Strong discriminating checks (A3, B1, C2, C3, Agent-ready, Guardrails, F3), but several outcomes depend on interpretation (D1/D2 grouped nodes, C1 placement, A1 markers vs headings, C4 labelled additions) and two bundled assertions (D5 D6, E1 E2) hide partial success. Clarify those and add a check that the decision list matches the sources."
+  }
+}

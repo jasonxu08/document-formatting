@@ -1,0 +1,21 @@
+{
+  "eval_id": 1,
+  "eval_name": "upgrade-risk-report",
+  "prompt": "Our runtime upgrade (v8 to v10) is on the table and our Eng Lead, Marcus, has to decide by Friday whether we upgrade before the November code freeze or push everything to January. I put the notes, the service inventory and last quarter's incidents in <workspace>\\fixtures\\upgrade-risk\\. Write the assessment report for Marcus. I also want it kept in the repo as the audit trail for whatever we decide, so keep the supporting data.",
+  "assertions": [
+    "Zones labeled: the document labels a part for human reading and a separate part for AI-input / archive / evidence material, using explicit headings or banners that name the audience (a bare 'Appendix' does not count), and the two parts do not interleave",
+    "Human part highlighted: the part written for humans is marked by a prominent banner or heading that says it is for people or where to start (for example an emoji-led 'start here' heading), so a reader cannot miss it",
+    "Glance first: the first section after the title is a one-screen overview that states the conclusion itself (what is true or what to do), not merely what the document covers; no background, method or table of contents comes before it",
+    "Reading path: within the first screen (about 60 lines) there is a reading path or 'read next' list with at least 3 working links to sections, each saying what the reader gets",
+    "Links work: every in-document link and every image path resolves (scripts/check_doc.py reports no ERROR lines)",
+    "Relationship diagram: the nine services and their dependencies are shown as a diagram (embedded image or Mermaid) that includes all nine services and labels or clearly draws the relationships",
+    "Diagram portable: the diagram a human sees first is an embedded image file that exists on disk (PNG or SVG), not only a Mermaid or other code block, because the reader's VS Code preview and Azure DevOps repo pages do not render Mermaid",
+    "Diagram readable: the diagram has a caption or how-to-read line, and viewing the rendered image shows legible labels with no overlapping or cut-off text",
+    "Evidence out of the way: bulky raw material (the 36 incident rows, the full inventory table, long logs) is not in the human part; it sits in the archive/machine part or in a linked file",
+    "Headings tell the story: at least half of the body headings state a claim, finding or question rather than a generic topic label like 'Overview', 'Analysis' or 'Details'",
+    "Verdict and ask first: the first screen gives a clear recommendation on upgrading before the freeze versus deferring (a conditional or split answer is fine) and names the decision Marcus must make with its deadline (Friday 23 Oct)",
+    "Top risks first: the first screen lists at least 3 top risks with severity markers, including the 12 Nov end of support and the missing rollback path for auth-service",
+    "Figures are right: the report states that auth-service has 6 dependents and accounts for 11 of the 36 Q3 incidents",
+    "Audit data kept: the 36 incident rows and the 9-service inventory are preserved for audit, inline in the archive part or as linked files, as the user asked"
+  ]
+}

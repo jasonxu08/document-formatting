@@ -1,0 +1,630 @@
+diff --git a/a/SKILL.md b/b/SKILL.md
+index 15eaf0b..4a3c109 100644
+--- a/a/SKILL.md
++++ b/b/SKILL.md
+@@ -28,7 +28,7 @@ Three overrides:
+ 
+ - **Required formats win.** If a template, schema or parser dictates the structure (an ADR template, OpenSpec artifacts, another skill's report format, CSV or JSON, API docs), keep its required parts and add the human layer around them: the glance block at the top if the format allows it, otherwise in a companion summary file or in your chat reply. Never break something a tool consumes.
+ - **Write in the reader's language** - the language the user is writing in, labels like "At a glance" included. The English in this file is for you.
+-- **Updating an existing document?** Keep its structure, and make sure its glance panel is still true after your edit. A stale summary is worse than none. A handoff or status document that agents will keep updating should say, in its AI-input block, which parts of the panel to refresh when the status changes.
++- **Existing document?** For a small edit, keep its structure and make sure its glance panel is still true afterwards; a stale summary is worse than none. A handoff or status document that agents keep updating should say, in its AI-input block, which parts of the panel to refresh when the status changes. To restructure a large existing document (a ledger that grew over weeks, a report nobody can read), follow `references/rewriting.md`: it keeps every line reachable and verifies that.
+ 
+ ## Step 1 - Sort every piece of content by audience
+ 
+@@ -45,7 +45,7 @@ Two tests keep the bins honest:
+ - *Would a person who skips this still decide correctly?* If yes, it is not human-read. Keep it, but out of their way.
+ - *Does a person need this to decide, yet it exists only in the archive?* Then it is in the wrong bin. Pull the point into the human zone in a sentence or two and link to the evidence.
+ 
+-Write each fact once, in full, where it is first needed, and reference it from elsewhere. If the whole output is machine-oriented (a JSON file, a prompt, a generated config), do not restructure it; give it a three-line human header saying what it is, what it is for and how to use it.
++Write each fact once, in full, where it is first needed, and reference it from elsewhere. (When you rewrite an existing document, a short restatement in the human zone plus the verbatim original in the archive is not duplication.) If the whole output is machine-oriented (a JSON file, a prompt, a generated config), do not restructure it; give it a three-line human header saying what it is, what it is for and how to use it.
+ 
+ ## Step 2 - Find the headline before you write
+ 
+@@ -69,7 +69,7 @@ Make the split unmistakable to both audiences:
+ - For people: the two zone headings carry the 👤 and 🗄️ glyphs (they show up in outline and TOC panes as well) and a one-line instruction ("Start here", "Skip unless you need the raw evidence or are an agent continuing this work").
+ - For tools and other agents: invisible markers `<!-- zone:human -->`, `<!-- zone:ai-input -->` and `<!-- zone:archive -->` at the start of each zone or block, so a later agent can jump to what it needs.
+ 
+-Long material goes in a sibling file (`<name>.evidence.md`, `<name>.data.json`), reached through a one-line block in the machine zone, when AI-input and archive content together pass about 60 lines or any single block passes about 25. That is a default, not a rule: if the user asks for material to stay in the document, or wants one self-sufficient file, keep it there, collapsed, whatever its size. When the user wants an audit trail, keep byte-exact copies of the inputs in `<doc-stem>.data/` and record their checksums in the evidence file. Start each sibling Markdown file with its zone marker (`<!-- zone:archive -->` or `<!-- zone:ai-input -->`) and run the checker on it too; it then skips the human-zone rules.
++Long material goes in a sibling file (`<name>.evidence.md`, `<name>.data.json`), reached through a one-line block in the machine zone, when AI-input and archive content together pass about 60 lines or any single block passes about 25. That is a default, not a rule: if the user asks for material to stay in the document, or wants one self-sufficient file, keep it there, collapsed, whatever its size. When the user wants an audit trail, keep byte-exact copies of the inputs in `<doc-stem>.data/` and record their checksums in the evidence file (an input that stays beside the output, such as the original in a rewrite, needs only its checksum). Start each sibling Markdown file with its zone marker (`<!-- zone:archive -->` or `<!-- zone:ai-input -->`) and run the checker on it too; it then skips the human-zone rules. Several siblings are fine when the material has distinct purposes (evidence, supporting notes, superseded history, handoff): name them `<doc-stem>.<purpose>.md`, open each with a line saying what it is and a contents list, keep block headings plain and unique (they are link targets), point to each from a block in the machine zone, and leave the blocks of an archive-only sibling open, since the file is the destination. A table or listing the user asked for by name (a map, an inventory) is allowed in full: in the human zone when readers use it to decide, otherwise in the machine zone with a link from the reading path.
+ 
+ ## The glance panel
+ 
+@@ -79,8 +79,8 @@ The first screen must carry the verdict, the decision and the top risks. The pic
+ 
+ Contents, in this order. Drop an item that does not apply and never invent one to fill a slot.
+ 
+-1. **Verdict or status** - if you reached any judgment, say so first and loudly: a glyph and a word (🟢 go, 🟡 go with conditions, 🔴 stop, ⚪ not enough evidence), then the bottom line, then confidence and what it rests on. 🟡 also fits "resolved, but the causes are still open".
+-2. **Decisions needed** - one line each: who decides what by when, and your recommendation. If the cost of being wrong matters, say it once for the whole block.
++1. **Verdict or status** - if you reached any judgment, say so first and loudly: a glyph and a word (🟢 go, 🟡 go with conditions, 🔴 stop, ⚪ not enough evidence), then the bottom line, then confidence and what it rests on. 🟡 also fits "resolved, but the causes are still open" and a partial result (everything checked passed, one check could not be run): write "Partial result" and name the missing part.
++2. **Decisions needed** - one line each: who decides what by when, and your recommendation. If the sources give no date or recommendation, say so ("no date set", "no recommendation in the source") instead of inventing one; a date or recommendation you propose is marked "(suggested)". If the cost of being wrong matters, say it once for the whole block.
+ 3. **Top risks** - at most five, ranked, severity glyph first, each with a one-line consequence and a link to where it is handled.
+ 4. **Key facts** - three to five numbers or facts that carry the argument; skip them when the verdict and risks already do.
+ 5. **One picture** - if a single diagram or compact table makes the topic click (system map, before and after, timeline, option matrix), put it here. When the picture is the fastest route to understanding, it may come right after the bottom line.
+@@ -97,7 +97,7 @@ Anything that could change what the reader does belongs in the panel, above the
+ | Decision or proposal | What do you recommend, what else was considered, what do you need from me, what if we are wrong? |
+ | Investigation or root cause | What happened, why (cause in one sentence, with confidence), who is affected, is it fixed, what next? |
+ | Review, audit, assessment | Overall rating, findings by severity, top three issues, ship or not? |
+-| Test or verification | Pass or fail, what was and was not covered, failures grouped by cause, release impact? |
++| Test or verification | Pass or fail (or partial), what was and was not covered, failures grouped by cause, release impact? A coverage matrix (each requirement against how it was checked) often beats prose. |
+ | Status or handoff | Where things stand, what blocks us, what is next, who must do what? For a handoff also: who carries on, what may they do alone, and what must they not touch? |
+ | Explainer or onboarding | What is the mental model (one picture), which 3-5 concepts matter, where do I read next? |
+ 
+@@ -112,11 +112,11 @@ People understand best when they get the frame before the details, one idea at a
+ - **Order by understanding, not by discovery.** A good default: glance panel, then the mental model (a diagram plus the 3-5 terms that matter), then findings by importance, then options and recommendation, then next steps and open questions. "First I looked at..." chronology belongs in the archive.
+ - **Give a reading path.** End the panel with a "Read next" list in reading order (bullets, with the section number inside the link text so it matches the headings). Each line holds a link, what the reader gets and roughly how long it takes. Say who may stop where ("Only deciding? Stop here. Implementing? Continue to 3, then A").
+ - **Make headings carry the story.** "Retries cause most timeouts" beats "Timeout analysis". Reading only the headings should give the argument. A numbered question or decision heading carries its answer or ask ("Q1 Allow XLS above 1M rows? Recommend: split"), not only its topic.
+-- **Signpost.** Open each section with one line on the question it answers, and close with `Next →` when the order is not obvious. Use one name per entity throughout; never rename something between sections.
++- **Signpost.** When a heading does not already say what its section answers, open the section with one line that does; close with `Next →` only when the order is not obvious. Use one name per entity throughout; never rename something between sections. Cross-references name something the reader can see (a numbered row, a heading), never an unlabelled "risk 3".
+ - **Show relationships explicitly.** When A depends on B or contradicts C, say it with a link: "builds on [2 The dependency map](#2-the-dependency-map)". Link each claim in the panel to the section that supports it, and each evidence block back to the claim it supports.
+ - **Chunk.** Groups of three to five, sections about a screen long, tables for comparisons, lists for parallel items, short paragraphs for reasoning.
+-- **Concepts before flows.** Introduce the vocabulary before the first section that uses it: a short glossary right after the mental model, or a definition on first use. A flow or procedure that leans on undefined terms sends the reader back and forth. Never assume the reader shares the context you built up during the work.
+-- **Keep link targets boring.** Anchors break silently. For headings you link to, use plain words and digits (no emoji or punctuation), build the anchor GitHub-style (lowercase, spaces to hyphens, punctuation dropped) and verify with the checker below.
++- **Concepts before flows.** Introduce the vocabulary before the first section that uses it: a short glossary right after the mental model, or a definition on first use. Include codes, abbreviations and internal names the reader has to decode. A flow or procedure that leans on undefined terms sends the reader back and forth. Never assume the reader shares the context you built up during the work.
++- **Keep link targets boring.** Anchors break silently. For headings you link to, use plain words and digits (no emoji or punctuation), build the anchor GitHub-style (lowercase, spaces to hyphens, punctuation dropped; underscores stay, so avoid them in these headings) and verify with the checker below. `python scripts/check_doc.py <file> --slugs` prints the anchor of every heading.
+ 
+ ## Draw the web
+ 
+@@ -149,14 +149,14 @@ Use plain blockquotes rather than `> [!NOTE]`-style alerts: GitHub renders those
+ 
+ - **File first.** Save the document where the repo's conventions say docs live; otherwise next to the work or where the user named. Put images in `<doc-stem>.assets/` beside it and link them relatively, with forward slashes and no spaces in file names. Name every sibling after the document (`<doc-stem>.evidence.md`) and keep all references relative, so the set can be moved or renamed together.
+ - **No machine-local paths.** Your home directory, temp or session folders mean nothing to the next reader and can leak a username; use paths relative to the document or the repo. The checker flags them.
+-- **The chat reply is the glance panel in miniature** (unless the caller asks for something else): verdict, decisions needed, the top two or three risks, the file path, and where to start reading. Do not paste the document into chat. The reader should be able to decide in thirty seconds and open the file only for more.
++- **The chat reply is the glance panel in miniature** (unless the caller asks for something else): verdict, decisions needed, the top two or three risks, the file path (folder plus file name), and where to start reading. Do not paste the document into chat. The reader should be able to decide in thirty seconds and open the file only for more.
+ - **Chat-only output** that is long gets the same structure. Keep archive material out of the reply (offer to save it), and use a table or indented list instead of a diagram if the client cannot render images.
+ 
+ ## Before you deliver
+ 
+ Review the document against `references/review-rubric.md`, the standard every large document is held to:
+ 
+-1. Run `python scripts/check_doc.py <report.md>` on the main file and on each sibling file (path relative to this skill's directory). It covers every automatic rule and prints each finding with a rule id and a tier: Blocker, Major or Minor.
++1. Run `python scripts/check_doc.py <report.md>` on the main file and on each sibling file (path relative to this skill's directory). It covers every automatic rule and prints each finding with a rule id and a tier: Blocker, Major or Minor. If you rewrote an existing document, also run `python scripts/source_set.py verify <report.md> --source <original>` (see `references/rewriting.md`).
+ 2. Walk the Blocker and Major judgment rules in the rubric that apply to this document type.
+ 3. Deliver when no Blocker is left and at most two Majors remain; name those Majors, with the reason, in your reply.
+ 
+diff --git a/a/assets/skeleton.md b/b/assets/skeleton.md
+index 769778c..9bd4b33 100644
+--- a/a/assets/skeleton.md
++++ b/b/assets/skeleton.md
+@@ -3,7 +3,7 @@
+ 
+ *{date} · {author or agent} · {draft | final} · for {audience}*
+ 
+-## 👤 START HERE - at a glance
++## 👤 START HERE - at a glance (for {audience})
+ 
+ > ### {🟢 | 🟡 | 🔴 | ⚪} {Verdict or status in one line}
+ >
+diff --git a/a/references/diagrams.md b/b/references/diagrams.md
+index ba73261..b17cf1f 100644
+--- a/a/references/diagrams.md
++++ b/b/references/diagrams.md
+@@ -62,7 +62,7 @@ Pitfalls that cost a retry:
+ 
+ - Quote node ids that contain hyphens, dots or spaces (`"auth-service"`). Unquoted, they are a syntax error.
+ - Do not combine `splines=ortho` with edge labels; Graphviz does not place labels on orthogonal edges well.
+-- Put cluster titles at the bottom-left (`labelloc=b; labeljust=l`). At the top, edges run straight through them.
++- Put cluster titles where no edge crosses them. In a left-to-right layout that is the bottom-left (`labelloc=b; labeljust=l`); at the top, edges run straight through the title. In a top-to-bottom layout a bottom title collides with outgoing edges and a top title with incoming ones: try the bottom-right, render, and look.
+ - Set `fontname` explicitly. The default serif font looks like a draft and may lack the glyphs you need.
+ - Legends: a legend of small swatch nodes inside the graph can render as big blobs and distort the layout. If it does, drop it and state the colour meanings in the caption, or in short words inside the focal nodes.
+ - **Non-Latin labels (Chinese, Japanese, Korean...) render as empty boxes** with the default font or Arial. Put a font that has the glyphs on the graph, nodes and edges (`graph [fontname="Microsoft YaHei"]`, same for `node` and `edge`; on Linux `"Noto Sans CJK SC"`, on macOS `"PingFang SC"`), then look at the image to confirm no boxes remain. Labels belong in the reader's language, so this matters whenever the report is not in English.
+@@ -140,7 +140,7 @@ When the full graph would not stay legible, do not shrink it. Options, in order
+ *How to read it: arrows point from caller to callee, red is `auth-service`, dashed edges are inferred from logs. Takeaway: every core service depends on `auth-service`, so it has to move last.*
+ ```
+ 
+-- In the machine zone, link the source file and add the edge list as a table (from, relation, to, verified or inferred). The diagram must not be the only carrier of the information: the table lets a later agent regenerate or check it, and lets a screen reader or a text-only client get the same facts.
++- In the machine zone, link the source file. Add the edge list as a table (from, relation, to, verified or inferred) when edges are inferred, when the diagram has more than about a dozen edges, or when the "verified how" column carries information readers need (for example which edges were checked directly). For a small, fully verified diagram the source file beside the image is the text equivalent, and a table would only repeat the picture. Either way the diagram must not be the only carrier of the information: a later agent must be able to regenerate or check it, and a screen reader or text-only client must get the same facts from the alt text and caption.
+ 
+ ## 8 What the viewers can show
+ 
+diff --git a/a/references/review-rubric.md b/b/references/review-rubric.md
+index ebf6406..9eb9075 100644
+--- a/a/references/review-rubric.md
++++ b/b/references/review-rubric.md
+@@ -4,7 +4,7 @@ This is the standard a large document written under this skill is held to. Use i
+ 
+ ## Run a review
+ 
+-1. Run `python scripts/check_doc.py <file>` on the main file and on every sibling file. It covers every rule marked **auto** and prints each finding with its rule id and tier.
++1. Run `python scripts/check_doc.py <file>` on the main file and on every sibling file. It covers every rule marked **auto** and prints each finding with its rule id and tier. For a rewrite of an existing document, also run `python scripts/source_set.py verify <main.md> --source <original>` (rule G1).
+ 2. Walk the **judge** rules that apply (column "For"), looking at the document the way its first reader will: the top of the rendered page and nothing else. Rules that need the sources (C5, C6) are checked against them.
+ 3. Gate: deliver when no Blocker is left and at most two Majors remain. Name the remaining Majors, with the reason, in your reply. Minors are advice.
+ 4. Fit the effort to the document. A short answer needs only C1, E1, F1 and F4. A medium document adds the rest of C, B3 and D1. A large one gets everything that applies.
+@@ -13,7 +13,7 @@ This is the standard a large document written under this skill is held to. Use i
+ 
+ **Reader profile.** The rules assume the readers open Markdown in VS Code's preview and on Azure DevOps repo and PR pages, which do not render Mermaid. If they only use GitHub or Azure DevOps wikis, inline Mermaid is fine: pass `--allow-mermaid` and treat D3 as met.
+ 
+-**For.** all = every document. medium+ = medium and large. large = large only. dec = decision or proposal. rca = investigation or root cause. rev = review, audit or assessment. hand = status or handoff. expl = explainer or onboarding.
++**For.** all = every document. medium+ = medium and large. large = large only. dec = decision or proposal. rca = investigation or root cause. rev = review, audit or assessment. ver = test or verification report. hand = status or handoff. expl = explainer or onboarding. rewrite = a restructured version of an existing large document.
+ 
+ ## Rules
+ 
+@@ -21,9 +21,9 @@ This is the standard a large document written under this skill is held to. Use i
+ 
+ | ID | Pass condition | Tier | Check | For |
+ |---|---|---|---|---|
+-| A1 | Zones are marked and ordered. A human zone comes first, opened by a heading or banner that names its audience. AI-input and archive material, if any, comes last in its own labelled zone. Nothing for people sits after machine content. No raw material means no machine zone is needed. | Blocker for a large document with raw material, else Major | auto (markers, order) + judge | all |
+-| A2 | The human zone holds no raw material: no table over 15 rows, no code block over 25 lines (diagram sources excepted), no logs, listings or data dumps. Shell commands belong in the AI-input block unless the reader must run them. | Major | auto | all |
+-| A3 | Machine and archive blocks are plain-headed and collapsed in `<details>`, or reduced to a one-line pointer when the material lives in a sibling file. Each opens with a line naming its bin (AI input or archive) and what it supports. Long material sits in a sibling file, unless the user asked for it to stay in the document. | Major | judge | large |
++| A1 | Zones are marked and ordered. A human zone comes first, opened by a heading or banner that names who it is for in words (`START HERE - at a glance (for the release managers)`); a glyph alone, or an audience named only in a header pointer line, is not enough. AI-input and archive material, if any, comes last in its own labelled zone. Nothing for people sits after machine content. No raw material means no machine zone is needed. | Blocker for a large document with raw material, else Major | auto (markers, order) + judge | all |
++| A2 | The human zone holds no raw material: no table over 15 rows, no code block over 25 lines (diagram sources excepted), no logs, listings or data dumps. Shell commands belong in the AI-input block unless the reader must run them. A table the user asked for by name (a map, an inventory) is exempt; place it where its readers look for it and link it from the reading path. | Major | auto | all |
++| A3 | Machine and archive blocks are plain-headed and collapsed in `<details>`, or reduced to a one-line pointer when the material lives in a sibling file (a pointer counts as collapsed). Each opens with a line naming its bin (AI input or archive) and what it supports. Long material sits in a sibling file, unless the user asked for it to stay in the document. Blocks inside an archive-only sibling need not be collapsed: the file is the destination. | Major | judge | large |
+ | A4 | The AI-input block is self-sufficient: current state, repo-relative paths with the root stated once, copy-paste commands, ordered next steps, constraints and what not to do, a definition of done, and what to do while decisions are open and where answers are recorded. | Major | judge | hand |
+ | A5 | No machine-local paths (home folder, temp or session folders). | Major | auto | all |
+ 
+@@ -32,12 +32,12 @@ This is the standard a large document written under this skill is held to. Use i
+ | ID | Pass condition | Tier | Check | For |
+ |---|---|---|---|---|
+ | B1 | A reading path sits within 60 lines of the title: at least 3 links to sections, each saying what the reader gets, and who can stop where. | Major | auto + judge | medium+ |
+-| B2 | Order follows understanding, not discovery. The mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive. | Major | judge | expl, rca, large |
+-| B3 | The H2 headings of the human zone, read alone, give the outline or the argument. A question or decision heading carries its answer or ask. | Major | judge | medium+ |
++| B2 | Order follows understanding, not discovery. The mental model comes first, terms are defined before the first numbered section that uses them (including codes, abbreviations and internal names the reader must decode), and chronology lives in the archive. The glance panel is exempt from the glossary but must read cold: a term it needs gets a short gloss in the line itself. | Major | judge | expl, rca, large |
++| B3 | The H2 headings of the human zone, read alone, give the outline or the argument, in words that cannot be misread (a heading about a handover must say from whom to whom). A question or decision heading carries its answer or ask. | Major | judge | medium+ |
+ | B4 | Every in-document link, cross-file anchor and image path resolves. Fences and `<details>` balance. No template placeholder is left. | Blocker | auto | all |
+ | B5 | A large document has real navigation: at least 5 in-document links. | Major | auto | large |
+-| B6 | Link-target headings use plain words and digits (no emoji, no punctuation) and are unique. | Minor | auto | all |
+-| B7 | Sections open with the question they answer. Each entity keeps one name throughout. | Minor | judge | large |
++| B6 | Link-target headings use plain words and digits (no emoji, no punctuation) and are unique. `python scripts/check_doc.py <file> --slugs` prints the anchor of every heading. | Minor | auto | all |
++| B7 | A section whose heading does not already say what it answers opens with a one-line orientation. Each entity keeps one name throughout. Cross-references name something the reader can see (a numbered row, a heading), not an unlabelled "risk 3". | Minor | judge | large |
+ 
+ ### C Glance first
+ 
+@@ -45,28 +45,28 @@ This is the standard a large document written under this skill is held to. Use i
+ |---|---|---|---|---|
+ | C1 | The glance panel opens the document, straight after the title and one metadata line. Its bottom line states the conclusion (for an explainer, the mental model), not what the document covers. | Blocker | judge + auto (more than 12 lines of text before the first panel element) | medium+ |
+ | C2 | The panel is compact: about 300 words of prose or fewer (tables, the picture and the Read-next list excluded), one line per decision and per risk. Verdict, decisions and top risks fit the first screen. | Major | auto + judge | medium+ |
+-| C3 | When a judgment, decision or risk exists, the panel states it loudly and completely. The verdict has a glyph, confidence and basis. Each decision has who, what, by when and a recommendation. At most 5 risks, ranked, each with severity and consequence. | Blocker | judge | dec, rca, rev, hand |
+-| C4 | Nothing is invented to fill the template: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, and empty slots are omitted. | Major | judge | all |
+-| C5 | Numbers in the panel trace to the sources (spot-check at least three). Derived, merged or de-duplicated numbers say so. | Major | judge, needs sources | all |
+-| C6 | Every open question or decision in the sources appears in the decision block or is explicitly parked. | Major | judge, needs sources | dec, hand |
++| C3 | When a judgment, decision or risk exists, the panel states it loudly and completely. The verdict has a glyph, confidence and basis; a partial result says "partial" and which part is missing. Each decision has who, what, by when and a recommendation; where the sources give no date or recommendation the panel says so ("no date set"), and a date or recommendation you propose is marked "(suggested)". At most 5 risks, ranked, each with severity and consequence. | Blocker | judge | dec, rca, rev, ver, hand |
++| C4 | Nothing is invented to fill the template: no verdict, decision or risk block without grounding in the sources, any ranking is traceable (a ranking of your own says so), and empty slots are omitted. A recommendation or stance attributed to a source matches that source's own wording and version (the source's option, not a stronger paraphrase; a claim about one version holds only for that version). A caption or takeaway agrees with the table or picture it describes: it never claims more than the table shows (no "all passed" above a table with a failed row). | Major | judge | all |
++| C5 | Numbers in the panel trace to the sources (spot-check at least three). Derived, merged or de-duplicated numbers say so, and every derived count, weekday and date calculation is recomputed from the source before delivery. | Major | judge, needs sources | all |
++| C6 | Every open question or decision in the sources appears in the decision block or is explicitly parked. | Major | judge, needs sources | dec, hand, ver |
+ 
+ ### D Diagrams
+ 
+ | ID | Pass condition | Tier | Check | For |
+ |---|---|---|---|---|
+ | D1 | More than 5 related entities, or any web of relationships, means at least one diagram. A linear chain of 5 steps or fewer, or a flat list, gets none. | Major | judge | all |
+-| D2 | Coverage and truth: every entity appears in at least one diagram, every drawn edge exists in the sources, and inferred edges are dashed and captioned. | Major | judge | all |
++| D2 | Coverage and truth: every entity the document names as a participant appears in at least one diagram as its own labelled node (a name tucked into another node's label does not count; if that makes the picture illegible, split it into an overview plus zoomed views), every drawn edge exists in the sources, and inferred edges are dashed and captioned. | Major | judge | all |
+ | D3 | Image-first: a diagram in the human zone is an embedded image file that exists. Inline Mermaid there is a defect under the default reader profile. For Azure DevOps wikis use `graph`, not `flowchart`. | Major | auto | all |
+ | D4 | Legible: the image is 500 to 2600 px wide. At 800 px wide the labels read, nothing overlaps, and no glyph shows as an empty box (look at the image to check). | Major | auto (size) + judge | all |
+ | D5 | Explained: alt text, a caption with how to read it and the takeaway, a legend where colour carries meaning, one focal point, and the relation stated (verbs on edges, or once in the caption when every edge is alike). | Minor | judge, auto for alt text | all |
+-| D6 | Source kept: the DOT, Mermaid or script file sits beside each image, and an edge list or other text equivalent is in the archive. | Minor | auto (file) + judge | all |
++| D6 | Source kept: the DOT, Mermaid or script file sits beside each image. When edges are inferred, or the diagram has more than about 12 edges, an edge list that says how each edge was verified is in the archive; for a small, fully verified diagram the source file is the text equivalent. | Minor | auto (file) + judge | all |
+ 
+ ### E Honesty and provenance
+ 
+ | ID | Pass condition | Tier | Check | For |
+ |---|---|---|---|---|
+ | E1 | Every judgment carries a confidence level and what it rests on. | Major | judge | all |
+-| E2 | Inferred, assumed and proposed content is labelled as such, unknowns are listed, and nothing presented as fact is unsourced. | Major | judge | all |
++| E2 | Inferred, assumed and proposed content is labelled as such, unknowns are listed, and nothing presented as fact is unsourced. When two sources disagree, the document says so and which one it used. | Major | judge | all |
+ | E3 | A metadata line under the title gives date, author or agent, status and audience. Sources are named. | Minor | auto (date) + judge | medium+ |
+ 
+ ### F Fit and delivery
+@@ -74,11 +74,19 @@ This is the standard a large document written under this skill is held to. Use i
+ | ID | Pass condition | Tier | Check | For |
+ |---|---|---|---|---|
+ | F1 | Proportionate: a short answer gets no zones or panel. A mandated template or schema is kept, with the human layer added around it. | Major | judge | all |
+-| F2 | The human zone is not bloated: about 2,500 words or fewer. Beyond that, check whether detail only some readers need has leaked in. | Minor | auto | all |
+-| F3 | The chat reply is the panel in miniature (verdict, decisions, top risks, file path, where to start) and does not paste the document. | Major | judge, needs the transcript | large |
++| F2 | The human zone is not bloated: about 2,500 words or fewer. Beyond that, check whether detail only some readers need has leaked in. A document with several decisions, a coverage matrix and a status table may need more; that is fine when every part serves a decision or a review. | Minor | auto | all |
++| F3 | The chat reply is the panel in miniature (verdict, decisions, top risks, file path, where to start) and does not paste the document. The path is the folder plus file name, relative to the repo root when there is one. | Major | judge, needs the transcript | large |
+ | F4 | Language: the document, its headings, labels and diagram text are in the reader's language, with no missing-glyph boxes. | Major | judge | all |
+ | F5 | Hygiene: a blank line after `</summary>` and `</details>` (Major); no `> [!NOTE]` alerts, no HTML colour or style, at most about 3 loud blockquote headings, no paragraph repeated verbatim, no spaces in file names (all Minor). | Major / Minor | auto | all |
+ 
++### G Rewriting an existing document
++
++| ID | Pass condition | Tier | Check | For |
++|---|---|---|---|---|
++| G1 | Nothing is lost: every non-blank line of the source is reachable, either in a verbatim copy in the machine zone or a sibling file, or because the source stays beside the output and the document names it and records its SHA-256. Every H2 section of the source is named in a section map. | Blocker | auto (`source_set.py verify`) | rewrite |
++| G2 | Current truth first: where the source contradicts itself over time (an early note says a check was not run, a later entry says it ran), the human zone states the current truth and says the older note predates it. The older text stays in the archive, labelled superseded. Labels match the source's own marking: nothing still current is labelled superseded or history, and text the source marks superseded is not presented as current. | Major | judge | rewrite |
++| G3 | The human zone restates; the archive proves. Each restated claim links to the verbatim block behind it, and the document says which parts are verbatim and which are rewritten. | Major | judge | rewrite |
++
+ ## Scorecard format
+ 
+ A reviewer replies with one line, **Verdict: deliver** or **Verdict: fix first**, followed by the counts of Blockers, Majors and Minors. Then a table of only the rules that failed: rule id, line or quote as evidence, and the fix. One line for anything notable that passed on a close call.
+diff --git a/b/references/rewriting.md b/b/references/rewriting.md
+new file mode 100644
+index 0000000..0901c96
+--- /dev/null
++++ b/b/references/rewriting.md
+@@ -0,0 +1,43 @@
++# Rewriting an existing large document
++
++Read this when the input is a long document that people cannot read (a ledger that grew over weeks, a report that records everything in the order it happened) and the job is to make it readable **without losing anything**. The steps in SKILL.md still apply; this adds what a rewrite needs. The tool is `scripts/source_set.py`.
++
++## Workflow
++
++1. **Read all of it, then take inventory.** Print the outline with line numbers (`python scripts/check_doc.py <source> --slugs` lists every heading with its line) and note each section's size. Do not draft before you have read to the last line: an unanswered open question may sit in the final paragraph.
++2. **Classify every section** by bin (human, AI-input, archive) and by layer:
++   - *current*: the verdict, decisions, risks, and the design or interface as it stands now
++   - *evidence*: raw results, tables, logs, long output
++   - *supporting notes*: background, release notes, setup details
++   - *superseded*: what the source itself marks as history
++   - *handoff*: commands, paths, ids, constraints a later agent needs
++
++   Typical outcome: the current layer becomes the human zone; evidence, supporting notes and superseded material become archive siblings; the handoff becomes an AI-input sibling.
++3. **Settle contradictions over time.** A ledger keeps stale statements ("not tested yet") beside later ones that overturn them. Put the current truth in the human zone and say that the older note predates it. Keep the stale text verbatim in the archive, labelled superseded. Never choose silently.
++4. **Keep every line reachable.** Move large blocks with `source_set.py slice`; do not retype them. Group blocks by purpose into a few siblings (`<stem>.evidence.md`, `<stem>.notes.md`, `<stem>.history.md`). The tool wraps each block in `<!-- src:A-B shift:+N -->` markers and demotes its headings so the sibling's outline stays usable; `verify` promotes them back and proves each block identical to its source lines. If the original stays beside the output it is the audit trail: record its SHA-256 and do not copy it into `<stem>.data/`.
++5. **Write the human zone as short, faithful restatements** that link to the block behind each claim. Facts come only from the source. Where the source gives no deadline or recommendation, say so ("The original sets no deadline"); attribute a recommendation to where it comes from; say when a ranking is your own. Cite by heading and quoted snippet; bare line numbers go stale, so if you use them, check them with a script.
++6. **Add the section map**: for each H2 of the source, its line range, where it is summarised and where its verbatim text lives. Make it visible if the user asked for it; otherwise keep it in the machine zone, collapsed, and link it from the reading path ("Checking that nothing got lost? Go to A").
++7. **Verify.** `python scripts/source_set.py verify <main.md> --source <original> --sha256 <recorded>` must end with ALL OK. Run `check_doc.py` on the main file and every sibling. Confirm the original is byte-identical. Spot-check five numbers of the panel against the source.
++
++## source_set.py
++
++```
++python scripts/source_set.py slice SOURCE OUT.md --title "Supporting evidence" \
++    --intro "What this file is and which claims it supports." \
++    --block "12-58:Benchmark tables" --block "59-96:Raw logs:+2" [--zone ai-input]
++python scripts/source_set.py verify MAIN.md --source SOURCE [--sha256 HEX] [--verbose]
++```
++
++- `slice` writes the zone marker, a title, your one-line intro, a contents list and one lettered block per range. A block's heading shift defaults to 1 (2 when the range contains an H1); override it with `:+N`. Headings inside code fences are never touched. Block titles are link targets, so keep them plain words.
++- `verify` treats MAIN.md plus `<stem>.*.md` as the document set. It fails when a block differs from its source lines, when a non-blank source line is nowhere in the set, or when a source H2 is not named outside the verbatim copies (the section map). It prints the source checksum.
++
++## Mistakes to avoid
++
++- **Treating the newest entry as the whole truth.** Older text can hold the only statement of an open item, and an open question can sit in the last paragraph. If it still calls for action, it belongs in the decision block.
++- **A takeaway that overstates its table.** A caption must not claim more than its table shows: no "all passed" above a table with a failed row. Re-read every caption against the table above it.
++- **Summarising superseded material as if it were current.** Mention it only as context, and only in the archive.
++- **Unlabelled cross-references.** "Risks 1 and 3" means nothing on a first screen where the risk rows have no numbers.
++- **Out-of-scope findings among the decisions.** A recommendation for another team (a fix in a file this change does not touch) is worth surfacing, but as one line under the decisions ("Out of scope here: ..."), not as a decision for this document's reader.
++- **Labelling a whole stack as history.** Several recent entries are usually still current. Label as superseded only what the source itself marks, or what a later entry overturns, and say which.
++- **Stronger attribution than the source gives.** A recommendation must match the version of the source that says it; where the source only lists options, name the option the source gives and mark your own pick "(suggested)".
++- **Retyping long blocks.** Typos and drift creep in; slice them and verify.
+diff --git a/a/scripts/check_doc.py b/b/scripts/check_doc.py
+index 392dc83..4baedda 100644
+--- a/a/scripts/check_doc.py
++++ b/b/scripts/check_doc.py
+@@ -4,6 +4,7 @@
+ Usage:
+     python check_doc.py REPORT.md [--json] [--allow-mermaid] [--machine-only]
+                         [--max-block 25] [--max-table 15] [--panel-words 300] [--human-words 2500]
++    python check_doc.py REPORT.md --slugs      # print each heading's anchor, for writing links
+ 
+ Every finding carries a rubric rule id and a tier:
+   BLOCKER  certain defect: broken link or image, unbalanced fence or <details>, leftover
+@@ -41,7 +42,7 @@ DIAGRAM_LANGS = {"mermaid", "dot", "graphviz", "plantuml"}
+ SHELL_LANGS = {"powershell", "ps1", "pwsh", "bash", "sh", "shell", "console", "cmd", "bat", "zsh"}
+ MACHINE_ZONES = {"ai-input", "archive", "machine"}
+ PLACEHOLDER = re.compile(
+-    r"\{(?:doc-stem|anchor|Section title|Who|what|when|overview|N|n|slug|title|\.\.\.)\}"
++    r"\{(?:doc-stem|anchor|Section title|Who|what|when|overview|N|n|slug|title|date|audience|author or agent|\.\.\.)\}"
+     r"|<!--\s*(?:No judgment to give|If this material is long|Block A only if)", re.I)
+ MACHINE_PATH = re.compile(r"[A-Za-z]:\\Users\\[^\\\s`'\"|)]+|/Users/[A-Za-z0-9._-]+/|/home/[A-Za-z0-9._-]+/")
+ DATE = re.compile(r"\d{4}[-/.]\d{1,2}[-/.]\d{1,2}")
+@@ -173,7 +174,6 @@ def check(path, args):
+     first_machine = next((n for n, z in zones if z in MACHINE_ZONES), None)
+     if machine_only:
+         human_start, human_end = 0, 0
+-        add("MINOR", "A1", 0, "machine/archive-only file: human-zone rules skipped")
+     else:
+         human_end = first_machine if first_machine and first_machine > human_start else len(lines) + 1
+     in_human = lambda n: human_start <= n < human_end  # noqa: E731
+@@ -259,12 +259,13 @@ def check(path, args):
+         if re.search(r"-\d+$", slug) and slug[: slug.rfind("-")] in slugs:
+             add("MINOR", "B6", n, "duplicate heading text %r; its anchor depends on order - make it unique" % raw)
+ 
+-    # <details> hygiene (blank lines matter for nested Markdown and in Azure DevOps)
+-    opens = sum(len(re.findall(r"<details\b", t, re.I)) for _, t in body)
+-    closes = sum(len(re.findall(r"</details>", t, re.I)) for _, t in body)
++    # <details> hygiene (blank lines matter for nested Markdown and in Azure DevOps); tags inside inline code are text
++    body_nocode = [(n, re.sub(r"`[^`]*`", "", t)) for n, t in body]
++    opens = sum(len(re.findall(r"<details\b", t, re.I)) for _, t in body_nocode)
++    closes = sum(len(re.findall(r"</details>", t, re.I)) for _, t in body_nocode)
+     if opens != closes:
+         add("BLOCKER", "B4", 0, "unbalanced <details>: %d opening vs %d closing tags" % (opens, closes))
+-    for n, line in body:
++    for n, line in body_nocode:
+         for tag in ("</summary>", "</details>"):
+             if tag in line.lower() and n < len(lines) and lines[n].strip():
+                 add("MAJOR", "F5", n, "add a blank line after %s (needed for rendering)" % tag)
+@@ -346,8 +347,9 @@ def check(path, args):
+                     % (panel_words, args.panel_words))
+         human_words = sum(count_words(prose(t)) for n, t in body if in_human(n))
+         if human_words > args.human_words:
+-            add("MINOR", "F2", human_start or 1, "the human zone runs to about %d words (advice: %d); check that detail "
+-                "only some readers need has moved to the archive" % (human_words, args.human_words))
++            add("MINOR", "F2", human_start or 1, "the human zone runs to about %d words (advice: %d); fine when every "
++                "part is needed by someone deciding or reviewing, otherwise move detail to the archive"
++                % (human_words, args.human_words))
+         if not any(DATE.search(t) for n, t in body if h1 <= n <= h1 + 8):
+             add("MINOR", "E3", h1 or 1, "no date near the title; add a line with date, author or agent, status, "
+                 "audience")
+@@ -401,6 +403,7 @@ def check(path, args):
+         "diagram_blocks": diagrams,
+         "details_blocks": opens,
+         "zones": names,
++        "machine_only": bool(machine_only),
+         "panel_words": round(panel_words),
+         "human_zone_words": round(human_words),
+     }
+@@ -419,6 +422,8 @@ def main():
+     ap.add_argument("--max-table", type=int, default=15, help="most table rows allowed in the human zone")
+     ap.add_argument("--panel-words", type=int, default=300, help="prose budget of the glance panel")
+     ap.add_argument("--human-words", type=int, default=2500, help="advisory word count of the human zone")
++    ap.add_argument("--slugs", action="store_true",
++                    help="print the anchor of every heading (as VS Code and GitHub build them) and exit")
+     args = ap.parse_args()
+     try:
+         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+@@ -428,6 +433,11 @@ def main():
+     if not path.is_file():
+         print("ERROR: file not found: %s" % path)
+         return 2
++    if args.slugs:
++        body, _, _ = scan(path.read_text(encoding="utf-8-sig", errors="replace").splitlines())
++        for n, level, raw, slug in headings_of(body)[0]:
++            print("line %4d  h%d  #%s   <- %s" % (n, level, slug, raw))
++        return 0
+     findings, stats = check(path, args)
+     findings.sort(key=lambda f: (TIER_ORDER[f[0]], f[2]))
+     counts = {t: sum(1 for f in findings if f[0] == t) for t in TIER_ORDER}
+diff --git a/b/scripts/source_set.py b/b/scripts/source_set.py
+new file mode 100644
+index 0000000..dfb9c8f
+--- /dev/null
++++ b/b/scripts/source_set.py
+@@ -0,0 +1,259 @@
++#!/usr/bin/env python3
++"""Rewrite a large existing document without losing anything: slice it verbatim, then verify.
++
++  slice   copy line ranges of the source, unchanged, into a sibling Markdown file
++  verify  check that every non-blank line of the source is reachable in the rewritten set
++          and that every H2 section of the source is named outside the verbatim copies (the section map)
++
++Every copied range is wrapped in markers, so it can be checked later:
++
++    <!-- src:12-58 shift:+1 -->
++    ...source lines 12-58; headings outside code fences are demoted by 1 level...
++    <!-- /src -->
++
++Headings are demoted so the sibling file keeps a usable outline (a verbatim copy of several "## Notes"
++sections would otherwise collide with its own block headings). `verify` promotes them back before
++comparing, so the copy is still proven identical.
++
++Usage:
++  python source_set.py slice SOURCE OUT.md --title "Supporting evidence" --intro "What this file is and what it supports." \\
++        --block "12-58:Benchmark tables" --block "59-96:Raw logs:+2" [--zone archive|ai-input]
++  python source_set.py verify MAIN.md --source SOURCE [--sha256 HEX] [--verbose]
++
++The document set is MAIN.md plus the siblings named <MAIN stem>.*.md in the same folder.
++Only the standard library is used. Exit code 1 means something is missing or different.
++"""
++import argparse
++import hashlib
++import re
++import sys
++import unicodedata
++from pathlib import Path
++
++sys.dont_write_bytecode = True
++FENCE = re.compile(r"^\s{0,3}(`{3,}|~{3,})\s*([\w+#.-]*)")
++ATX = re.compile(r"^(\s{0,3})(#{1,6})(\s.*|)$")
++SRC_OPEN = re.compile(r"^<!-- src:(\d+)-(\d+) shift:\+(\d) -->$")
++SRC_CLOSE = "<!-- /src -->"
++BLOCK = re.compile(r"^(\d+)-(\d+):(.*?)(?::\+(\d))?$")
++
++
++def read_lines(path):
++    text = path.read_bytes().decode("utf-8-sig", errors="replace")
++    lines = text.split("\n")
++    if lines and lines[-1] == "":
++        lines.pop()
++    return [l.rstrip("\r") for l in lines]
++
++
++def shift_headings(chunk, levels):
++    """Demote (levels > 0) or promote (levels < 0) ATX headings outside code fences."""
++    out, in_fence, fchar, flen = [], False, "", 0
++    for line in chunk:
++        m = FENCE.match(line)
++        if in_fence:
++            out.append(line)
++            if m and m.group(1)[0] == fchar and len(m.group(1)) >= flen and not m.group(2).strip():
++                in_fence = False
++            continue
++        if m:
++            in_fence, fchar, flen = True, m.group(1)[0], len(m.group(1))
++            out.append(line)
++            continue
++        h = ATX.match(line)
++        if h:
++            level = len(h.group(2)) + levels
++            if not 1 <= level <= 6:
++                raise ValueError("heading %r would leave levels 1-6" % line[:60])
++            out.append(h.group(1) + "#" * level + h.group(3))
++        else:
++            out.append(line)
++    return out
++
++
++def min_heading_level(chunk):
++    levels, in_fence, fchar, flen = [], False, "", 0
++    for line in chunk:
++        m = FENCE.match(line)
++        if in_fence:
++            if m and m.group(1)[0] == fchar and len(m.group(1)) >= flen and not m.group(2).strip():
++                in_fence = False
++            continue
++        if m:
++            in_fence, fchar, flen = True, m.group(1)[0], len(m.group(1))
++            continue
++        h = ATX.match(line)
++        if h:
++            levels.append(len(h.group(2)))
++    return min(levels) if levels else 6
++
++
++def slug(text):
++    t = re.sub(r"<[^>]+>", "", text).lower()
++    return "".join(ch for ch in t if unicodedata.category(ch)[0] in "LNM" or ch in "-_ ").replace(" ", "-")
++
++
++def norm(line):
++    """A line without heading markers or extra spaces, for finding it again after a rewrite."""
++    return re.sub(r"\s+", " ", re.sub(r"^\s*#{1,6}\s+", "", line)).strip()
++
++
++def significant(line):
++    return len(re.findall(r"\w", line)) >= 3
++
++
++def cmd_slice(a):
++    src = Path(a.source)
++    lines = read_lines(src)
++    sha = hashlib.sha256(src.read_bytes()).hexdigest().upper()
++    blocks = []
++    for spec in a.block:
++        m = BLOCK.match(spec)
++        if not m:
++            sys.exit("bad --block %r (expected FIRST-LAST:Title or FIRST-LAST:Title:+N)" % spec)
++        first, last, title = int(m.group(1)), int(m.group(2)), m.group(3).strip()
++        if not 1 <= first <= last <= len(lines):
++            sys.exit("--block %r is outside the source (%d lines)" % (spec, len(lines)))
++        if re.search(r"[^\w\s-]", title):
++            print("warning: block title %r has punctuation; block headings are link targets, keep them plain" % title)
++        shift = int(m.group(4)) if m.group(4) else (2 if min_heading_level(lines[first - 1:last]) == 1 else 1)
++        blocks.append((first, last, title, shift))
++    if len(blocks) > 26:
++        sys.exit("at most 26 blocks per file (A-Z); split the file")
++    glyph, label = ("🗄️", "Archive") if a.zone == "archive" else ("🤖", "AI input")
++    total = sum(l - f + 1 for f, l, _, _ in blocks)
++    out = ["<!-- zone:%s -->" % a.zone, "# %s" % a.title, "",
++           "*%s %s - %s*" % (glyph, label, a.intro.strip()), "",
++           "Verbatim copy of %d lines of `%s` (SHA-256 `%s`). Each block is wrapped in `<!-- src:FIRST-LAST shift:+N -->` "
++           "markers; headings outside code blocks are demoted by N levels so this file keeps a usable outline. "
++           "`source_set.py verify` proves every block identical to its source lines." % (total, src.name, sha), "",
++           "**Contents**", ""]
++    letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
++    for i, (first, last, title, _) in enumerate(blocks):
++        out.append("- [%s %s](#%s) - source lines %d-%d" % (letters[i], title, slug("%s %s" % (letters[i], title)), first, last))
++    out.append("")
++    for i, (first, last, title, shift) in enumerate(blocks):
++        chunk = lines[first - 1:last]
++        try:
++            moved = shift_headings(chunk, shift)
++        except ValueError as exc:
++            sys.exit("block %d-%d: %s; use a smaller shift (:+N)" % (first, last, exc))
++        out += ["## %s %s" % (letters[i], title), "",
++                "*%s %s - verbatim copy of source lines %d-%d (%d lines).*" % (glyph, label, first, last, last - first + 1), "",
++                "<!-- src:%d-%d shift:+%d -->" % (first, last, shift)] + moved + ["", SRC_CLOSE, ""]
++    Path(a.out).write_text("\n".join(out), encoding="utf-8", newline="\n")
++    print("wrote %s: %d blocks, %d source lines" % (a.out, len(blocks), total))
++
++
++def cmd_verify(a):
++    main, src = Path(a.main), Path(a.source)
++    source = read_lines(src)
++    sha = hashlib.sha256(src.read_bytes()).hexdigest().upper()
++    print("source %s: %d lines, SHA-256 %s" % (src.name, len(source), sha))
++    ok = True
++    if a.sha256:
++        match = a.sha256.strip().upper() == sha
++        print("recorded SHA-256 %s" % ("matches" if match else "DOES NOT MATCH: the source changed"))
++        ok = ok and match
++    files = [main] + sorted(p for p in main.parent.glob(main.stem + ".*.md") if p != main)
++    covered = [0] * (len(source) + 2)
++    outside, every = [], set()
++    for f in files:
++        lines = read_lines(f)
++        every.update(norm(l) for l in lines if significant(l))
++        i, blocks, copied = 0, 0, 0
++        while i < len(lines):
++            m = SRC_OPEN.match(lines[i])
++            if not m:
++                outside.append(lines[i])
++                i += 1
++                continue
++            first, last, levels = int(m.group(1)), int(m.group(2)), int(m.group(3))
++            j = i + 1
++            while j < len(lines) and lines[j] != SRC_CLOSE:
++                j += 1
++            if j >= len(lines):
++                print("PROBLEM %s line %d: src block is never closed" % (f.name, i + 1))
++                ok = False
++                break
++            region = lines[i + 1:j]
++            if region and region[-1] == "":
++                region = region[:-1]
++            try:
++                restored = shift_headings(region, -levels)
++            except ValueError:
++                restored = None
++            expected = source[first - 1:last]
++            if restored == expected:
++                for n in range(first, last + 1):
++                    covered[n] += 1
++                blocks += 1
++                copied += last - first + 1
++                if a.verbose:
++                    print("  %-44s source %4d-%4d identical" % (f.name, first, last))
++            else:
++                bad = next((k for k in range(min(len(expected), len(restored or []))) if restored[k] != expected[k]),
++                           min(len(expected), len(restored or [])))
++                print("PROBLEM %s line %d: block src:%d-%d is DIFFERENT from the source (first difference at source line %d)"
++                      % (f.name, i + 1, first, last, first + bad))
++                ok = False
++            i = j + 1
++        if blocks:
++            print("%s: %d verbatim block(s), %d source lines" % (f.name, blocks, copied))
++    missing = [n for n in range(1, len(source) + 1)
++               if source[n - 1].strip() and significant(source[n - 1]) and not covered[n]
++               and norm(source[n - 1]) not in every]
++    twice = [n for n in range(1, len(source) + 1) if covered[n] > 1 and significant(source[n - 1])]
++    print("source lines not reachable anywhere in the set: %d%s" % (len(missing), (" (first: %s)" % missing[:8]) if missing else ""))
++    if twice:
++        print("note: %d source lines are copied more than once (first: %s)" % (len(twice), twice[:8]))
++    ok = ok and not missing
++    # Section map: every H2 of the source must be named outside the verbatim copies
++    blob = "\n".join(norm(l).lower() for l in outside)
++    h2s, in_fence, fchar, flen = [], False, "", 0
++    for n, line in enumerate(source, 1):
++        m = FENCE.match(line)
++        if in_fence:
++            if m and m.group(1)[0] == fchar and len(m.group(1)) >= flen and not m.group(2).strip():
++                in_fence = False
++            continue
++        if m:
++            in_fence, fchar, flen = True, m.group(1)[0], len(m.group(1))
++            continue
++        h = re.match(r"^\s{0,3}##\s+(.*?)\s*#*\s*$", line)
++        if h:
++            h2s.append((n, h.group(1)))
++    unmapped = [(n, t) for n, t in h2s if norm(t).lower() not in blob]
++    print("source H2 sections: %d; not named outside the verbatim copies (no map entry): %d" % (len(h2s), len(unmapped)))
++    for n, t in unmapped[:10]:
++        print("  line %d: %s" % (n, t[:100]))
++    ok = ok and not unmapped
++    print("ALL OK: every source line is reachable and every H2 section is in the map." if ok else "PROBLEM: see above.")
++    return 0 if ok else 1
++
++
++def main():
++    try:
++        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
++    except Exception:
++        pass
++    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
++    sub = ap.add_subparsers(dest="cmd", required=True)
++    s = sub.add_parser("slice", help="copy source line ranges verbatim into a sibling file")
++    s.add_argument("source")
++    s.add_argument("out")
++    s.add_argument("--title", required=True)
++    s.add_argument("--intro", required=True, help="one line: what this file is and which claims it supports")
++    s.add_argument("--zone", choices=("archive", "ai-input"), default="archive")
++    s.add_argument("--block", action="append", required=True, metavar="FIRST-LAST:Title[:+N]")
++    v = sub.add_parser("verify", help="prove nothing was lost")
++    v.add_argument("main")
++    v.add_argument("--source", required=True)
++    v.add_argument("--sha256", help="the checksum recorded in the document, to prove the source is unchanged")
++    v.add_argument("--verbose", action="store_true")
++    a = ap.parse_args()
++    return cmd_slice(a) if a.cmd == "slice" else cmd_verify(a)
++
++
++if __name__ == "__main__":
++    sys.exit(main())

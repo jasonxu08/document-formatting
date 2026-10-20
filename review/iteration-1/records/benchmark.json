@@ -1,0 +1,721 @@
+{
+  "metadata": {
+    "skill_name": "document-formatting",
+    "skill_path": "<skill>",
+    "executor_model": "claude-sonnet-5.5 (harness default for general-purpose subagents)",
+    "analyzer_model": "claude-sonnet-5.5",
+    "timestamp": "2026-10-16T18:06:14Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 14,
+        "failed": 0,
+        "total": 14,
+        "time_seconds": 2156.6,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Zones labeled: the document labels a part for human reading and a separate part for AI-input / archive / evidence material, using explicit headings or banners that name the audience (a bare 'Appendix' does not count), and the two parts do not interleave",
+          "passed": true,
+          "evidence": "report.md line 1 is '<!-- zone:human -->'; the human part opens at line 6 with '## [person emoji] START HERE - at a glance' and runs through section 5 (last line 181, rule at 183). Line 185 is '<!-- zone:ai-input -->' and line 186 is '## [file-cabinet emoji] MACHINE AND ARCHIVE ZONE - skip unless you need the evidence or are an agent continuing this work', followed by 'A Handoff context for the next agent' (summary 'AI input: state, files, commands, constraints and next steps'), 'B Evidence and sources' ('Archive: ...'), 'C Diagram sources and edge list' and 'D Decision record', all in collapsed <details>. Both banners name their audience (the reader vs 'MACHINE ... an agent'); none is a bare 'Appendix'. No machine/archive block appears before line 185 and nothing human-facing follows it (mechanical.json zones in order: human, ai-input, archive, archive, archive; details_blocks 4, all in the machine zone)."
+        },
+        {
+          "text": "Human part highlighted: the part written for humans is marked by a prominent banner or heading that says it is for people or where to start (for example an emoji-led 'start here' heading), so a reader cannot miss it",
+          "passed": true,
+          "evidence": "Line 6: '## [person emoji] START HERE - at a glance' - an H2 directly under the title and byline, emoji-led 'start here', which is the example given in the expectation. It is contrasted with the 'MACHINE AND ARCHIVE ZONE - skip unless you need the evidence...' banner at line 186."
+        },
+        {
+          "text": "Glance first: the first section after the title is a one-screen overview that states the conclusion itself (what is true or what to do), not merely what the document covers; no background, method or table of contents comes before it",
+          "passed": true,
+          "evidence": "The title (line 2) already states the answer ('upgrade 7 of 9 services before the freeze, hold auth-service and user-store until January'). The first section after it (line 6) opens at line 8 with '[yellow circle] Go with conditions: upgrade 7 of 9 services before the freeze, hold auth-service and user-store until January' and line 10 'Bottom line: The seven services that passed staging can be rolled back in 10 to 15 minutes, so they go in the 5 working days before the freeze...'. Only a zone comment, the title and a one-line byline precede it - no background, method or TOC. The whole panel (verdict, decision box, risk table, key facts, picture, read-next) spans lines 6-42, inside the ~60-line first screen. Caveat: it is dense; the executor's notes estimate ~1.3 rendered screens and, with long wrapped paragraphs and the 484 px-tall picture, I would put it nearer two."
+        },
+        {
+          "text": "Reading path: within the first screen (about 60 lines) there is a reading path or 'read next' list with at least 3 working links to sections, each saying what the reader gets",
+          "passed": true,
+          "evidence": "Lines 34-40: '**Read next**' numbered list of 5 links to sections 1-5, each with what the reader gets and a time, e.g. line 36 '[1 Seven services are ready and the two Identity services are not](#1-seven-services-are-ready-and-the-two-identity-services-are-not) - the readiness table and why the Identity pair waits - 3 min'; line 38 '... - four options, their cost, why the split wins - 3 min'. Line 42 adds who can stop where. All five anchors resolve to real headings (checked by slug). The list ends at line 42, well inside 60 lines."
+        },
+        {
+          "text": "Links work: every in-document link and every image path resolves (scripts/check_doc.py reports no ERROR lines)",
+          "passed": true,
+          "evidence": "mechanical.json for report.md: errors [], warnings [], stats internal_links 20, images 2. I also re-checked all 57 relative links in report.md and report.evidence.md (file targets and heading anchors, including cross-file ones such as report.evidence.md#e5-incident-records-cited-in-the-report and the report.md#... back-links): 0 missing files, 0 missing anchors. report.assets/overview.png and report.assets/timeline.png both exist."
+        },
+        {
+          "text": "Relationship diagram: the nine services and their dependencies are shown as a diagram (embedded image or Mermaid) that includes all nine services and labels or clearly draws the relationships",
+          "passed": true,
+          "evidence": "report.assets/overview.png (1765x1068) draws all nine services: gateway, notify-service, search-index, share-service, auth-service, catalog-service, connector-service, map-service, user-store. I traced every arrow against the depends_on column of services.csv: all 16 edges are present with the right direction (including one two-headed arrow for the catalog-service/map-service cycle) and none is invented. The relationship is stated in an in-image legend ('every arrow means depends on'), the auth-service node reads '6 services depend on it', and the caption at line 32 explains the arrows."
+        },
+        {
+          "text": "Diagram portable: the diagram a human sees first is an embedded image file that exists on disk (PNG or SVG), not only a Mermaid or other code block, because the reader's VS Code preview and Azure DevOps repo pages do not render Mermaid",
+          "passed": true,
+          "evidence": "Line 30: '![Dependency map of the nine services: ...](report.assets/overview.png)' sits inside the glance panel (first screen). The file exists and opens as a valid PNG. mechanical.json stats: images 2, diagram_blocks 0 - there is no Mermaid block anywhere; the edge list in block C is a plain table. The second figure (timeline.png, line 138) is also an embedded PNG."
+        },
+        {
+          "text": "Diagram readable: the diagram has a caption or how-to-read line, and viewing the rendered image shows legible labels with no overlapping or cut-off text",
+          "passed": true,
+          "evidence": "Line 32 is an italic how-to-read caption: 'How to read it: an arrow points from a service to a service it depends on (all 16 come from services.csv; the two-headed arrow means catalog-service and map-service depend on each other). Red services are held until January, grey ones upgrade before the freeze. Takeaway: six arrows end at auth-service...'. I viewed overview.png at native size and downscaled to 800 px wide (800x484): node names, the 'Platform - critical' style sub-labels, the red notes ('6 services depend on it', '2 of 148 tests fail - no rollback') and the legend are all legible; no overlapping or cut-off text, and arrows do not run through labels. timeline.png at 800 px is also legible with no overlaps."
+        },
+        {
+          "text": "Evidence out of the way: bulky raw material (the 36 incident rows, the full inventory table, long logs) is not in the human part; it sits in the archive/machine part or in a linked file",
+          "passed": true,
+          "evidence": "The human part (lines 1-183) contains no incident rows and no raw inventory dump: section 2 (lines 88-103) only summarises counts. The 36 rows live in report.data/incidents-q3.csv and are summarised or cited in report.evidence.md (E4 per-service table, E5 18 cited records); the 16-row edge list is in collapsed block C (lines 224-250) of the machine zone; claim register, method, hashes, calendar and reproduce steps are in report.evidence.md. The human-part tables are curated decision tables (readiness table at lines 55-65 with a derived 'Call' column, options, plan, open questions). Slight caveat: the readiness table lists all nine services, but it is a compact derived view without the runtime and depends_on columns, not a raw dump."
+        },
+        {
+          "text": "Headings tell the story: at least half of the body headings state a claim, finding or question rather than a generic topic label like 'Overview', 'Analysis' or 'Details'",
+          "passed": true,
+          "evidence": "Body section headings: '1 Seven services are ready and the two Identity services are not', '2 auth-service is also the weak point in production', '3 Splitting beats upgrading everything or deferring everything', '4 The plan puts seven services in the 26 to 30 October window and two in January' (four full-sentence claims) and '5 What we assumed and what we still do not know' (question-style; each section also opens with an italic question). The title is a claim too. Only 'START HERE - at a glance' is a navigation label, so 4-5 of the 6 human-part headings below the title are claims. Judged on the human body, as the expectation says 'body headings'. The machine-zone headings (banner, 'A Handoff context for the next agent', 'B Evidence and sources', 'C Diagram sources and edge list', 'D Decision record') are plain labels by design; if they were counted too the ratio would be 4-5 of 11, under half."
+        },
+        {
+          "text": "Verdict and ask first: the first screen gives a clear recommendation on upgrading before the freeze versus deferring (a conditional or split answer is fine) and names the decision Marcus must make with its deadline (Friday 23 Oct)",
+          "passed": true,
+          "evidence": "Lines 8-14: '[yellow circle] Go with conditions: upgrade 7 of 9 services before the freeze, hold auth-service and user-store until January', with bottom line, three conditions and the fallback 'If 1 or 2 fails, defer everything to January instead'. Lines 16-18: '[compass emoji] Decision needed - Marcus Hale decides by Fri 23 Oct whether to approve the split plan and to order v8 extended support (18,000 USD per quarter, order by Thu 5 Nov) ... Recommendation: approve both'. A split answer is allowed; upgrade-notes.md says 'Decision needed by Friday 2026-10-23' and 23 Oct 2026 is a Friday."
+        },
+        {
+          "text": "Top risks first: the first screen lists at least 3 top risks with severity markers, including the 12 Nov end of support and the missing rollback path for auth-service",
+          "passed": true,
+          "evidence": "Lines 20-26: a 'Top risks' table with five rows carrying severity glyphs ([red circle], [orange circle] x3, [yellow circle]). Row 1 (red): 'Upgrading auth-service or user-store before January - No rollback: about 4 hours to restore, 3.1 times the worst Q3 incident, with every login failing' (the missing rollback path); row 2 (orange): 'v8 stops getting security patches on 12 Nov'. Line 28 repeats that auth-service 'fails 2 of 148 tests and cannot be rolled back'. Minor: the glyph column has no header or legend, but the red/orange/yellow scale is conventional."
+        },
+        {
+          "text": "Figures are right: the report states that auth-service has 6 dependents and accounts for 11 of the 36 Q3 incidents",
+          "passed": true,
+          "evidence": "6 dependents: line 28 '6 of the other 8 services depend on auth-service'; line 72 names the six (catalog-service, connector-service, gateway, map-service, notify-service, share-service); the diagram node says '6 services depend on it'. I verified from services.csv that exactly 6 rows list auth-service in depends_on. 11 of 36: line 92 'The Q3 incident log has 36 records.' and line 94 'auth-service logged 11 incidents (380 minutes: 1 SEV1, 6 SEV2, 4 SEV3)'; report.evidence.md E4 shows auth-service 11 against Total 36. I recounted incidents-q3.csv myself: 36 rows, 11 auth-service, 380 minutes. Caveat: the headline figure is a different, derived one - '14 of 35 distinct incidents (40%) involve auth-service' (adds 3 gateway incidents that name auth-service and removes the duplicated 11 Jul SEV1 pair). It is correct and explained, and the literal ratio '11 of 36' is never printed as a single phrase, but both numbers are stated and right."
+        },
+        {
+          "text": "Audit data kept: the 36 incident rows and the 9-service inventory are preserved for audit, inline in the archive part or as linked files, as the user asked",
+          "passed": true,
+          "evidence": "report.data/ holds incidents-q3.csv (36 data rows), services.csv (9 rows) and upgrade-notes.md. The SHA-256 of each equals the supplied fixture byte for byte (incidents 2600694C...2B64C4, services 8573DA35...37A3CC, upgrade-notes AAD08996...A735) and matches the hashes listed in report.evidence.md E1. report.md line 197 names report.data/ with all three files ('verbatim copies ... do not edit, hashes in E1') and line 229 hyperlinks services.csv. The incident file is referenced by path rather than a clickable link, which is acceptable for 'preserved as files'."
+        }
+      ],
+      "notes": [
+        "Report dated 2026-10-17 (system date), not the notes' 2026-10-14",
+        "Freeze end 5 Jan read as the last frozen day",
+        "Extended-support terms assumed: flat 18,000 USD and a 3-month quarter from 12 Nov (36,000 USD if billed by calendar quarter)",
+        "Notes do not say whether the seven services were staged against v8 or the v10-shim auth-service - the biggest content uncertainty and the reason for the yellow verdict",
+        "Whether the CAB allows rollbacks during the freeze is not in the notes",
+        "Three gateway incidents are tied to auth-service only by summary text, so the report says 'involve', not 'caused by'",
+        "Diagram layout assumes Arial; other machines fall back to DejaVu Sans and labels may shift slightly",
+        "Glance panel is dense (executor estimates ~1.3 screens; grader estimate nearer two rendered screens)",
+        "Machine zone is 82 lines in report.md against the skill's ~60-line guidance",
+        "Proposals that are not in the notes: order of the seven, the two pre-decision checks, the Identity preparation window from 16 Nov (labelled 'proposed' in the claim register)",
+        "Repo location for the document is unknown; everything is relative to one folder so it can move as a unit",
+        "Used paths relative to report.md for AI input instead of the skill's absolute paths (a local absolute path would leak a machine path and break in a repo)",
+        "Did not put a verb on all 16 edges: labels were unreadable at 800 px and two overlapped, so the relation is stated once in the legend and caption",
+        "Dropped parentheses from machine-zone headings to keep link targets plain and moved the bin label into the summary line",
+        "Used PowerShell Copy-Item for byte-exact copies of the three inputs; create/edit for all text",
+        "Replied with the file list only per run rules instead of the skill's glance-panel-in-miniature reply",
+        "A first checker run wrote scripts/__pycache__ into the skill snapshot; it was deleted at once"
+      ]
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.93,
+        "passed": 14,
+        "failed": 1,
+        "total": 15,
+        "time_seconds": 1565.6,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Zones labeled: the document labels a part for human reading and a separate part for AI-input / archive / evidence material, using explicit headings or banners that name the audience (a bare 'Appendix' does not count), and the two parts do not interleave",
+          "passed": true,
+          "evidence": "Human part is headed '## [person emoji] START HERE - at a glance' (report.md line 7). The second part is bannered '## [file-cabinet emoji] MACHINE AND ARCHIVE ZONE - skip unless you need the evidence or are an agent continuing this work' (line 195) with a 'What is in here' line, followed by lettered blocks A-F (agent material) and G-H (archive). The byline (line 5) also names both audiences: 'for Dana (decisions) and the coding agent that continues the work'. No interleaving: the human zone is lines 1-192 and ends at a '---' rule; the machine/archive zone is lines 194-390 (A-F ai-input, then G-H archive); mechanical.json lists the zones in order human, ai-input x7, archive x2. Caveat: the visible human banner names its audience with a person glyph and 'START HERE' rather than the word 'people'; I judged that enough given expectation 2's own example."
+        },
+        {
+          "text": "Human part highlighted: the part written for humans is marked by a prominent banner or heading that says it is for people or where to start (for example an emoji-led 'start here' heading), so a reader cannot miss it",
+          "passed": true,
+          "evidence": "Line 7, the first heading after the H1 and byline: '## [person emoji] START HERE - at a glance'. This is an emoji-led 'start here' heading, exactly the pattern the expectation gives as its example. Its counterpart at line 195 tells readers to 'skip unless you need the evidence or are an agent continuing this work', so the human entry point is hard to miss."
+        },
+        {
+          "text": "Glance first: the first section after the title is a one-screen overview that states the conclusion itself (what is true or what to do), not merely what the document covers; no background, method or table of contents comes before it",
+          "passed": true,
+          "evidence": "The first section after the H1 is 'START HERE - at a glance' (lines 7-50, 43 source lines, inside the ~60-line first screen). It opens with the verdict heading 'At risk: the 10 Nov cutover holds only if four blockers clear by 30 Oct' and 'Bottom line: CSV exports already run on the new JobRunner platform in staging, and nothing has been done in production yet. The tenant rollout cannot start until four items clear...' - a conclusion, not a coverage statement. Only the H1 (itself a conclusion: 'CSV path works on staging, 10 Nov cutover at risk until four blockers clear') and a one-line byline precede it; no background, method or TOC. Caveat: with the picture, the six-item ask list and the risk table the section renders to roughly two screens (user_notes admits 'accepted about two screens'), but the verdict and the asks sit in the top ~25 lines."
+        },
+        {
+          "text": "Reading path: within the first screen (about 60 lines) there is a reading path or 'read next' list with at least 3 working links to sections, each saying what the reader gets",
+          "passed": true,
+          "evidence": "'**Read next**' at line 42 with five numbered links on lines 44-48, each followed by what the reader gets and a time, e.g. '[2 Six open questions and four of them block the rollout](#2-six-open-questions-...) - options, recommendations, who answers - 3 min' and '[A Agent brief with rules and order of work](#a-agent-brief-...) - everything the continuing agent needs - 10 min'. Line 50 says where Dana can stop ('you can stop after 2'). All five anchors resolve (my own check: 0 broken of 57 links; mechanical.json errors: [])."
+        },
+        {
+          "text": "Links work: every in-document link and every image path resolves (scripts/check_doc.py reports no ERROR lines)",
+          "passed": true,
+          "evidence": "mechanical.json: errors [] and warnings [] (54 internal links, 1 image, 0 diagram blocks, 8 details blocks). Independent check I ran with GitHub-style heading slugs: 57 links/images in report.md and 4 links in report.evidence.md (including its anchors into report.md) - 0 broken. report.assets/task-map.png, report.assets/task-map.dot and report.evidence.md all exist on disk."
+        },
+        {
+          "text": "Relationship diagram: the eleven tasks T1-T11 and their dependencies are shown as a diagram (embedded image or Mermaid) that includes all eleven tasks and draws the dependency edges",
+          "passed": true,
+          "evidence": "report.assets/task-map.png (1406x1022) contains boxes T1 to T11 (all eleven) and 12 arrows: T1->T2, T1->T3, T3->T4, T2->T5, T2->T6, T2->T7, T4->T9, T5->T9, T6->T9, T7->T9, T8->T10, T9->T10. These match the 'Depends on' column of tasks.md exactly (T8 and T11 have no predecessor; T11 is drawn as an isolated box). The same edge list is repeated as a text table in block H."
+        },
+        {
+          "text": "Diagram portable: the diagram a human sees first is an embedded image file that exists on disk (PNG or SVG), not only a Mermaid or other code block, because the reader's VS Code preview and Azure DevOps repo pages do not render Mermaid",
+          "passed": true,
+          "evidence": "Line 38: '![Task dependency map: three tasks done, four blocked or waiting on people, and the rollout T9 gated by all four](report.assets/task-map.png)'. The PNG exists on disk (1406x1022). mechanical.json reports diagram_blocks: 0, so nothing depends on Mermaid rendering. The Graphviz source (task-map.dot) and a text edge list (block H) are kept as backups."
+        },
+        {
+          "text": "Diagram readable: the diagram has a caption or how-to-read line, and viewing the rendered image shows legible labels with no overlapping or cut-off text",
+          "passed": true,
+          "evidence": "Caption directly under the image (line 40): 'How to read it: an arrow points from a task to what it unblocks. Green is done, red is blocked by a decision or a booking, amber is waiting on Marketing, grey is not started, and the thick outline is the rollout. Takeaway: four boxes sit between the finished work and the rollout, and only T8 and T11 can start without anyone's answer.' A colour legend is also embedded at the bottom of the image. I viewed the PNG at full size and scaled to 800 px wide (scale 0.57): node text is about 12 px and edge labels about 11 px, all legible; no overlapping or clipped text, arrows are clear, nothing is cut off. Minor nit: all 12 edge labels are the same word 'unblocks'."
+        },
+        {
+          "text": "Evidence out of the way: bulky raw material (the chronological log, dead-end stories, long command listings) is not in the part written for Dana; it sits in the archive/machine part or in a linked file",
+          "passed": true,
+          "evidence": "The human zone (lines 1-192) holds no chronological log, no dead-end narrative and no command listing: a grep for OOM, OFFSET, pytest, kubectl, docker, deploy.ps1, git reset/log/status/blame and kv:// matches only lines >= 211 (machine zone). The command listing is block B (fenced, inside a collapsed details block); the dead-end rule is one line in block A (line 221); the dated work-log digest (with the 2026-10-02 dead ends) and the claim-to-source table are in the linked sibling report.evidence.md."
+        },
+        {
+          "text": "Headings tell the story: at least half of the body headings state a claim, finding or question rather than a generic topic label like 'Overview', 'Status' or 'Details'",
+          "passed": false,
+          "evidence": "Counting every heading below the H1 gives 23 (lines 7-368). Only 5-6 state a claim, finding or ask: 'At risk: the 10 Nov cutover holds only if four blockers clear by 30 Oct', '1 The CSV path works on staging and nothing is in production yet', '2 Six open questions and four of them block the rollout', '3 The 10 Nov date holds only if all four blockers clear by 30 Oct', '4 Next week the agent can prepare but cannot unblock anything', and arguably 'Decisions and actions needed from Dana, by Fri 30 Oct at the latest' = 22-26%. The other 17 are topic labels: 'START HERE - at a glance', 'Q1 XLS above 1M rows', 'Q2 Pool size 3 to 6 workers', 'Q3 Email wording and logo sign-off', 'Q4 DBA window for migration 0042', 'Q5 Owner of the three unmapped cron jobs', 'Q6 Cutover date', '5 Assumptions and what is not known', the machine-zone banner, and 'A Agent brief with rules and order of work' through 'H Diagram source and edge list'. Restricted to the human zone it is 6 of 14 = 43%, still under half. It would only reach half by counting the six 'Qn <topic>' item names as question headings, but they are neither phrased as questions nor claims (the actual question is an italic line under each heading). Burden of proof is on the expectation, so FAIL; this is borderline and depends on that reading."
+        },
+        {
+          "text": "Dana's view: the first screen says where things stand (how many of the 11 tasks are done, blocked or open) and lists the decisions Dana must make (XLS above 1M rows, pool size and its cost, DBA window, email template, owner of the 3 cron jobs) with options or a recommendation",
+          "passed": true,
+          "evidence": "Within the first 60 lines: line 36 'Key facts: 3 of 11 tasks done, 4 blockers', the verdict (lines 9-13) 'four blockers', and the picture colours the other four tasks grey (not started). The 'Decisions and actions needed from Dana' block (lines 15-26) covers all five named decisions plus the date: Q1 'choose (a) a ZIP of several 1M-row XLS files or (b) CSV only for large datasets. Recommendation: (a)'; Q2 'approve 6 workers instead of 3, about 1,200 USD more per month (estimate). Recommendation: approve'; Q3 email 'chase Marketing for sign-off on the wording and logo'; Q4 'name one person to book it... Windows before 30 Oct: 20, 22, 27 and 29 Oct. Recommendation: book the earliest one now'; Q5 'find who owns the 3 unmapped legacy cron jobs'; Q6 'keep 10 Nov only if Q1 to Q4 are closed; otherwise move it'. Figures match the sources (tasks.md: 3 done; work-log 10-09: 1,200 USD/month). Weak spots: Q3 and Q5 carry an imperative ask rather than a labelled recommendation, and the count of open (not started) tasks is not stated as a number; I judged the asks themselves to be the recommendation."
+        },
+        {
+          "text": "Cutover risk: states that the 10 Nov cutover depends on tasks T4-T7 (the blocked ones) and is at risk if decisions slip past about 30 Oct",
+          "passed": true,
+          "evidence": "Verdict (line 9): 'At risk: the 10 Nov cutover holds only if four blockers clear by 30 Oct'. The four blockers are tied to T4-T7: the section 1 status table lists T4 (blocked, DBA window), T5 (blocked, XLS), T6 (blocked, pool size) and T7 (waiting, Marketing), and the T9 row (line 68) says it waits on 'T4, T5, T6 and T7'; the glance picture labels T9 'needs T4 to T7'. Q6 (line 138): 'The target is Tue 10 Nov. The rollout (T9) cannot start until Q1 to Q4 are resolved, and Alex's own limit for those is 30 Oct.' The section 3 heading repeats it ('The 10 Nov date holds only if all four blockers clear by 30 Oct') and section 5 assumption 2 defines 'Cutover' as T9 done. The chain cutover -> T9 -> T4-T7 is spread over table, picture and Q6 rather than one sentence, but every link in it is explicit."
+        },
+        {
+          "text": "Agent-ready: the agent-facing part holds exact commands and paths from the log (for example pytest tests/exports -q, the staging deploy command, jobs/export-dataset.yaml) and an ordered next-steps list that respects the task dependencies",
+          "passed": true,
+          "evidence": "Block B (lines 246-253, fenced) copies the log verbatim: 'python -m exports.cli run --dataset demo --format csv --rows 100000', 'docker compose up -d postgres', 'pytest tests/exports -q' (expected: 212 passed, 1 xfailed), './scripts/deploy.ps1 -Env staging -Service exports-runner' (needs the staging VPN), 'kubectl get pods -n exports'. Its path table lists jobs/export-dataset.yaml, src/exports/streaming_csv.py, src/exports/xls_writer.py, migrations/0042_export_runs.sql, templates/export_ready.html, legacy/crontab.txt, docs/cron-mapping.md, tests/exports/test_export_cancel.py. Block A 'Order of work' is a 6-step numbered list (orient -> verify unknowns -> T8 -> on each recorded answer follow block D -> T11 last -> stop if all remaining work waits on Q1-Q4). Block D gates T4 on Q4, T5 on Q1, T6 on Q2, T7 on Q3, T9 on 'T4, T5, T6 and T7 are done and Q6 confirms the date', T10 on 'T8 and T9 are done and Q5' - consistent with tasks.md. The git orientation commands are not from the log, but they are only read-only orientation."
+        },
+        {
+          "text": "Guardrails: the agent-facing part says what not to do (do not retry the in-memory or OFFSET approaches, do not apply migration 0042 in production without the DBA window, do not copy secrets from the vault path)",
+          "passed": true,
+          "evidence": "Block A (lines 209-221): 'Never, because these are for a person: 1. Any production action: running migration 0042 in production (T4), deploying to production... Prepare and document them; do not run them.' This is stricter than 'without the DBA window'; block D T4 adds 'Human only: the agent does not run it ... Done when a person has applied it in the DBA window'. '2. Reading, printing or copying production secrets (kv://nimbus/exports/prod/*) into code, logs, commits, this document or chat.' 'Do not retry dead ends: 5. Loading all rows into memory (the worker was OOM-killed at 2M rows with a 2 GB limit) and LIMIT/OFFSET paging (slower with every page).' Also forbids customer-visible changes before Q1/Q3 are answered and force-push/merge to the default branch."
+        },
+        {
+          "text": "No leakage: the part written for Dana contains no shell commands or code blocks, and the dead-end stories (OOM, OFFSET paging) are archived rather than narrated in it",
+          "passed": true,
+          "evidence": "Lines 1-192 contain no fenced code block (the only fence is block B, lines 246-253) and no shell command: the 23 distinct inline code spans are identifiers and paths (e.g. jobs/export-dataset.yaml, xlsxwriter, tenant_flags, NotImplementedError) and none looks like a command (my scan for flags, ./ prefixes and git/docker/kubectl/pytest/python/dot found none). 'OOM' and 'OFFSET' occur only in block A line 221 (machine zone) and in report.evidence.md (work-log digest row 2026-10-02 and claim rows 6-7); the human zone mentions memory only as the current approach staying 'under 300 MB'."
+        }
+      ],
+      "notes": [
+        "Date: wrote 'Fri 2026-10-16' although the system clock read 2026-10-17; 7 Nov is a Saturday, so first working day is Mon 9 Nov",
+        "'Cutover' assumed to mean T9 complete; the notes do not define it",
+        "Who decides: assumed Dana answers Q1, Q2, Q6 and names the person for Q4; only Q1 has Alex's stated preference, so recommendations for Q2-Q4 and Q6 are the executor's reading",
+        "Agent access assumed to be staging only, commits to a new branch only",
+        "Flag semantics (switches a tenant from legacy cron to JobRunner) inferred, not stated",
+        "Unresolved from the notes: which branch holds the work and whether it is pushed, whether the 11 mapped jobs exist in jobs/, where pool size is set, how staging benchmarks were run, valid -Env values for deploy.ps1, rollout stage durations and rollback, the Marketing contact",
+        "Alex should confirm the recommendations and assumptions before Dana reads them",
+        "Content added beyond the notes: T8 steps, the '20 runs in a row' and half-day time-boxes, the xlsxwriter constant_memory hint (untested), 'look in docs/ for the JobRunner docs', the CET/CEST conversion, git orientation commands",
+        "All paths and commands are copied from the notes; the repository was not inspected",
+        "The Answer-column mechanism for recording Dana's decisions may not match how the team works",
+        "Skill says AI-input over about 60 lines goes to a sibling file, but the user wants one self-sufficient document: agent blocks A-F (about 106 non-blank lines) were kept inline in collapsed details blocks and only the archive went to report.evidence.md",
+        "A glance panel with verdict, six asks, five risks, key facts, picture and reading path cannot fit one screen; accepted about two screens",
+        "Skeleton has a single 'Decision needed'; used a bulleted 'Decisions and actions' block for six asks",
+        "Followed 'a verb on every edge' literally, giving 12 identical 'unblocks' labels",
+        "check_doc.py on the evidence file reports 2 WARN that do not apply to an archive-only file, and it does not validate cross-file anchors (checked by hand)"
+      ]
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8,
+        "passed": 12,
+        "failed": 3,
+        "total": 15,
+        "time_seconds": 1745.7,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Zones labeled: the document labels a part for human reading and a separate part for AI-input / archive / evidence / reference material, using explicit headings or banners that name the audience (a bare 'Appendix' does not count), and the two parts do not interleave",
+          "passed": true,
+          "evidence": "Two labeled, non-interleaved parts in report.md. Human part: line 1 '<!-- zone:human -->' and line 6 heading '## 👤 START HERE - at a glance', then numbered sections 1-7 (lines 42-191), ended by a '---' rule at line 193. Machine part: line 195 '<!-- zone:ai-input -->' and line 196 banner '## 🗄️ MACHINE AND ARCHIVE ZONE - skip unless you need the evidence or are an agent continuing this work' (names the audience: agent/machine, archive), then block A 'Handoff context for the next agent' (AI input, line 200) and blocks B-D 'Config reference', 'Diagram sources and edge lists', 'Source trace' (archive, lines 244-272), each in <details> with an 'AI input:' / 'Archive:' opening line. All 7 human sections sit before line 193 and nothing human-facing appears after line 195. Slight weakness: the human label says 'START HERE' with a person glyph rather than literally 'for people', but it is a named, non-neutral banner and not a bare 'Appendix'."
+        },
+        {
+          "text": "Human part highlighted: the part written for humans is marked by a prominent banner or heading that says it is for people or where to start (for example an emoji-led 'start here' heading), so a reader cannot miss it",
+          "passed": true,
+          "evidence": "Line 6, the first heading after the title and one-line byline: '## 👤 START HERE - at a glance'. It is an emoji-led, all-caps 'start here' heading at the very top of the first screen (the exact form the expectation gives as an example) and leads straight into the blockquote panel. Its prominence comes from the glyph and capitals; it is the same heading level as the numbered sections."
+        },
+        {
+          "text": "Glance first: the first section after the title is a one-screen overview that states the bottom line itself (how the platform works in a sentence or two), not merely what the document covers; no background, method or table of contents comes before it",
+          "passed": true,
+          "evidence": "Title is line 2, followed only by a one-line byline (line 4: date, source, 'draft, not yet reviewed by Sam', audience). The first section is '## START HERE - at a glance' (lines 6-40, inside the 60-line first screen). It opens with '### Mental model: upload → validate → transform → publish, all asynchronous' (line 8) and line 10: '**Bottom line:** Customers upload files and the platform turns them into queryable tables, with nobody waiting on an HTTP call. Each upload is a **Version** ... that three components move along by message ..., and the **Catalog** records where it is: `received`, `validated`, `published`, or `quarantined` if validation fails. If the Catalog and the queue disagree, trust the Catalog'. That states how the platform works, not what the document covers. No background, method or TOC precedes it. Caveat: with the picture, table and reading path the panel renders at roughly 1.5-2 screens (executor says so in user_notes), but the bottom line is on line 10 and the whole panel is within the 60-line definition of the first screen."
+        },
+        {
+          "text": "Reading path: within the first screen (about 60 lines) there is a reading path or 'read next' list with at least 3 working links to sections, each saying what the reader gets",
+          "passed": true,
+          "evidence": "Lines 30-38: '**Read next**' followed by a numbered list of 7 links to sections 1-7, each with what the reader gets and a time, e.g. '[1 A file becomes a table in three asynchronous steps](#1-a-file-becomes-a-table-in-three-asynchronous-steps) - the order of events and how long it takes · 3 min', '[2 ...] - the vocabulary', '[3 ...] - who does what and who calls whom', '[4 ...] - what happens when things go wrong', '[5 ...] - run it on your machine', '[6 ...] - what to do in what order', '[7 ...] - what to confirm with Sam'. All 7 anchors resolve (see 'Links work'). Line 40 adds role-based shortcuts ('Starting Monday? Read 5 and 6.')."
+        },
+        {
+          "text": "Links work: every in-document link and every image path resolves (scripts/check_doc.py reports no ERROR lines)",
+          "passed": true,
+          "evidence": "mechanical.json (check_doc.py --json on report.md): errors [], warnings [], 36 internal links, 2 images. I re-ran check_doc.py on report.md and on report.evidence.md: 0 errors and 0 warnings in both. I also resolved all 45 link targets in report.md myself, including cross-file anchors: report.evidence.md#b-config-reference, #c-diagram-sources-and-edge-lists and #d-source-trace all exist as headings in the evidence file, and report.assets/ingestion-overview.png/.dot and shared-services.png/.dot exist on disk. No broken link or image path."
+        },
+        {
+          "text": "Relationship diagram: the eleven platform components and how they connect are shown as a diagram (embedded image or Mermaid) that includes all eleven components and labels or clearly draws the relationships",
+          "passed": false,
+          "evidence": "No single diagram contains all eleven components. Figure 1 (first screen, report.assets/ingestion-overview.png) shows Customer plus 8 components: Uploader API, Message Queue, Raw Zone, Validation Worker, Transform Worker, Quarantine Store, Catalog, Curated Zone; its own caption (line 16) says 'The Policy Engine, Schema Registry and Notifier are left out here'. Figure 2 (section 3, shared-services.png, line 93) shows 8 components (Uploader API, Validation Worker, Transform Worker, Curated Zone, Catalog, Policy Engine, Schema Registry, Notifier) and omits Message Queue, Raw Zone and Quarantine Store. Every edge in both figures is labeled with a verb or message name, and the union of the two figures does cover all eleven, but the expectation asks for 'a diagram ... that includes all eleven components'; the relationships among all eleven are never drawn in one place. Judgment call (the executor deliberately split 11 components into overview + zoom); the burden of proof is on the expectation, so not passed."
+        },
+        {
+          "text": "Diagram portable: the diagram a human sees first is an embedded image file that exists on disk (PNG or SVG), not only a Mermaid or other code block, because the reader's VS Code preview and Azure DevOps repo pages do not render Mermaid",
+          "passed": true,
+          "evidence": "Line 14 embeds '![Map of one upload's path through the Uploader API, Message Queue, Validation Worker and Transform Worker into the Curated Zone, ...](report.assets/ingestion-overview.png)'. The PNG exists in outputs/report.assets (1496x1055) and renders (I opened it). The second figure (line 93) is also an embedded PNG (shared-services.png, 1785x917). check_doc stats: diagram_blocks 0, so there is no Mermaid or other diagram code block; the .dot sources are separate linked files in the archive zone, not inline."
+        },
+        {
+          "text": "Diagram readable: the diagram has a caption or how-to-read line, and viewing the rendered image shows legible labels with no overlapping or cut-off text",
+          "passed": true,
+          "evidence": "Both figures have an italic caption directly under the image that starts 'How to read it: ...' with an arrow/colour legend and a 'Takeaway' (line 16 for the first, line 95 for the section 3 figure). I viewed both PNGs downscaled to 800 px wide and at native size with 2-3x zoomed crops: node names, sub-labels and every edge label ('uploads file', 'pass: transform', 'file to convert', 'validated or quarantined', 'gets Schema contract', 'who can see a dataset?', 'row-level rules') are legible; no text is clipped at the image edges; no label overlaps another label or a node. Only hairline contacts: the 'q' of 'queries' touches its edge line in the overview, and a 'q' descender of 'quarantined' brushes the blue edge in shared-services.png. Neither impairs reading."
+        },
+        {
+          "text": "Evidence out of the way: bulky raw material (the 20-row configuration table) is not in the human reading flow; it sits in the reference/machine part or in a linked file",
+          "passed": true,
+          "evidence": "The 20-row settings table (MAX_UPLOAD_MB ... LOG_LEVEL) does not appear anywhere in the human flow (lines 1-193). It lives in the linked sibling file report.evidence.md, block 'B Config reference' (all 20 rows; names and defaults match Sam's table). In report.md block B (lines 244-252) is only a collapsed <details> stub in the machine/archive zone with a link; the human text quotes just the few values it needs (128 MB row groups, cache lifetimes 60/300/30 s, line 111) and points to '[B Config reference](report.evidence.md#b-config-reference)'."
+        },
+        {
+          "text": "Headings tell the story: at least half of the body headings state a claim, finding or question rather than a generic topic label like 'Overview', 'Components' or 'Details'",
+          "passed": true,
+          "evidence": "The 7 numbered body headings are statements, not topic labels: '1 A file becomes a table in three asynchronous steps', '2 Six terms to know and a Version that never changes', '3 Eleven components in five roles with two hubs', '4 Two kinds of failure and one source of truth', '5 Test locally in strict policy mode' (clear claims), plus '6 Your first week in eight steps' and '7 What this guide does not know' (specific statements); each section also opens with an italic question (e.g. 'What happens when something goes wrong, and who is told?'). The H1 is itself a claim ('...and the Catalog is the source of truth'). Generic labels appear only in the machine zone: 'A Handoff context for the next agent', 'B Config reference', 'C Diagram sources and edge lists', 'D Source trace' and the two zone banners. 5/7 (71%) to 7/7 of body sections qualify; counted across all 14 headings the checker found it is 8/14 (57%) if 6 and 7 count, 6/14 (43%) if they do not, so the result depends on reading 'body headings' as the human sections."
+        },
+        {
+          "text": "No invented verdict: the document does not fabricate a verdict, a 'decision needed' block or a risk table; the first screen gives a bottom line and mental model instead",
+          "passed": true,
+          "evidence": "No verdict glyph or status: the status slot reads '### Mental model: upload → validate → transform → publish, all asynchronous' (line 8). No 'decision needed' block: the only ask (Sam confirms seven open questions) lives in section 7 and the handoff block, not as a decision on the first screen. No project risk register. The first screen gives a bottom line (line 10), a confidence line (line 12), the overview diagram and a read-next list. Caveat: lines 18-24 hold a severity-glyph table, 'Five ideas that matter most (orange = costly to miss, yellow = confusing to miss) | The trap if you miss it | Where it is handled', which user_notes admit is the skeleton's 'Top risks' table reused. Its five rows are grounded in Sam's gotchas (Catalog vs queue, POLICY_MODE=strict, at-least-once/idempotent, immutable Version and major version, retention/UTC), so they are not fabricated risks; only the orange/yellow ranking is the author's judgment. I treated it as a key-ideas table, not a fabricated risk table (borderline)."
+        },
+        {
+          "text": "Mental model first: the first screen has a diagram of the eleven components and their flow with a one-line bottom line, and calls out that the Catalog (not the queue) is the source of truth for status",
+          "passed": false,
+          "evidence": "Met: a diagram is on the first screen (line 14); there is a bottom line (line 10) with a one-line mental-model heading above it (line 8); the Catalog callout is strong (H1 '...and the Catalog is the source of truth'; line 10 'If the Catalog and the queue disagree, trust the Catalog'; row 1 of the table, line 20, 'The Catalog, not the queue, says where a file is'; diagram node 'Catalog - source of truth for status'). Not met: the first-screen diagram is not a diagram of the eleven components. It shows 8 of the 11 (no Policy Engine, Schema Registry or Notifier), and its caption says so: 'The Policy Engine, Schema Registry and Notifier are left out here' (line 16). The figure that adds those three (section 3) is not on the first screen and itself omits Message Queue, Raw Zone and Quarantine Store. No partial credit."
+        },
+        {
+          "text": "Concepts before flows: Dataset, Version, Schema contract, Quarantine, Lineage record and Tenant are defined (glossary or equivalent) before the detailed step-by-step flow",
+          "passed": false,
+          "evidence": "The detailed step-by-step flow is section 1 (lines 42-64: table of steps 1, 2, 2a, 2b, 3 with component, action and Catalog status). The glossary is section 2 'Six terms to know and a Version that never changes' (lines 66-87), i.e. after it, and the read-next order on lines 32-33 keeps it that way ('1 ... the order of events', '2 ... the vocabulary'). Section 1 already uses 'Schema contract', 'Quarantine Store', 'Lineage record' and 'Version' undefined. Before section 1 only Version is glossed inline ('Each upload is a Version (one immutable upload)', line 10); Dataset, Schema contract, Quarantine, Lineage record and Tenant are first defined in section 2 (lines 72-77). The glossary content itself is complete and correct (all six terms, matching Sam's definitions); only the ordering fails."
+        },
+        {
+          "text": "Week-one use: includes the six gotchas and what to do in week one (runbooks, starter tickets INGEST-310 and INGEST-322, the weekly sync)",
+          "passed": true,
+          "evidence": "Week one: section 6 (lines 154-171) is an eight-row table covering the whole checklist, including 'Read the runbooks `replay-dlq` and `quarantine-release`' (line 165), 'Pick up a starter ticket: INGEST-310 (add a column type to the Schema Registry validator) or INGEST-322 (improve the quarantine email wording)' (line 168) and 'Join the weekly ingestion sync (Wednesdays) and the Friday incident review' with 'Wed 10:00 CET and Fri' (line 169), plus a Friday self-check. All six gotchas are present and correct: (1) a Version is immutable, 'fixing' means uploading a new one (lines 23, 74); (2) a breaking schema change needs a new dataset major version, not a new Version (lines 73, 85); (3) all timestamps are UTC, also in the Catalog UI, and support is confused weekly (lines 24, 106); (4) docker compose up emulators, Policy Engine mocked allow-all unless POLICY_MODE=strict, run the e2e smoke test with strict before every PR (lines 21, 144-146); (5) Notifier is fire-and-forget, a failed email never fails a Version (line 134, Notifier row 109); (6) quarantine 30 days vs Raw Zone 1 year (lines 24, 103-104). They are spread over the panel table and sections 2-5 rather than listed as 'the six gotchas', but each is stated. The weekday assignments are the author's suggestion and are labelled as such (line 156)."
+        },
+        {
+          "text": "Figures are right: states the correct retry behaviour (3 attempts with 30 s, 2 min, 10 min backoff, then the dead-letter queue) and the 15-minute publish target for files up to 1 GB",
+          "passed": true,
+          "evidence": "Line 123 (section 4 table): 'Retries (3 attempts, waiting 30 s, then 2 min, then 10 min), then moves the message to the DLQ', with DLQ defined as the dead-letter queue in the section 3 table and 'paged as soon as the DLQ holds one message' (DLQ_ALERT_THRESHOLD 1). Line 62: 'The target is a published table within 15 minutes for files up to 1 GB'; first-screen key facts (line 26): 'published within **15 minutes** for files up to 1 GB, hard limit 5 GB'. All match Sam's notes ('Retries: 3 attempts with backoff 30 s, 2 min, 10 min. Then DLQ'; 'Target: published within 15 minutes for files up to 1 GB'). The doc also flags that '3 attempts' versus three delays is ambiguous (line 128 and open question 1, with correct arithmetic: 30 s + 2 min = 2.5 min; + 10 min = 12.5 min) without changing the stated figures."
+        }
+      ],
+      "notes": [
+        "Retry count: notes say '3 attempts' (QUEUE_MAX_ATTEMPTS 3) but list three backoff delays; executor repeated the notes' wording and raised it as open question 1.",
+        "Inferences tagged '(inferred)': Version status during retries and after the DLQ, effect of the cache lifetimes, what each repo holds, what the two starter tickets touch, the 'stuck Version' hint; the day-by-day pacing in section 6 is a suggestion.",
+        "Open question 6 (5 GB file vs 30-minute transform timeout) is the executor's own arithmetic assuming linear growth and may read as speculative.",
+        "Assumed Sam is a teammate Priya can ask; target wiki (GitHub vs Azure DevOps) not stated, so PNGs and <details> were used and Mermaid avoided.",
+        "Figure 1 shows one Message Queue node; the real implementation might be two queues.",
+        "Date comes from the system clock; British spelling; reading times are rough; the choice and ranking of the 'five ideas' and their severity glyphs are the executor's judgment.",
+        "Sam should confirm the seven open questions in section 7 and the '(inferred)' items before publication.",
+        "The orange/yellow severity ranking of the five ideas on the first screen is not from the notes.",
+        "Open question 6 could be cut as speculative.",
+        "No Markdown renderer was available to the executor, so VS Code / Azure DevOps rendering was not checked visually (tables and anchors checked with scripts only).",
+        "Skeleton's verdict glyph and Decision block dropped for an explainer; opened with a 'Mental model' status line instead.",
+        "Skeleton's 'Top risks' table reused as 'Five ideas that matter most' with severity glyphs and a legend.",
+        "Glance panel with picture, table and reading path is about 1.5-2 screens rather than one; kept because the skill's explainer row asks for both.",
+        "Archive blocks B-D kept as <details> stubs that link to report.evidence.md (slightly redundant).",
+        "check_doc.py false positives on the archive-only sibling file were fixed by adding a three-line zone:human header to report.evidence.md.",
+        "Process slip: shared-services.dot was rewritten with PowerShell Set-Content instead of the edit tool (executor checked: no BOM, renders fine).",
+        "Replied with the file list only (task rules) instead of the skill's 'panel in miniature' chat reply."
+      ]
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.57,
+        "passed": 8,
+        "failed": 6,
+        "total": 14,
+        "time_seconds": 1566.3,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Zones labeled: the document labels a part for human reading and a separate part for AI-input / archive / evidence material, using explicit headings or banners that name the audience (a bare 'Appendix' does not count), and the two parts do not interleave",
+          "passed": false,
+          "evidence": "No zone labels exist. The headings are Recommendation, Options considered, What the evidence shows, Plan, Cost, Risks, Assumptions and open items, When to revisit, Decision record, then 'Appendix A: Supporting data', 'Appendix B: Q3 incident analysis' and 'Appendix C: Key dates' - bare appendices that name no audience. mechanical.json warns 'no <!-- zone:... --> markers; human-read and machine/archive content are not marked' and stats.zones is []. The only orientation is plain text at line 8: 'The Recommendation below is enough to decide. Everything after it is the evidence, the plan and the audit trail.' That is not a heading or banner, names no audience (people vs AI/archive), and lumps the plan and the decision record in with the evidence. The evidence/ and analysis/ folders form a separate bundle on disk, but report.md itself never labels the two audiences."
+        },
+        {
+          "text": "Human part highlighted: the part written for humans is marked by a prominent banner or heading that says it is for people or where to start (for example an emoji-led 'start here' heading), so a reader cannot miss it",
+          "passed": false,
+          "evidence": "Nothing in report.md says 'for people' or 'start here'. The first heading (line 10) is the plain topic label '## Recommendation'; line 3 only names the addressee ('For: Marcus Hale, Engineering Lead') and line 8 is an unformatted sentence. There is no emoji-led heading, banner or callout marking the human-reading zone, so a reader is not prominently told where to start."
+        },
+        {
+          "text": "Glance first: the first section after the title is a one-screen overview that states the conclusion itself (what is true or what to do), not merely what the document covers; no background, method or table of contents comes before it",
+          "passed": true,
+          "evidence": "After the title and a 4-line metadata block (For / Decision needed by / Prepared / Based on, lines 3-6), the first section is '## Recommendation' (lines 10-28, about 440 words). It states the conclusion itself: 'Split the upgrade rather than choosing between \"all before the freeze\" and \"all in January\". Move the seven services that passed staging to v10 in the week of 2026-10-26 ... Keep the two Identity-team services ... on v8 until January'. Three reasons, four decisions and a confidence note follow and all end by line 28, inside the first 60 lines. No background, method or table of contents precedes it. Caveat: the section is dense, so 'glance' is generous."
+        },
+        {
+          "text": "Reading path: within the first screen (about 60 lines) there is a reading path or 'read next' list with at least 3 working links to sections, each saying what the reader gets",
+          "passed": false,
+          "evidence": "The first 60 lines contain only two links: line 6 (the `evidence/` folder link inside the 'Based on' metadata) and line 21 ('[Cost](#cost)' inside decision 2). There is no reading-path or 'read next' list, only one link points to a section, and none says what the reader gets. mechanical.json agrees: 'fewer than 2 in-document links near the top; add a Read next path'. The expectation needs at least 3 section links with descriptions."
+        },
+        {
+          "text": "Links work: every in-document link and every image path resolves (scripts/check_doc.py reports no ERROR lines)",
+          "passed": true,
+          "evidence": "mechanical.json: errors [] (no ERROR lines); stats internal_links 3, images 3. I also resolved all 19 link/image targets in report.md independently: the 3 anchors (#cost, #appendix-b-q3-incident-analysis, #appendix-c-key-dates) match headings, the 3 PNGs exist, and every evidence/, analysis/ and figures/ file or folder link exists on disk; 0 unresolved. Caveat: 2 warnings say the anchors for 'Appendix B: Q3 incident analysis' and 'Appendix C: Key dates' (colon in the heading) may differ between viewers such as Azure DevOps - warnings, not errors."
+        },
+        {
+          "text": "Relationship diagram: the nine services and their dependencies are shown as a diagram (embedded image or Mermaid) that includes all nine services and labels or clearly draws the relationships",
+          "passed": true,
+          "evidence": "figures/dependency-graph.png (embedded at line 77 as Figure 1) draws all nine services as labelled nodes (gateway, share-service, connector-service, catalog-service, notify-service, map-service, search-index, auth-service, user-store) with directed arrows. I checked every edge against services.csv depends_on and all match: gateway -> auth/catalog/share/connector; share -> auth/catalog/notify; connector -> auth/catalog; catalog -> auth/search-index and catalog <-> map-service ('call each other'); map -> auth; notify -> auth; auth -> user-store. Nodes also show team, criticality, staging result and rollback status, and the six edges into auth-service are red."
+        },
+        {
+          "text": "Diagram portable: the diagram a human sees first is an embedded image file that exists on disk (PNG or SVG), not only a Mermaid or other code block, because the reader's VS Code preview and Azure DevOps repo pages do not render Mermaid",
+          "passed": true,
+          "evidence": "The first diagram in the document is the embedded image '![Dependency graph of the nine services ...](figures/dependency-graph.png)' at line 77: a PNG that exists on disk (184,704 bytes, 1372x1516, opens fine). check_doc.py stats show images 3 and diagram_blocks 0, so there is no Mermaid or other code-block diagram at all; the Graphviz source is kept as figures/dependency-graph.dot."
+        },
+        {
+          "text": "Diagram readable: the diagram has a caption or how-to-read line, and viewing the rendered image shows legible labels with no overlapping or cut-off text",
+          "passed": true,
+          "evidence": "Caption at line 79: 'Figure 1. Who depends on whom (inventory). The seven passing services are green; the two Identity services are the only ones without a rollback path. catalog-service and map-service call each other.' The image also embeds a legend and a how-to-read line ('An arrow points from a service to a service it depends on. Red arrows point at auth-service.'). I viewed the PNG at native size and downscaled to 800 px wide: the bold service names, the smaller team/criticality/status lines, the 'call each other' edge label and the legend all stay legible, with no overlapping or clipped text."
+        },
+        {
+          "text": "Evidence out of the way: bulky raw material (the 36 incident rows, the full inventory table, long logs) is not in the human part; it sits in the archive/machine part or in a linked file",
+          "passed": true,
+          "evidence": "report.md contains none of the 36 raw incident rows and no raw log or inventory dump. The raw material sits in linked files: evidence/incidents-q3.csv, evidence/services.csv and evidence/upgrade-notes.md, linked from line 6, line 48 and Appendix A (lines 232-234). Appendix B (line 243 on) holds only aggregated by-service (9 rows) and by-cause (8 rows) tables. Caveat: the body has a 9-row derived 'Service by service' table (lines 61-73: team, criticality, staging, rollback, Q3 incident count, phase) - an analysis table that supports the argument rather than the raw inventory (no depends_on or runtime columns), so I did not count it as bulky raw material."
+        },
+        {
+          "text": "Headings tell the story: at least half of the body headings state a claim, finding or question rather than a generic topic label like 'Overview', 'Analysis' or 'Details'",
+          "passed": false,
+          "evidence": "There are 18 body headings (excluding the H1 title: 12 H2, 6 H3). Only 4 state a finding: 'The seven are ready; the two Identity services are not', 'auth-service is where the risk concentrates', 'Recovery cost differs by an order of magnitude' and 'The calendar is the binding constraint' (all H3 under 'What the evidence shows'). The other 14 are topic labels: Recommendation, Options considered, What the evidence shows, Plan, 'Phase 1: the seven passing services, before the freeze', 'Phase 2: the Identity services, in January', Cost, Risks, Assumptions and open items, When to revisit, Decision record, Appendix A: Supporting data, Appendix B: Q3 incident analysis, Appendix C: Key dates. 4/18 = 22% (6/18 = 33% even if the two Phase headings are generously counted) is below the half bar, and all 12 H2 headings are generic."
+        },
+        {
+          "text": "Verdict and ask first: the first screen gives a clear recommendation on upgrading before the freeze versus deferring (a conditional or split answer is fine) and names the decision Marcus must make with its deadline (Friday 23 Oct)",
+          "passed": true,
+          "evidence": "Line 12 (first screen): 'Split the upgrade rather than choosing between \"all before the freeze\" and \"all in January\". Move the seven services that passed staging to v10 in the week of 2026-10-26, before the code freeze (Phase 1). Keep the two Identity-team services ... on v8 until January' - a clear split verdict. The ask is named twice with the deadline: line 4 'Decision needed by: Friday 2026-10-23' and lines 18-23 '> **Decisions needed by Friday 2026-10-23**' with four numbered decisions (approve Phase 1, approve USD 18,000 extended support, ask CAB for a contingency exception, confirm auth-service and user-store stay on v8)."
+        },
+        {
+          "text": "Top risks first: the first screen lists at least 3 top risks with severity markers, including the 12 Nov end of support and the missing rollback path for auth-service",
+          "passed": false,
+          "evidence": "The first 60 lines contain no top-risk list and no severity markers (no High/Critical/SEV labels, colour or emoji on risks). The only risk table, with Likelihood/Impact columns, is under '## Risks' at line 178. The first screen has a recommendation narrative instead: the missing rollback path appears in a bullet (line 15: 'Neither can be rolled back after the schema migration; recovery is a backup restore, estimated at 4 hours'), but the 12 Nov end of support is only implied (line 16: the Identity services 'will still be on v8 on 2026-11-12'); the explicit 'end of security support on 2026-11-12' first appears at line 96. The only 'High'/'Moderate' markers (lines 27-28) rate confidence in the recommendation, not risk severity."
+        },
+        {
+          "text": "Figures are right: the report states that auth-service has 6 dependents and accounts for 11 of the 36 Q3 incidents",
+          "passed": false,
+          "evidence": "6 dependents is stated correctly: line 81 'Six of the other eight services call it directly: gateway, catalog-service, share-service, connector-service, map-service and notify-service' (matches services.csv). The incident share is not stated as 11 of 36: line 85 says 'auth-service accounts for 11 of 35 Q3 incidents (31%), 380 of 854 incident minutes'. incidents-q3.csv has 36 rows (auth-service 11 rows and 380 min; 932 min in total). The report merges the 2026-07-11 gateway SEV1 row ('caused by auth-service SEV1') into the auth-service row and uses 35 as the denominator throughout (Figure 2 title 'n = 35', gateway 6 instead of 7 rows, 854 instead of 932 minutes). The merge is disclosed (lines 75, 247) and '36' appears only as a row count (lines 234, 247), but the figure the report states is 11 of 35, not the 11 of 36 the expectation requires."
+        },
+        {
+          "text": "Audit data kept: the 36 incident rows and the 9-service inventory are preserved for audit, inline in the archive part or as linked files, as the user asked",
+          "passed": true,
+          "evidence": "outputs/evidence/incidents-q3.csv (36 data rows), evidence/services.csv (9 services) and evidence/upgrade-notes.md are byte-identical to the fixtures (SHA-256 hashes match). They are linked from the header (line 6), the source tags (line 48) and the Appendix A table (lines 232-234), which also says 'Do not edit them: if the facts change, add a dated file and a new revision of this report'. Extras kept: analysis/analyze.py (re-run in a scratch copy: it regenerated byte-identical derived CSVs and the same .dot), analysis/derived/*.csv and figures/*.png plus the .dot source."
+        }
+      ],
+      "notes": [
+        "Extended support terms: whether USD 18,000 is flat or per service and whether a quarter is rolling or calendar (assumed flat and rolling; ceiling set at USD 36,000)",
+        "The CAB rule 'already staged and tested' was read as 'passed staging', which makes the seven eligible and the Identity services not",
+        "What the seven passing services were tested against (v8 or v10 auth-service) is not in the notes; made a pre-Monday check and the basis for 'moderate' confidence",
+        "Why auth-service itself has no rollback path (the notes tie it to the schema migration, which belongs to user-store) was flagged, not resolved",
+        "Proposals nobody has agreed to: Phase 1 order, the 2026-10-30 order date, the 2026-12-15 checkpoint, the Phase 2 gates; Platform and Integration capacity in the week of 2026-10-26 is unknown",
+        "Incident attribution: the two 2026-07-11 SEV1 rows treated as one event (35 from 36), and three gateway incidents attributed to auth-service from free-text summaries",
+        "Rounding: 44.5% written as 'about 45%'",
+        "Dates: report dated 2026-10-17 from the system clock, Friday taken as 2026-10-23, Identity engineer assumed back on Monday 2026-11-16",
+        "Facts in the notes (staging results, rollback times, vendor timing, price) taken as given and not checked against primary sources",
+        "Likelihood and impact ratings in the risk table are the author's judgment",
+        "The 35-versus-36 de-duplication: it changes the headline numbers (gateway 6 vs 7, 854 vs 932 minutes)",
+        "The USD 18,000 pricing basis and the USD 36,000 ceiling put to Marcus as decision 2",
+        "The CAB eligibility reading behind decision 3 (contingency exception)",
+        "The open mixed-version question (what the seven were tested against), which needs an answer from Platform before Friday",
+        "No skill was used (without_skill baseline). Portability choices instead: PNG figures with the .dot source kept, no Mermaid or GitHub-only alert syntax because Azure DevOps may not render them, ASCII-only text, relative links, plain GFM tables and blockquotes"
+      ]
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.73,
+        "passed": 11,
+        "failed": 4,
+        "total": 15,
+        "time_seconds": 2421.7,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Zones labeled: the document labels a part for human reading and a separate part for AI-input / archive / evidence material, using explicit headings or banners that name the audience (a bare 'Appendix' does not count), and the two parts do not interleave",
+          "passed": false,
+          "evidence": "Near miss. Lines 5-7 are a two-line reader-guide blockquote: 'Dana: §1 and §2 are for you...' / 'Coding agent: read everything. §3 is your brief.' Only two headings name an audience ('## 2. What Dana needs to decide or unblock' and '## 3. Agent brief'). The rest of the agent/archive material sits under bare topic headings ('4. Remaining work, task by task', '5. Reference', '6. Dead ends and gotchas', '7. Assumptions and gaps', '8. Progress log'), which is no better than the bare 'Appendix' the assertion excludes, and the guide tells the agent to 'read everything', so no separate AI/archive zone is delimited or labeled. Order is human first (lines 14-116) then agent (117-387), so nothing interleaves, but the labeling requirement is not met. mechanical.json warns: 'no <!-- zone:... --> markers; human-read and machine/archive content are not marked'."
+        },
+        {
+          "text": "Human part highlighted: the part written for humans is marked by a prominent banner or heading that says it is for people or where to start (for example an emoji-led 'start here' heading), so a reader cannot miss it",
+          "passed": true,
+          "evidence": "Borderline pass. Lines 5-7, directly under the title and purpose line, are the only callout in the document: a blockquote opening '**Dana:** §1 and §2 are for you: where things stand, and the six items that need you.' It names the person and says where to start, and a reader sees it before any section. Weaknesses: it is a plain blockquote rather than an emoji or heading-level banner, it is shared with an instruction for the agent, and the section headings themselves ('1. Where things stand') carry no marker. Passed because the purpose of the assertion, that a human reader cannot miss where to start, is met."
+        },
+        {
+          "text": "Glance first: the first section after the title is a one-screen overview that states the conclusion itself (what is true or what to do), not merely what the document covers; no background, method or table of contents comes before it",
+          "passed": false,
+          "evidence": "The verdict itself is good and early: line 16 under '## 1. Where things stand' (line 14) says '**Status: at risk.** The 2026-11-10 cutover needs four things from outside the engineering work (Q1 to Q4), and none is settled yet.' But the assertion forbids background or method before it, and lines 3-12 are exactly that: line 3 is project background ('Moving scheduled exports from the legacy cron jobs to the new JobRunner platform, then switching the old cron off'), lines 9-12 are owner/provenance/method bullets ('Built from Alex's work log, task list and open-questions list... what they leave out is listed in §7'; 'Text marked (assumption) or (suggestion) was added while drafting this document...'). Section 1 then runs on through 5 long bullets, an 11-row table and a 1215x935 diagram (lines 14-43), so it is more than a glance."
+        },
+        {
+          "text": "Reading path: within the first screen (about 60 lines) there is a reading path or 'read next' list with at least 3 working links to sections, each saying what the reader gets",
+          "passed": false,
+          "evidence": "There are no section links at all. The only markdown link syntax in the file is the two image embeds (lines 40 and 59). mechanical.json stats: internal_links 0, with warning 'fewer than 2 in-document links near the top; add a Read next path'. The only reading guidance is plain-text section numbers in the blockquote (lines 5-7), which are not links."
+        },
+        {
+          "text": "Links work: every in-document link and every image path resolves (scripts/check_doc.py reports no ERROR lines)",
+          "passed": true,
+          "evidence": "mechanical.json: errors [] (no ERROR lines). Both image paths resolve on disk: outputs/images/task-dependencies.png (1215x935) and outputs/images/calendar.png (1196x689). Caveat: this passes vacuously for links, because the document has zero in-document links (internal_links 0)."
+        },
+        {
+          "text": "Relationship diagram: the eleven tasks T1-T11 and their dependencies are shown as a diagram (embedded image or Mermaid) that includes all eleven tasks and draws the dependency edges",
+          "passed": true,
+          "evidence": "images/task-dependencies.png shows all eleven nodes T1-T11 with arrows: T1->T2, T1->T3, T3->T4, T2->T5, T2->T6, T2->T7, T4/T5/T6/T7->T9, T9->T10, T8->T10, and T11 isolated. This matches the 'Depends on' column of tasks.md exactly (T2:T1, T3:T1, T4:T3, T5/T6/T7:T2, T9:T4-T7, T10:T8+T9, T8 and T11: none). Nodes are colored by status with an in-image legend (Done / Blocked / Waiting / Not started)."
+        },
+        {
+          "text": "Diagram portable: the diagram a human sees first is an embedded image file that exists on disk (PNG or SVG), not only a Mermaid or other code block, because the reader's VS Code preview and Azure DevOps repo pages do not render Mermaid",
+          "passed": true,
+          "evidence": "The first diagram, line 40, is an embedded PNG: '![Task dependency map. ...](images/task-dependencies.png)'; the file exists. No Mermaid or code-block diagram is used (mechanical.json: diagram_blocks 0). The alt text spells out every edge, and the Graphviz source is kept beside it in images/src/task-dependencies.dot."
+        },
+        {
+          "text": "Diagram readable: the diagram has a caption or how-to-read line, and viewing the rendered image shows legible labels with no overlapping or cut-off text",
+          "passed": true,
+          "evidence": "Caption / how-to-read line directly under the image (line 42): 'Arrows point from a task to what it unlocks. The four blockers in front of T9 are four different kinds of input: a DBA slot, a product decision, a budget decision and Marketing's approval.' plus a colour legend inside the image. Viewing the 1215x935 PNG (about 0.66 scale at 800 px, labels about 15 px): every label sits fully inside its box, no overlaps, nothing clipped, arrows do not run through text. The second image (calendar.png) is also legible."
+        },
+        {
+          "text": "Evidence out of the way: bulky raw material (the chronological log, dead-end stories, long command listings) is not in the part written for Dana; it sits in the archive/machine part or in a linked file",
+          "passed": true,
+          "evidence": "Dana's part (lines 14-116, sections 1 and 2, as the reader guide states) contains no chronological log, no dead-end narrative and no command listing. Dead ends are in section 6 (lines 336-345, 'Dead ends. Do not retry.'), commands in section 3.2 and section 5 'Commands' (lines 291-303), measurements in section 5, all in the agent half (line 117 onward). The raw work log is not reproduced. The only mention of a rejected idea in Dana's part is the one-line option (c) in Q1 (line 67), which is an option, not a dead-end story."
+        },
+        {
+          "text": "Headings tell the story: at least half of the body headings state a claim, finding or question rather than a generic topic label like 'Overview', 'Status' or 'Details'",
+          "passed": false,
+          "evidence": "35 body headings (H2/H3). Only Q1-Q6 (lines 61-97, e.g. 'Q2. Approve 6 workers instead of 3', 'Q6. Keep or move the 2026-11-10 date') are clearly claim/question headings. 18 are generic topic labels: 'Where things stand', 'Decision log', 'Agent brief', 'Rules', 'First hour', 'Work queue', 'Remaining work, task by task', 'Not in the task list (optional)', 'Reference', 'Where things are', 'Commands', 'Environments', 'Measurements', 'People and tenants', 'Dead ends and gotchas', 'Assumptions and gaps', 'Assumptions made while drafting', 'Progress log'. Even counting the 8 task headings T4-T11 (which carry a state such as 'waits for Q1') and 3 borderline ones ('What Dana needs to decide or unblock', 'Keeping this document current', 'Gaps in the notes: verify, do not guess') as claims, the total is 17 of 35, below half."
+        },
+        {
+          "text": "Dana's view: the first screen says where things stand (how many of the 11 tasks are done, blocked or open) and lists the decisions Dana must make (XLS above 1M rows, pool size and its cost, DBA window, email template, owner of the 3 cron jobs) with options or a recommendation",
+          "passed": true,
+          "evidence": "Within the first 60 lines: line 24 '3 of 11 tasks are done, 4 are blocked or waiting on other people, and 4 are not started (T8 can start now)' (matches tasks.md: T1-T3 done, T4-T7 blocked/waiting, T8-T11 todo) and lines 48-55, a Q1-Q6 table with Ask / Needed by / Recommendation / Blocks: XLS above 1,048,576 rows (rec. '(a) ZIP of several XLS files (Alex's preference)'), 6-worker pool '+1,200 USD/month' (rec. 'Approve, conditional on a staging check'), DBA window (rec. 'Aim for Tue 10-27 or Thu 10-29'), email wording and logo, owner of the 3 unmapped cron jobs, keep-or-move date. Caveats: Q3, Q5 and Q6 show '-' under Recommendation, and in a rendered preview the table sits below a 935 px diagram and an 11-row table, so it is below the fold. Passed on the 60-line definition of first screen, since each decision is listed with its ask and deadline and a recommendation wherever the notes support one."
+        },
+        {
+          "text": "Cutover risk: states that the 10 Nov cutover depends on tasks T4-T7 (the blocked ones) and is at risk if decisions slip past about 30 Oct",
+          "passed": true,
+          "evidence": "Line 16: '**Status: at risk.** The 2026-11-10 cutover needs four things from outside the engineering work (Q1 to Q4), and none is settled yet. Alex's view: they need to be settled by Fri 2026-10-30.' Line 20: 'T4 to T7 each wait on a different kind of input...'. Line 99 (Q6): 'the rollout (T9) cannot start until T4 to T7 are done. Alex's view: if Q1 to Q4 slip past 10-30, the date is at risk.'"
+        },
+        {
+          "text": "Agent-ready: the agent-facing part holds exact commands and paths from the log (for example pytest tests/exports -q, the staging deploy command, jobs/export-dataset.yaml) and an ordered next-steps list that respects the task dependencies",
+          "passed": true,
+          "evidence": "Exact commands from work-log.md are in the agent half: line 160 'pytest tests/exports -q', plus 'docker compose up -d postgres' and 'python -m exports.cli run --dataset demo --format csv --rows 100000' (section 3.2), and line 301 './scripts/deploy.ps1 -Env staging -Service exports-runner' plus 'kubectl get pods -n exports' (section 5 Commands). Paths such as jobs/export-dataset.yaml appear at lines 165 and 277. Section 3.3 'Work queue' (lines 168-183) is a numbered 1-10 list with a 'Needs' column that respects the dependencies (T5 only once Q1 is recorded, T7 needs Q3, T9 only drafted, T11 last) and ends 'Do not execute T9 or T10.'"
+        },
+        {
+          "text": "Guardrails: the agent-facing part says what not to do (do not retry the in-memory or OFFSET approaches, do not apply migration 0042 in production without the DBA window, do not copy secrets from the vault path)",
+          "passed": true,
+          "evidence": "Section 3.1 'Never' (lines 136-141): 'Copy secrets. Production secrets live in the vault under kv://nimbus/exports/prod/*...' and 'Retry the dead ends in §6'; section 6 (lines 338-341) lists 'Loading all rows into memory...' (OOM) and 'LIMIT/OFFSET paging' under 'Dead ends. Do not retry.' Migration 0042: line 132 puts 'applying migration 0042 (T4)' under 'A named human must do or approve it', line 196 says T4 is 'Waiting on: a DBA window ... and a named human to attend (Q4)', and line 137 says 'Never enable it in production before migration 0042 is applied there.' It is phrased as human-only rather than 'not without the DBA window', which is stricter, so the intent is met."
+        },
+        {
+          "text": "No leakage: the part written for Dana contains no shell commands or code blocks, and the dead-end stories (OOM, OFFSET paging) are archived rather than narrated in it",
+          "passed": true,
+          "evidence": "Code fences appear only at lines 149-162 (section 3.2) and 295-303 (section 5), all after the agent half starts at line 117. A scan of lines 1-116 for pytest, docker, kubectl, git, deploy, powershell, OOM and OFFSET found nothing relevant (the only hits were 'under 300 MB of memory' in a results sentence and the word 'limit'). Dana's part uses only inline identifiers (xlsxwriter, export_runs, templates/export_ready.html), not shell commands. The OOM and OFFSET dead ends are narrated only in section 6 (lines 340-341)."
+        }
+      ],
+      "notes": [
+        "Date of writing: assumed Fri 2026-10-16 (system clock said 10-17) and that the agent starts Mon 2026-10-19.",
+        "'Back 7 Nov' is a Saturday; assumed Mon 2026-11-09 is the first working day, leaving one working day before the 11-10 target.",
+        "Meaning of 'cutover 2026-11-10': read as the day the production rollout (T9) starts with nimbus-internal.",
+        "Who decides what: only Q1 was explicitly put to Dana; Q2 (budget) is addressed to her 'or whoever holds the budget'; Marketing and DBA contacts are not named.",
+        "Agent permissions (branches and staging allowed, production human-only, no push to the default branch) are assumed, not in the notes.",
+        "'6 workers fixes it' and XLS timing are unmeasured (SLA tests presumably CSV).",
+        "Unknown whether legacy cron and JobRunner double-run a tenant once its flag is on, and whether the other 10 mapped cron jobs already have JobRunner definitions.",
+        "T7 status differs between the task list (in progress) and the work log (wiring done, only approval missing); the doc shows 'Waiting'.",
+        "Test baseline (212 passed, 1 xfailed) dates from 10-05; no repo access, so every path and command comes from the notes.",
+        "Suggestions beyond the notes, all tagged in the text: conditional approval of Q2, a staging 6-worker test, a hedge branch for XLS option (a), DBA and rollout runbooks, aiming for the 10-27 or 10-29 DBA window, the 'middle path' of keeping 11-10 for the internal tenant only, a 1-hour timebox for T11, a dead-letter-queue alert before the first production tenant.",
+        "Agent permissions in section 3.1 need confirming against the real setup.",
+        "Length: about 5,800 words; the executor says the Measurements table and the gaps table are the first things to cut.",
+        "No repo access: the '--rows 4200000' idea for a 4.2M-row dataset and 'about 5 files' for Acme are inferences, tagged as such."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.73,
+        "passed": 11,
+        "failed": 4,
+        "total": 15,
+        "time_seconds": 2425.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Zones labeled: the document labels a part for human reading and a separate part for AI-input / archive / evidence / reference material, using explicit headings or banners that name the audience (a bare 'Appendix' does not count), and the two parts do not interleave",
+          "passed": false,
+          "evidence": "No part is labelled for an audience. mechanical.json warns 'no <!-- zone:... --> markers; human-read and machine/archive content are not marked' (stats.zones = []). The only reference-type parts are the trailing 'Appendix A: configuration reference' (L254) and 'Appendix B: assumptions and open questions' (L281), i.e. topic-labelled appendices that do not name an audience, and nothing labels the human-reading part. Reference material is also interleaved with the human flow: L15 says 'As reference: Shared services and stores, Numbers to know, Gotchas', and those sections (L100, L153, L182) sit between 'The life of a Version' / 'When things go wrong' / 'Running it locally' and 'Your first week'."
+        },
+        {
+          "text": "Human part highlighted: the part written for humans is marked by a prominent banner or heading that says it is for people or where to start (for example an emoji-led 'start here' heading), so a reader cannot miss it",
+          "passed": false,
+          "evidence": "No banner, callout or emoji heading marks a human part. The nearest thing is the plain H2 '## How to use this page' (L11), styled like the other 24 headings; its text is a reading guide ('On day one, read ...') and it neither says it is for people nor 'start here'. L7 'Audience: new ingestion engineers' is a low-key metadata bullet, not a prominent banner. With no machine/reference zone to contrast against and no zone markers (mechanical.json), nothing is highlighted as the human part."
+        },
+        {
+          "text": "Glance first: the first section after the title is a one-screen overview that states the bottom line itself (how the platform works in a sentence or two), not merely what the document covers; no background, method or table of contents comes before it",
+          "passed": false,
+          "evidence": "The first section after the title is '## How to use this page' (L11-18), a link-list reading guide (a TOC-like navigation list), and it is preceded by a preamble (L3-9) with a what-the-document-covers sentence ('After reading this you should be able to explain how an uploaded file becomes a published table...'), 'Based on: the team's architecture notes and week-one checklist' (source/method) and 'Reading time'. The bottom line only starts in the second section, '## What the platform does' (L20-26: 'The platform checks each file against an agreed schema, transforms it and publishes it as a queryable table...'; L24 'upload -> validate -> transform -> publish, with a quarantine exit')."
+        },
+        {
+          "text": "Reading path: within the first screen (about 60 lines) there is a reading path or 'read next' list with at least 3 working links to sections, each saying what the reader gets",
+          "passed": true,
+          "evidence": "L11-18 ('## How to use this page') sit inside the first 60 lines and hold 9 working section links (L13-16), each bullet annotated with its purpose: 'On day one, read [What the platform does] through [The pipeline, stage by stage]. That is the mental model everything else hangs off.'; 'Before you need them: read [The life of a Version] and [When things go wrong] before you shadow on-call, and [Running it locally] before your first PR.'; 'Your week: [Your first week] turns the onboarding checklist into a day-by-day plan.' All anchors resolve (independent check: 27/27 link and image targets OK; mechanical.json errors = []). Caveat: the 'As reference: ...' bullet (L15) names only a category, and the #the-pipeline-stage-by-stage link carries a fragile-anchor warning, but at least 3 working links with a stated purpose remain."
+        },
+        {
+          "text": "Links work: every in-document link and every image path resolves (scripts/check_doc.py reports no ERROR lines)",
+          "passed": true,
+          "evidence": "mechanical.json: 'errors': [] with stats internal_links 24, images 2. Only warnings: no zone markers, plus fragile-anchor notes for 'The pipeline, stage by stage' (L64) and 'Appendix B: assumptions and open questions' (L281). My own re-check of all 27 targets (anchors, images/architecture-overview.png, images/version-lifecycle.png, the images/ folder link) found none broken; both PNGs exist in outputs/images."
+        },
+        {
+          "text": "Relationship diagram: the eleven platform components and how they connect are shown as a diagram (embedded image or Mermaid) that includes all eleven components and labels or clearly draws the relationships",
+          "passed": true,
+          "evidence": "images/architecture-overview.png (embedded at L39) draws all eleven components from architecture-notes.md: Uploader API, Message Queue (validate and transform boxes), Validation Worker, Transform Worker, Schema Registry, Quarantine Store, Raw Zone, Curated Zone, Catalog, Policy Engine, Notifier (plus Customer). Relationships are drawn as labelled, numbered arrows ('3 stream file', '4 Version: received', '2 may upload?', '5 enqueue', '6 get contract', '6 read file', '7a validated | 7b quarantined', '7b copy file', '7b tell owner', '8 write tables', '9 Lineage record + published', '10 email owner'). Minor: the Catalog and Curated Zone calls to the Policy Engine appear only as text inside the Policy Engine node, not as arrows."
+        },
+        {
+          "text": "Diagram portable: the diagram a human sees first is an embedded image file that exists on disk (PNG or SVG), not only a Mermaid or other code block, because the reader's VS Code preview and Azure DevOps repo pages do not render Mermaid",
+          "passed": true,
+          "evidence": "L39 embeds the first diagram as ![...](images/architecture-overview.png), a 1710x1595 PNG that exists in outputs/images. mechanical.json stats: diagram_blocks 0, images 2, so there is no Mermaid or other code-block diagram; the second diagram (L117) is also an embedded PNG."
+        },
+        {
+          "text": "Diagram readable: the diagram has a caption or how-to-read line, and viewing the rendered image shows legible labels with no overlapping or cut-off text",
+          "passed": true,
+          "evidence": "Caption at L41: 'Figure 1. The components and the path of one upload. The step numbers are explained in [The pipeline, stage by stage].' The image also carries a legend: 'Arrows point the way data or requests travel. Solid = main flow and writes; dashed = reads and supporting calls; red = failure path. Numbers match the steps in The pipeline, stage by stage.' I viewed a copy downscaled from 1710 px to 800 px wide: every node and edge label stayed readable (smallest text, the Policy Engine caller list, DLQ notes and legend, is about 9-10 px but legible), nothing is clipped, and no text overlaps other text (the dashed line only breaks behind the '2 may upload?' label). Figure 2 (version-lifecycle.png, caption L119) is equally legible."
+        },
+        {
+          "text": "Evidence out of the way: bulky raw material (the 20-row configuration table) is not in the human reading flow; it sits in the reference/machine part or in a linked file",
+          "passed": true,
+          "evidence": "The full 20-row settings table (checked: 20 rows, all values match architecture-notes.md) appears only in '## Appendix A: configuration reference' (L254-279), after 'Your first week' and the self-check, and L9 flags it: 'The appendices are reference material.' The main flow carries only an 8-row 'Numbers to know' summary (L153-164) and short inline 'Settings:' lines. Caveat: it is a plain appendix in the same file, not a labelled machine zone or a linked file."
+        },
+        {
+          "text": "Headings tell the story: at least half of the body headings state a claim, finding or question rather than a generic topic label like 'Overview', 'Components' or 'Details'",
+          "passed": false,
+          "evidence": "There are 24 body headings (25 incl. the H1) and nearly all are generic topic labels: 'How to use this page', 'What the platform does', 'The big picture', 'Core concepts', 'The pipeline, stage by stage', 'Stage 1: upload (Uploader API)', 'Stage 2: validate ...', 'Stage 3: transform and publish ...', 'Shared services and stores', 'The life of a Version', 'When things go wrong', 'Quick triage', 'Numbers to know', 'Running it locally', 'Gotchas', 'Your first week', 'The repos', 'A suggested plan', 'Appendix A: configuration reference', 'Appendix B: assumptions and open questions', 'Assumptions made in this page', 'Open questions'. Only 'Six ideas that explain most of the design' (L28) and 'You've got it when you can answer these' (L245) carry a claim or criterion, about 8% even when counted generously, far below half."
+        },
+        {
+          "text": "No invented verdict: the document does not fabricate a verdict, a 'decision needed' block or a risk table; the first screen gives a bottom line and mental model instead",
+          "passed": true,
+          "evidence": "There is no verdict, recommendation, 'decision needed' block or risk table anywhere. The 'Assumption' and 'Open question' callouts (e.g. L138 'three attempts or three retries?') flag real ambiguities in Sam's notes and are labelled as such, and derived items are marked ('This row is derived from the pipeline, not taken from a runbook' L150; 'derived here, not stated in the notes' in Numbers to know). The first 60 lines give a bottom line (L22-24) and a mental model ('Six ideas that explain most of the design' L28-35, diagram L39) instead."
+        },
+        {
+          "text": "Mental model first: the first screen has a diagram of the eleven components and their flow with a one-line bottom line, and calls out that the Catalog (not the queue) is the source of truth for status",
+          "passed": true,
+          "evidence": "Inside the first 60 lines: the diagram of all eleven components and the upload flow at L39 (Figure 1), the one-line bottom line at L24 ('upload -> validate -> transform -> publish, with a quarantine exit for files that fail validation.'), and the Catalog call-out at L31 ('The Catalog is the source of truth for status, not the queue. If the two disagree, trust the Catalog.'), echoed in the diagram's Catalog node ('source of truth for status'). Borderline: all of this comes after the preamble, reading guide, overview and six ideas, so when rendered the diagram sits roughly 1.3 screens down; it passes by the 60-line yardstick only."
+        },
+        {
+          "text": "Concepts before flows: Dataset, Version, Schema contract, Quarantine, Lineage record and Tenant are defined (glossary or equivalent) before the detailed step-by-step flow",
+          "passed": true,
+          "evidence": "'## Core concepts' (L45-56) is a definition table covering Tenant, Dataset, Version, Schema contract, Quarantine and Lineage record, all six, with definitions matching Sam's notes (e.g. Dataset 'A named collection a tenant owns, with a Schema contract. Example: acme/orders.'; Version 'Immutable. Re-uploading creates a new Version and never overwrites.'). It precedes the step-by-step flow '## The pipeline, stage by stage' (L64) and Stages 1-3 (L68-98)."
+        },
+        {
+          "text": "Week-one use: includes the six gotchas and what to do in week one (runbooks, starter tickets INGEST-310 and INGEST-322, the weekly sync)",
+          "passed": true,
+          "evidence": "'## Gotchas' (L182-189) lists all six: Versions immutable (L184); breaking schema change needs a new dataset major version; all timestamps UTC; local runs allow-all unless POLICY_MODE=strict; Notifier fire-and-forget; quarantine 30 days vs Raw Zone 1 year (L189). 'Your first week' (L191-252) turns all eight checklist items into a Monday-Friday plan: runbooks replay-dlq and quarantine-release (L219), INGEST-310 and INGEST-322 (L232-233), the weekly ingestion sync 'Wednesdays, 10:00 CET' (L227) and the Friday incident review (L238)."
+        },
+        {
+          "text": "Figures are right: states the correct retry behaviour (3 attempts with 30 s, 2 min, 10 min backoff, then the dead-letter queue) and the 15-minute publish target for files up to 1 GB",
+          "passed": true,
+          "evidence": "Retry: L104 'A message gets 3 attempts, then goes to the DLQ'; L136 'retried with back-off delays of 30 s, 2 min and 10 min. After the last failed attempt it goes to the DLQ, and a DLQ depth of 1 or more pages the on-call engineer'; L162 'Retry back-off | 30 s, 2 min, 10 min, then the DLQ'; Appendix A QUEUE_MAX_ATTEMPTS 3 / QUEUE_BACKOFF_S 30,120,600. Target: L26 'publish a file within 15 minutes for files up to 1 GB' and L161 'Published within 15 min, for files up to 1 GB'. All match architecture-notes.md. L138 additionally flags that '3 attempts' vs three back-off delays is ambiguous in the source, an honest hedge rather than a misstatement."
+        }
+      ],
+      "notes": [
+        "Retry semantics: the notes say both '3 attempts' and 'retried 3 times' and list three back-off delays; left unresolved and flagged in the doc",
+        "Catalog status while a message sits in the DLQ: assumed no fifth status, so the Version keeps its last status",
+        "Repo contents inferred from names only",
+        "What quarantine-release does to the status, and whether a released file is re-validated",
+        "Where MAX_ROW_BYTES is enforced and whether one over-long row fails the whole file",
+        "Which components the ingestion team owns versus merely uses",
+        "What the local stack contains, whether week-one sample uploads go to the local stack or to ingestion-dev, and the exact smoke-test command",
+        "Derived statements (15-minute budget arithmetic, 5 GB vs TRANSFORM_TIMEOUT_S, the stuck-in-received/validated triage row, the cache-delay note) are the executor's own inferences, each labelled as derived",
+        "Day-by-day order is a suggestion; '10:00 CET' taken as written because the clock change on 25 October 2026 makes the invite authoritative",
+        "Naming Sam as the source in the footer and open questions; remove if unwanted",
+        "Heading anchors assume GitHub-style slugs and '- [ ]' task lists only render as checkboxes in GitHub-flavoured renderers (the intended viewers are VS Code preview and Azure DevOps)",
+        "Files are UTF-8 with CRLF line endings; convert if the wiki repo enforces LF",
+        "Side effect: a browser-tool call briefly wrote scratch files into a .playwright-mcp folder at the root of a git repo (reported as deleted; unverifiable here)",
+        "Chose PNG diagrams rendered with Graphviz (neato with pinned positions, .dot sources kept) instead of Mermaid because the wiki renderer is unknown",
+        "Used plain blockquotes for callouts instead of GitHub-only alert syntax for the same reason",
+        "Wrote the doc for any new joiner rather than Priya by name so it outlives her first week"
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.91,
+        "stddev": 0.1015,
+        "min": 0.8,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 1822.6333,
+        "stddev": 302.918,
+        "min": 1565.6,
+        "max": 2156.6
+      },
+      "tokens": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.6767,
+        "stddev": 0.0924,
+        "min": 0.57,
+        "max": 0.73
+      },
+      "time_seconds": {
+        "mean": 2137.6667,
+        "stddev": 494.8208,
+        "min": 1566.3,
+        "max": 2425.0
+      },
+      "tokens": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.23",
+      "time_seconds": "-315.0",
+      "tokens": "+0"
+    }
+  },
+  "notes": [
+    "Discriminating assertions (skill adds value): Zones labeled 3/3 with skill vs 0/3 without; Reading path 3/3 vs 1/3; Glance first 3/3 vs 1/3; Human part highlighted 3/3 vs 1/3; Headings tell the story 2/3 vs 0/3; Top risks first 1/1 vs 0/1. These are exactly the behaviours the skill introduces: explicit audience zones, a guided reading path, and a conclusion-first panel.",
+    "Non-discriminating: Diagram portable, Diagram readable and Links work pass in both configurations. The baseline agents were told Graphviz was installed and drew good PNGs, so they never hit the Mermaid-doesn't-render problem. Links work passed vacuously for the baseline eval-2 document, which has zero in-document links. Iteration 2 drops the Graphviz hint for both configurations to test the skill's own tool discovery.",
+    "The skill under-performed in eval 3 (0.80 vs 0.73): Relationship diagram, Mental model first and Concepts before flows failed. The agent split 11 components into an overview (8) plus a zoom (8), as the skill's size rule says, so no single diagram holds all 11 (the assertion wording conflicts with that rule). It also placed the glossary after the step-by-step flow, so terms such as Schema contract and Lineage record are used before they are defined. That second point is a real gap in the skill.",
+    "Content accuracy did not suffer from the layout rules: the factual assertions pass in both configurations. The one exception is baseline eval 1, which merged a duplicated incident and reported 11 of 35 instead of 11 of 36 (disclosed, so arguably acceptable; the assertion is ambiguous and is reworded in iteration 2).",
+    "Glance panel density: all with-skill panels pass the 60-line proxy but render at about 1.5 to 2 screens (long verdict paragraphs, wrapped risk-table cells, a picture). The skill said 'fits on one screen' while also asking for six elements, which the executors flagged as contradictory. Iteration 2 adds a brevity budget and defines the first screen as verdict, decision and top risks.",
+    "Executor feedback (user_notes.md) listed contradictions now fixed in the skill: '(AI input)' parentheses in skeleton headings versus the plain-link-target rule; 'a verb on every edge' for uniform dependency graphs; absolute paths for documents that live in a repo; the 60-line sibling-file rule versus a request for one self-sufficient document; a single 'Decision needed' versus several asks; checker false positives on archive-only sibling files and no cross-file anchor check.",
+    "Time and tokens: this harness reports neither. Time is estimated from file timestamps (executor run only) and tokens are shown as 0. With-skill runs were not slower on average, but with one run per eval this is not statistically meaningful.",
+    "Assertion quality (from the graders): 'Zones labeled' and 'Human part highlighted' overlap; 'one screen' and 'body headings' are not measurable or scoped; Evidence out of the way is satisfied by any report that leaves CSVs in separate files; no assertion covers labelling of inferred content or machine-local paths leaking into a shared document. Iteration 2 tightens or adds these."
+  ]
+}

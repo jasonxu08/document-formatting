@@ -1,0 +1,66 @@
+{
+  "files": {
+    "report.evidence.md": {
+      "file": "report.evidence.md",
+      "stats": {
+        "lines": 104,
+        "headings": 7,
+        "internal_links": 4,
+        "images": 0,
+        "diagram_blocks": 0,
+        "details_blocks": 0,
+        "zones": [
+          "archive"
+        ],
+        "machine_only": true,
+        "panel_words": 0,
+        "human_zone_words": 0
+      },
+      "gate": {
+        "blockers": 0,
+        "majors": 0,
+        "minors": 0
+      },
+      "blockers": [],
+      "majors": [],
+      "minors": []
+    },
+    "report.md": {
+      "file": "report.md",
+      "stats": {
+        "lines": 223,
+        "headings": 13,
+        "internal_links": 20,
+        "images": 2,
+        "diagram_blocks": 0,
+        "details_blocks": 1,
+        "zones": [
+          "human",
+          "archive",
+          "ai-input",
+          "archive",
+          "archive",
+          "archive"
+        ],
+        "machine_only": false,
+        "panel_words": 258,
+        "human_zone_words": 2363
+      },
+      "gate": {
+        "blockers": 0,
+        "majors": 0,
+        "minors": 0
+      },
+      "blockers": [],
+      "majors": [],
+      "minors": []
+    }
+  },
+  "gate": {
+    "blockers": 0,
+    "majors": 0,
+    "minors": 0,
+    "passed": true
+  },
+  "note": "Blocker/Major/Minor findings of scripts/check_doc.py; passed = no Blocker and at most 2 Majors."
+}

@@ -1,0 +1,270 @@
+{
+  "expectations": [
+    {
+      "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input or archive material sits last in its own labelled zone; nothing for people follows machine content",
+      "passed": true,
+      "evidence": "report.md line 1 is the marker 'zone:human'; line 2 is the title; line 4 is the metadata line ending 'for Marcus Hale, Engineering Lead'; line 6 is the visible human-zone heading '## [person glyph] START HERE - at a glance' (the skeleton's own wording). The human zone is therefore opened by a real heading plus a banner that names its audience. The machine zone starts at lines 186-187 (marker 'zone:ai-input', heading '[cabinet glyph] Machine and archive zone - skip unless you need the evidence or are an agent continuing this work'). mechanical.json zones = human, ai-input, archive, archive, archive; lines 1-183 are all human content and nothing for people follows line 186. Close call: the H2 itself says START HERE rather than naming Marcus; the audience is named in the metadata line directly above it and in the zone marker."
+    },
+    {
+      "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+      "passed": true,
+      "evidence": "Block A (line 191 'A Handoff context for the next agent') opens with the italic line 'AI input - lets a later agent update this report once Marcus decides, regenerate its pictures and verify its numbers' and its content is inside a details block (lines 195-242). Block B (line 245 'B Decision record') opens 'Archive - the audit trail of what was decided ... Supports the Decisions needed block in the glance panel' and is inside details (249-264). Blocks C (267) and D (276) each open with an 'Archive - ... supports ...' line; C is a two-line pointer to report.evidence.md and report.data/, D is three pointer bullets to the .dot/.py sources and evidence anchors. All four block headings are plain words. The long material (9-row inventory, 36-row incident log, statistics, claim table, date checks) sits in sibling report.evidence.md behind that pointer, and that file starts with its own zone:archive marker. Close call: only 2 of 4 blocks use details; C and D are pointer blocks, which the skeleton and the expectation's last clause allow in place of a details block."
+    },
+    {
+      "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+      "passed": true,
+      "evidence": "Title is line 2. Lines 34-42 are 'Read next' with 7 section links, each followed by what the reader gets and a time, e.g. line 37 '[2 auth-service and user-store must wait for January](#...) - the reasons - 3 min', line 39 'options, cost - 2 min', line 42 'who does what - 1 min'. Line 44: 'Only deciding? Stop here. Checking the plan? Read 2, 4 and 5. Auditing? See the machine zone.' All of it is within 42 lines of the title; mechanical.json has no B1 finding. The descriptors are terse (for example 'terms, table') but do say what each section holds."
+    },
+    {
+      "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive",
+      "passed": true,
+      "evidence": "Order is: glance panel with the dependency map and takeaway (lines 6-44); section 1 (line 46) opens with the mental model 'Six services call auth-service directly, and auth-service rests on user-store ...' and then a glossary 'Terms used in this report' (lines 54-61: the seven, Identity pair, split plan, shim, freeze, CAB exception, extended support, mixed-version check) before sections 2-7 use the vocabulary; then findings (2, 3), options and recommendation (4), plan (5), unknowns (6), next steps (7). Chronology lives in report.evidence.md (Date checks, Method); the body has no investigation narrative. Minor leak: the panel uses 'the shim' (line 27) and 'mixed-version check' (line 10) before their glossary entries (lines 59, 61); Identity pair and CAB are glossed inline in the panel. Accepted because the glossary sits right after the mental model (SKILL.md: 'a short glossary right after the mental model') and inside the first 62 lines."
+    },
+    {
+      "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+      "passed": true,
+      "evidence": "H2 list (lines 6-173): 'START HERE - at a glance'; '1 Seven of nine services are ready and two are not'; '2 auth-service and user-store must wait for January'; '3 Q3 incidents point the same way'; '4 The split costs no more than waiting'; '5 The seven fit before the freeze with no slack'; '6 Five unknowns could change the call'; '7 Next steps if Marcus approves'. Read alone they give the argument (split plan; Identity pair waits; incidents agree; cost is no worse; no slack; five unknowns; next steps). '6 Five unknowns could change the call' and '7 Next steps if Marcus approves' carry their answer or ask."
+    },
+    {
+      "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the conclusion itself, not what the document covers",
+      "passed": true,
+      "evidence": "Line 2 title, line 4 one metadata line, line 6 START HERE heading, line 8 the verdict blockquote; check_doc.py reports no C1 finding. Bottom line (line 10): 'The seven services that passed staging roll back in 10 to 15 minutes, so they move now once a mixed-version check passes. auth-service and user-store (the Identity pair) have no rollback and are not ready, so they wait for January; extended support is needed either way.' That is a conclusion, not a list of topics."
+    },
+    {
+      "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words), one line per decision and per risk, and verdict, decisions and top risks fit the first screen",
+      "passed": true,
+      "evidence": "mechanical.json (and my own re-run of check_doc.py) gives panel_words = 292 against a 300 budget. The verdict (lines 8-12), the 3 decisions (lines 16-18, one list item each) and the 5-row risk table (lines 24-28, one row per risk) all sit within the first 28 lines, well inside the first 60 lines (one or two screens). Close to the limit because the 7-item reading path counts toward the 292 (executor's own note, user_notes item 2.1)."
+    },
+    {
+      "text": "C3 Verdict, decisions and risks are complete and loud in the panel: the verdict has a glyph, confidence and basis; each decision has who, what, by when and a recommendation; at most 5 ranked risks, each with severity and consequence",
+      "passed": true,
+      "evidence": "Verdict (line 8): yellow-circle glyph, 'Go with conditions: seven services before the freeze, auth-service and user-store in January'; line 12: 'Confidence: medium - Platform's staging results and estimates, none re-run by me; high for the Identity pair, lower for the seven's schedule.' Decisions (lines 16-18) each give who/what/when/recommendation: 'Marcus decides whether to approve the split plan ... by Fri 2026-10-23 - recommend: approve'; '... order v8 extended support (18,000 USD a quarter) by Thu 2026-11-05 - recommend: order'; '... request a change advisory board (CAB) exception ... by Fri 2026-10-23 - recommend: ask'. Risks (lines 22-28): exactly 5 rows under the header 'Top risks (ranked by consequence)', a severity glyph per row (1 red, 3 orange, 1 yellow), an Impact column (for example 'No rollback, 4 h restore, every login down') and a 'Where it is handled' link."
+    },
+    {
+      "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+      "passed": true,
+      "evidence": "Every panel item traces to the inputs. The split verdict derives from the notes and services.csv (7 of 9 pass staging; rollback 10-15 min versus none and RTO 4 h for auth-service/user-store; 6.0 uncommitted; one Identity engineer on leave). Decision 1's deadline is the notes' 'Decision needed by Friday 2026-10-23'; decision 2's is 'Must be ordered by 2026-11-05'; risks 1, 3 and 4 come straight from the notes; risk 2 follows from the freeze rule plus Data's week ending Fri 30 Oct (Monday-to-Friday assumption labelled in section 5); risk 5 is hedged as 'not shown tested' and listed as unknown 3 in section 6. Report-owned proposals (decision 3's date, the mid-December review) are labelled Proposal in sections 5-7. The ranking basis is stated ('ranked by consequence') and visible in the Impact column. The optional Key facts slot was dropped rather than filled, and no placeholders remain (B4 clean)."
+    },
+    {
+      "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived, merged or de-duplicated numbers say so",
+      "passed": true,
+      "evidence": "Spot-checked against the fixtures: 10 to 15 minutes and 4 h RTO (notes 'Rollback'); 18,000 USD a quarter and 'order by 2026-11-05' (notes 'Costs and options'); end of support 2026-11-12 (notes 'Context'); Fri 2026-10-23 (notes header); '2 of 148' (services.csv); six dependents (I counted 6 rows listing auth-service: gateway, catalog, share, connector, map, notify). Weekday labels also verified (23 Oct Fri, 26 Oct Mon, 5 Nov Thu). Derived figures say so: the section 1 table caption 'Depended on by = direct dependents, counted from services.csv' and the evidence file's Claim traceability table; the merged 11 Jul pair is disclosed in section 3 ('counted once') and in the incident chart caption."
+    },
+    {
+      "text": "D1 Diagram drawn: the nine related services (gateway, auth-service, user-store, catalog-service, share-service, connector-service, map-service, search-index, notify-service) are shown in at least one diagram",
+      "passed": true,
+      "evidence": "report.assets/dependency-map.png (embedded at line 30, 1474x1137 px) draws all nine services as labelled nodes: gateway, share-service, connector-service, notify-service, catalog-service, map-service, search-index, auth-service, user-store (confirmed by viewing the image)."
+    },
+    {
+      "text": "D2 Coverage and truth: every one of the nine services appears in at least one diagram (a single diagram or an overview plus zoomed views), every drawn edge exists in services.csv, and inferred edges are dashed and captioned",
+      "passed": true,
+      "evidence": "All nine nodes appear in the single dependency map. I compared the 16 drawn edges (dependency-map.dot, cross-checked against the PNG) with services.csv depends_on: gateway -> auth/catalog/share/connector; auth -> user-store; catalog -> auth/search-index/map; share -> auth/catalog/notify; connector -> auth/catalog; map -> auth/catalog; notify -> auth. That is 16 edges with none extra and none missing; catalog<->map is drawn as one two-way orange arrow and both directions exist in the CSV. No edge is inferred (stated in the .dot header and the evidence 'Dependency edges' table), so no dashed edge is needed; the timeline's gateway box is dashed and captioned as a proposal."
+    },
+    {
+      "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+      "passed": true,
+      "evidence": "The first picture a reader meets is the embedded PNG at line 30 (report.assets/dependency-map.png). The file exists (134,121 bytes, 1474x1137 px, inside the 500-2600 range) and there are no diagram code blocks (diagram_blocks = 0). I downscaled it to 800 px wide and viewed it: node labels (roughly 12-14 px tall) and the in-image legend lines (roughly 10-11 px) read clearly, no label or node overlaps another (edges cross but carry no labels), and there are no emoji or empty glyph boxes. incidents.png and timeline.png also read at 800 px; one nit, not affecting this verdict: in timeline.png two dashed vertical lines run through the 'Code freeze: P1 hotfixes only' label."
+    },
+    {
+      "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+      "passed": true,
+      "evidence": "Alt text (line 30) describes the content and colours ('auth-service (red) is the hub with six dependents and user-store (amber) sits behind it; the other seven (grey) passed staging; catalog-service and map-service depend on each other'). Caption (line 32): 'Arrows mean depends on. Takeaway: six services depend on auth-service, the one that is not ready.' Legend inside the image: 'Arrow = depends on. Grey = the seven ... Red and amber = the Identity pair ... Orange = mutual dependency'. The relation is stated once (all edges alike). Source files sit beside each image in report.assets/: dependency-map.dot, incidents.py, timeline.py. The text equivalent is the 16-row 'Dependency edges' table in report.evidence.md (column 'Verified?' = 'yes, services.csv'), pointed to from block D (line 280). incidents.png and timeline.png also have alt text, how-to-read captions with takeaways, and in-chart legends."
+    },
+    {
+      "text": "E1 E2 Honesty: every judgment has a confidence level and its basis; content not in the inputs (assumptions, suggestions, inferences) is labelled as such; unknowns are listed",
+      "passed": true,
+      "evidence": "The verdict carries 'Confidence: medium' with its basis and a split (high for the Identity pair, lower for the seven's schedule), line 12. Line 52 sets the convention: 'Unmarked facts come from the three source files ...; the rest is marked Inference, Assumption or Proposal.' Labels are used consistently: Inference (sections 2 x2, 4, 5), Assumption (sections 2, 4, 5: flat 18,000 USD, a quarter from 2026-11-12, Monday-to-Friday week, freeze limits production only, Marcus can approve the spend), Proposal (section 2 gate, section 5 order, section 6 fallback, section 7 owners and mid-December date). Unknowns: the 5-row table in section 6 with who can settle each, plus 'Not done' (Method item 7) in the evidence file. Close call: sub-judgments such as individual risk ranks carry no separate confidence figure; only the verdict-level confidence plus the labels."
+    },
+    {
+      "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (verdict, decisions, top risks, the file path, where to start) and does not paste the document",
+      "passed": true,
+      "evidence": "final_reply.md (390 words) opens with the verdict (yellow glyph, 'Go with conditions: upgrade seven services before the freeze, move auth-service and user-store to January', confidence medium with its basis), lists the 3 decisions with dates and recommendations, gives 3 top risks, says 'Where to start: the panel at the top of report.md. Stop there if you're only deciding.' and names the file as report.md in the outputs folder (a relative path, no absolute path). It does not paste the report. Extras (assumptions, audit-trail files, checker status) make it longer than a bare miniature, but it stays a summary."
+    },
+    {
+      "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+      "passed": true,
+      "evidence": "mechanical.json: report.md 0 Blockers / 0 Majors / 0 Minors; report.evidence.md 0 / 0 / 1 (informational A1 'machine/archive-only file: human-zone rules skipped'); gate passed. I re-ran check_doc.py and got identical results. Out of scope per the task statement: user_notes.md (executor notes; it trips a B4 false positive only because it mentions the literal tag in inline code on lines 19 and 39) and report.data/upgrade-notes.md (an unedited input copy; only B1 and C1 Majors, which would still total 2)."
+    },
+    {
+      "text": "Verdict and ask: the panel gives a clear recommendation on upgrading before the freeze versus deferring (a split or conditional answer is fine) and names the decision Marcus must make with its deadline (Friday 23 Oct)",
+      "passed": true,
+      "evidence": "Panel line 8: 'Go with conditions: seven services before the freeze, auth-service and user-store in January'. Decision 1 (line 16): 'Marcus decides whether to approve the split plan (seven from Mon 2026-10-26, Identity pair in January) by Fri 2026-10-23 - recommend: approve.' That is a clear split recommendation, the decision Marcus must take, and the Friday 23 Oct deadline (matches the notes' 'Decision needed by Friday 2026-10-23')."
+    },
+    {
+      "text": "Key risks present: the 12 Nov end of support and the missing rollback path for auth-service (and user-store) appear among the top risks",
+      "passed": true,
+      "evidence": "Risk table lines 24-28: row 1 (red) 'Identity pair upgraded before it is ready | No rollback, 4 h restore, every login down' (Identity pair = auth-service and user-store, defined at line 10); row 3 (orange) 'Identity pair on unpatched v8 after 2026-11-12 | No CVE fixes for login unless support is ordered', which is the 12 Nov end of security support. Both are among the five ranked risks. Note the end-of-support risk is framed for the Identity pair only, because the seven move to v10 first."
+    },
+    {
+      "text": "Figures: the report states that auth-service has 6 dependents and accounts for 11 of the 36 incident rows (11 of 35 is also acceptable if the merged 11 Jul pair is disclosed)",
+      "passed": true,
+      "evidence": "Six dependents: section 1 line 50 'Six services call auth-service directly', the table column 'Depended on by' = 6, and the picture alt text 'six dependents'; I confirmed 6 rows of services.csv list auth-service. 11 of 36: section 3 bullet 'auth-service is the incident hub. 11 of 36 records, 380 minutes, and 7 of the 11 SEV1 or SEV2 events (the gateway's SEV1 of 2026-07-11 is the same event as auth-service's, so it is counted once)' and the chart title 'auth-service had 11 of Q3's 36 incident records'. Recomputed from incidents-q3.csv: 36 rows, 11 for auth-service, 380 minutes, 7 SEV1/SEV2 rows."
+    },
+    {
+      "text": "Audit data kept: the 36 incident rows and the 9-service inventory are preserved for audit (archive part or linked files), as the user asked",
+      "passed": true,
+      "evidence": "report.evidence.md holds 'Service inventory' (9 rows) and 'Incident log' (36 rows plus a Note column); I compared every row with the fixtures programmatically: 36 of 36 incident rows and 9 of 9 inventory rows match. report.data/ holds byte-identical copies of upgrade-notes.md, services.csv and incidents-q3.csv (SHA-256 equal to the fixtures, and the hashes are recorded in the evidence file). Both are linked from block C (lines 271-273) of report.md."
+    },
+    {
+      "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+      "passed": true,
+      "evidence": "Recall 5/6 = 83%. Recovered: K1, K2, K3, K4, K5. Missed: auth-service accounts for about a third of the Q3 incidents (11 of 36 records, mostly token-validation timeouts).. K6 (11 of 36 Q3 incidents) is an evidence-level detail; both configurations missed it."
+    }
+  ],
+  "summary": {
+    "passed": 22,
+    "failed": 0,
+    "total": 22,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 0,
+    "errors_encountered": 0,
+    "output_chars": 0,
+    "transcript_chars": 0,
+    "files_created": [
+      "report.assets/dependency-map.dot",
+      "report.assets/dependency-map.png",
+      "report.assets/incidents.png",
+      "report.assets/incidents.py",
+      "report.assets/timeline.png",
+      "report.assets/timeline.py",
+      "report.data/incidents-q3.csv",
+      "report.data/services.csv",
+      "report.data/upgrade-notes.md",
+      "report.evidence.md",
+      "report.md",
+      "user_notes.md"
+    ],
+    "note": "Copied from outputs/metrics.json. The harness does not record tool calls (0 is a default) and no transcript exists, so transcript_chars is 0."
+  },
+  "timing": {
+    "executor_duration_seconds": 2435.4,
+    "total_duration_seconds": 2435.4,
+    "note": "executor estimate from file timestamps"
+  },
+  "claims": [
+    {
+      "claim": "auth-service has 6 direct dependents (gateway, catalog-service, share-service, connector-service, map-service, notify-service)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Counted from services.csv depends_on: auth-service appears in 6 rows; 16 dependency edges in total."
+    },
+    {
+      "claim": "auth-service has 11 of 36 incident records (380 minutes, 7 of 12 SEV1/SEV2 rows = 7 of 11 distinct events); 3 of 36 are GC pauses; the 5 deploy rollbacks took 10-19 minutes, 4 within 15; 4 of the gateway's 7 incidents name auth-service",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Recomputed from incidents-q3.csv: per-service counts, 380 minutes, 12 SEV1/2 rows (07-11 pair merged gives 11 events), runtime-gc x3, deploy rows 15/14/10/19/15 minutes, gateway rows on 07-05, 07-11, 08-27 and 09-15 name auth-service."
+    },
+    {
+      "claim": "4 hours is about three times the longest Q3 incident (78 min); staging results are 86 days old on 2027-01-05; v8 is unpatched 54 days if the Identity pair moves when the freeze ends; the weekday labels are right",
+      "type": "factual",
+      "verified": true,
+      "evidence": "240/78 = 3.08; 2026-10-11 to 2027-01-05 = 86 days; 2026-11-12 to 2027-01-05 = 54 days; 23 Oct Fri, 26 Oct Mon, 30 Oct Fri, 1 Nov Sun, 5 Nov Thu, 12 Nov Thu, 5 Jan 2027 Tue."
+    },
+    {
+      "claim": "report.data/ holds byte-identical copies of the three inputs and their SHA-256 hashes are recorded in the evidence file (final reply and evidence file)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Get-FileHash of each copy equals the fixture hash, and each full hash string appears in report.evidence.md."
+    },
+    {
+      "claim": "All 16 dependency edges in the map are verified from services.csv and none is inferred",
+      "type": "factual",
+      "verified": true,
+      "evidence": "dependency-map.dot edges compared with services.csv: 16 edges, no extras, no omissions; catalog<->map is a real mutual dependency."
+    },
+    {
+      "claim": "The document checker reports no blockers or warnings on report.md; the panel prose is 292 words against a 300 budget",
+      "type": "process",
+      "verified": true,
+      "evidence": "mechanical.json and my own run of check_doc.py: report.md 0 Blockers, 0 Majors, 0 Minors; panel_words 292."
+    },
+    {
+      "claim": "Section 1: 'a failure in the Identity pair can reach seven of the other eight services'",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Imprecise wording. With the pair (2 services) as the failing set there are 7 other services, and 6 of them depend on auth-service (search-index does not). 'Seven of the other eight' only holds for a failure in user-store alone (auth-service plus its 6 dependents), which is how report.evidence.md states it. Minor, body only, not in the panel."
+    },
+    {
+      "claim": "Section 4: auth-service and user-store are 'the two most critical services'",
+      "type": "factual",
+      "verified": false,
+      "evidence": "services.csv marks gateway, auth-service and user-store all as critical, so the Identity pair is two of three critical services, not the two most critical. Minor overstatement."
+    },
+    {
+      "claim": "timeline.png title: 'Data's week ends on the last working day before the freeze; v8 support ends a week later'",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Fri 2026-10-30 to Thu 2026-11-12 is 13 days (11 days after the freeze starts on 1 Nov), not a week. Minor wording slip inside a chart title."
+    },
+    {
+      "claim": "Executor process claim (user_notes): first layout was 2,556 px wide and unreadable, so it was switched to top-to-bottom at 1,474 px; scratch previews and a stray __pycache__ in the skill snapshot were deleted",
+      "type": "process",
+      "verified": true,
+      "evidence": "Final dependency-map.png is 1474 px wide; no _preview folder remains in report.assets/; the skill snapshot scripts folder contains only check_doc.py. The earlier 2,556 px layout cannot be checked (no transcript)."
+    },
+    {
+      "claim": "The seven services passed staging (2026-10-09 to 2026-10-11) and roll back in 10 to 15 minutes; the Identity pair has no rollback and an estimated 4 hour restore",
+      "type": "factual",
+      "verified": true,
+      "evidence": "upgrade-notes.md 'Staging results' and 'Rollback'; services.csv rollback_path = yes for 7 services, no for auth-service and user-store."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+      "The split-plan recommendation is the executor's judgment from three files, rated medium confidence: high that the Identity pair must wait, lower that the seven fit the schedule",
+      "Assumptions: extended support is a flat 18,000 USD for the whole v8 estate and a quarter runs from 2026-11-12; one week means Monday to Friday; the freeze limits production deployments only; Marcus can approve the spend",
+      "Inferences: the 2 failing token-refresh tests may share a cause with the 3 Q3 refresh incidents; a non-P1 fix would not qualify for a CAB exception; the mixed v8/v10 estate is untested; staging results would be re-run in January",
+      "Counting choice: the 2026-07-11 gateway and auth-service SEV1 rows are one event in event totals and two rows in per-service counts",
+      "The 10 to 15 minute rollback estimate is supported but not proven by 5 Q3 rollbacks that were ordinary deploys, not runtime upgrades",
+      "Could not render the Markdown in VS Code or Azure DevOps, so how the numbered list inside a blockquote and the details blocks display is unchecked; the report is dated 2026-10-17 from the system clock"
+    ],
+    "needs_review": [
+      "Skill ambiguity: the 300-word panel budget versus a 7-link reading path (the executor cut every descriptor to 2-3 words to fit)",
+      "Skill ambiguity: A3 says blocks are collapsed in details, but the skeleton says to replace long blocks with a one-line pointer; blocks A and B are collapsed, C and D are pointer blocks",
+      "Skill gap: no named home for verbatim input copies (the executor invented report.data/ with SHA-256 hashes) and no guidance on a decision record or handoff block for a decision report",
+      "No cold-reader test was run by the executor (delegation not allowed); it is scored separately"
+    ],
+    "workarounds": [
+      "Used Copy-Item instead of the create tool for byte-exact copies of the three inputs (hashes verified identical)",
+      "Deleted and re-created two of its own draft files because the create tool cannot overwrite",
+      "Importing the checker as a module wrote a __pycache__ into the skill snapshot scripts folder; the executor deleted it (only check_doc.py remains)",
+      "Made scratch 800 px previews in report.assets/_preview and deleted them (confirmed absent)"
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+        "reason": "'Every sibling Markdown file' is ambiguous. The outputs folder also holds user_notes.md and report.data/upgrade-notes.md. Run on them, user_notes.md gives a Blocker (B4 'unbalanced details': a false positive, because check_doc.py counts the literal tag inside inline code on lines 19 and 39) and the unedited input copy gives two Majors (B1, C1), which an input file can never avoid. Name the files in scope (report.md and report.*.md) and make the checker skip inline-code spans."
+      },
+      {
+        "assertion": "A1 Zones marked and ordered: ... heading or banner names its audience (a pointer line in the header does not count) ...",
+        "reason": "The skeleton's own heading '## [person glyph] START HERE - at a glance' does not literally name an audience. I passed it because the metadata line says 'for Marcus Hale, Engineering Lead' and the marker reads zone:human, but a stricter grader would fail every output that copies the skeleton. Decide whether the heading itself must name the audience and align the skeleton or the assertion."
+      },
+      {
+        "assertion": "B2 Order follows understanding: ... terms are defined before the first section that uses them ...",
+        "reason": "It is unclear whether the glance panel counts as 'the first section that uses' a term. The run uses 'the shim' and 'mixed-version check' in the panel (lines 27, 10) before the section 1 glossary (lines 59, 61). Say whether the glossary must precede the panel's jargon or only the numbered sections."
+      },
+      {
+        "assertion": "A3 Machine and archive blocks are collapsed in details blocks ... long material sits in a sibling file behind a pointer",
+        "reason": "The assertion asks for details blocks and for pointers at once. The run satisfied it with two collapsed blocks and two uncollapsed pointer blocks (the executor flagged the same ambiguity). State whether a pointer block needs details."
+      },
+      {
+        "reason": "No assertion checks body-level factual accuracy beyond the two Figures numbers, and I found three small slips: section 1 says a failure in the Identity pair reaches 'seven of the other eight' services (true only for user-store); section 4 calls auth-service and user-store 'the two most critical services' although services.csv also marks gateway critical; the timeline title says v8 support ends 'a week later' than Fri 30 Oct (it is 13 days). Add an assertion such as: every number or ranking in sections 1-5 that restates services.csv or incidents-q3.csv matches the data (spot-check five)."
+      },
+      {
+        "assertion": "D2 Coverage and truth: ... inferred edges are dashed and captioned",
+        "reason": "Vacuous for this fixture: every dependency edge is in services.csv, so the clause can never be tested. A fixture variant with one dependency mentioned only in the notes would exercise it."
+      },
+      {
+        "assertion": "C2 Compact panel: about 300 words of prose or fewer ...",
+        "reason": "Tension with B1: the 7-link reading path takes roughly a third of the budget (292 of 300 words used) and the run shrank each descriptor to 2-3 words such as 'terms, table'. State whether the reading path is excluded from the panel word count or require descriptors of a minimum useful length."
+      }
+    ],
+    "overall": "The assertions are mostly meaningful and this run met all 21 with concrete evidence, but several (A1, A3, B2, F3) hinge on wording that the skeleton itself satisfies verbatim or ambiguously, and no assertion covers body-level factual accuracy, where three small slips went uncaught. Tighten those four wordings, scope the automatic-check files, and add a data-accuracy spot-check."
+  }
+}

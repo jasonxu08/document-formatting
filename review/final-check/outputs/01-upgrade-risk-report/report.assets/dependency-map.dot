@@ -1,0 +1,53 @@
+// Dependency map of the nine services. An arrow A -> B means "A depends on B".
+// All 16 edges come from the depends_on column of services.csv; none is inferred.
+// Render: dot -Tpng -Gdpi=150 dependency-map.dot -o dependency-map.png
+digraph deps {
+  rankdir=TB; pad=0.3; nodesep=0.4; ranksep=0.5; bgcolor="white"; newrank=true;
+  graph [fontname="Arial", fontsize=12];
+  node  [shape=box, style="rounded,filled", fontname="Arial", fontsize=14, margin="0.16,0.09",
+         fillcolor="#EEF3EF", color="#8FA89A", penwidth=1.2];
+  edge  [color="#A3ACB9", arrowsize=0.8, penwidth=1.1];
+
+  subgraph cluster_ready {
+    label="SUGGESTED: UPGRADE BEFORE THE FREEZE\l7 services, staging pass, rollback in 10-15 min\l";
+    labelloc=t; labeljust=l; fontname="Arial"; fontsize=12; color="#8FA89A"; style="rounded";
+    "gateway"           [label=<<B>gateway</B><BR/><FONT POINT-SIZE="11">Platform, critical, upgrade last</FONT>>];
+    "share-service"     [label=<<B>share-service</B><BR/><FONT POINT-SIZE="11">Data, high</FONT>>];
+    "connector-service" [label=<<B>connector-service</B><BR/><FONT POINT-SIZE="11">Integration, medium</FONT>>];
+    "catalog-service"   [label=<<B>catalog-service</B><BR/><FONT POINT-SIZE="11">Data, high</FONT>>];
+    "notify-service"    [label=<<B>notify-service</B><BR/><FONT POINT-SIZE="11">Platform, low</FONT>>];
+    "map-service"       [label=<<B>map-service</B><BR/><FONT POINT-SIZE="11">Data, medium</FONT>>];
+    "search-index"      [label=<<B>search-index</B><BR/><FONT POINT-SIZE="11">Data, medium</FONT>>];
+  }
+
+  subgraph cluster_defer {
+    label="SUGGESTED: DEFER TO JANUARY\lno rollback path, failing or untested\l";
+    labelloc=b; labeljust=l; fontname="Arial"; fontsize=12; color="#D92D20"; style="rounded";
+    "auth-service" [fillcolor="#FEE4E2", color="#D92D20", penwidth=2.4,
+                    label=<<B>auth-service</B><BR/><FONT POINT-SIZE="11">Identity, critical</FONT><BR/><FONT POINT-SIZE="11">2 of 148 tests fail, 6 services depend on it</FONT>>];
+    "user-store"   [fillcolor="#FEE4E2", color="#D92D20", penwidth=2.4,
+                    label=<<B>user-store</B><BR/><FONT POINT-SIZE="11">Identity, critical, never tested</FONT>>];
+  }
+
+  // gateway
+  "gateway" -> "share-service";
+  "gateway" -> "connector-service";
+  "gateway" -> "catalog-service";
+  "gateway" -> "auth-service"       [color="#D92D20", penwidth=1.6];
+  // share-service
+  "share-service" -> "catalog-service";
+  "share-service" -> "notify-service";
+  "share-service" -> "auth-service" [color="#D92D20", penwidth=1.6];
+  // connector-service
+  "connector-service" -> "catalog-service";
+  "connector-service" -> "auth-service" [color="#D92D20", penwidth=1.6];
+  // catalog-service and map-service depend on each other
+  "catalog-service" -> "map-service";
+  "map-service" -> "catalog-service";
+  "catalog-service" -> "search-index";
+  "catalog-service" -> "auth-service" [color="#D92D20", penwidth=1.6];
+  // remaining edges into auth-service, and auth-service itself
+  "notify-service" -> "auth-service" [color="#D92D20", penwidth=1.6];
+  "map-service" -> "auth-service"    [color="#D92D20", penwidth=1.6];
+  "auth-service" -> "user-store"     [color="#D92D20", penwidth=1.6];
+}

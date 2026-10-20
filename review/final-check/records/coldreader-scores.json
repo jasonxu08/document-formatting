@@ -1,0 +1,18 @@
+{
+  "01-upgrade-risk-report": {
+    "recovered": ["K1", "K2", "K3", "K4", "K5", "K6"], "missed": [], "total": 6,
+    "note": "K6 counted on its core: the reader gave '11 of 36 Q3 incident records' for auth-service. In iteration 2 both arms missed this fact; in this version it is in the first 60 lines."
+  },
+  "02-dual-audience-handoff": {
+    "recovered": ["K1", "K2", "K3", "K4", "K5"], "missed": ["K6"], "total": 6,
+    "note": "K6: the first 60 lines say the agent works alone on staging and never touches production (the 'Carrying on' line and the reading path), but the reader reported only the production half, so it is counted as missed. K4 counted on its core (21 minutes against a 15-minute limit); the 9.5-minute single export was not repeated."
+  },
+  "03-ingestion-explainer": {
+    "recovered": ["K1", "K2", "K3", "K4", "K5", "K6"], "missed": [], "total": 6,
+    "note": "K3: the reader named every component; Raw Zone, Policy Engine, Schema Registry and Notifier were named as left out of Figure 1."
+  },
+  "04-postmortem-zh": {
+    "recovered": ["K1", "K2", "K3", "K4", "K5", "K6"], "missed": [], "total": 6,
+    "note": "K3 counted on its core (3,800 failed orders, 1,200 users); the 99.93% availability against the 99.95% objective was not repeated. K4: no canary, no retry backoff and no config check on call were named; the 5-second latency threshold only as 'A3 alert threshold'."
+  }
+}

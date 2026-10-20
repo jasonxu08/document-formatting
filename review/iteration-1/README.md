@@ -1,0 +1,50 @@
+# Iteration 1 · skill v0.1
+
+[← Review dashboard](../README.md)
+
+The first draft of the skill, tested on three scenarios. Assertions were written by hand per scenario (14 or 15 each). Both arms were told Graphviz was installed, which is why the baseline diagrams are good. One grader agent per run; no cold reader and no tiered checker yet. The findings of this round produced the rubric and the checker.
+
+| | Without the skill | With the skill |
+|---|---|---|
+| Assertions passed (pooled) | **30 / 44** | **40 / 44** |
+| Mean pass rate per run | **67.9%** | **91.1%** |
+
+![Assertions passed per scenario](../assets/it1-pass-rate.png)
+
+## Scenario by scenario
+
+| Scenario | Without | With | Automatic checker, v0.1 (errors and warnings, no tiers) (without → with) | Page |
+|---|---|---|---|---|
+| Upgrade risk report | 8/14 | 14/14 | 0 errors · 4 warnings → 0 errors · 0 warnings | [details](eval-1-upgrade-risk-report.md) |
+| Dual-audience handoff | 11/15 | 14/15 | 0 errors · 2 warnings → 0 errors · 0 warnings | [details](eval-2-dual-audience-handoff.md) |
+| Platform explainer for a new hire | 11/15 | 12/15 | 0 errors · 3 warnings → 0 errors · 0 warnings | [details](eval-3-ingestion-explainer.md) |
+
+## Every common assertion, every run
+
+Rows are the assertions that appear in at least two scenarios; ✓ passed, ✗ failed, – not part of that scenario. Scenario-specific assertions are on each scenario page.
+
+![Assertion heatmap](../assets/it1-heatmap.png)
+
+## Where the skill moved the needle
+
+Each row is one assertion. The grey dot is the pass rate without the skill, the green dot with it. Long lines are where the skill matters; assertions where both dots sit together passed or failed for both arms.
+
+![Discrimination per assertion](../assets/it1-discrimination.png)
+
+## What the analyst noticed
+
+- Discriminating assertions (skill adds value): Zones labeled 3/3 with skill vs 0/3 without; Reading path 3/3 vs 1/3; Glance first 3/3 vs 1/3; Human part highlighted 3/3 vs 1/3; Headings tell the story 2/3 vs 0/3; Top risks first 1/1 vs 0/1. These are exactly the behaviours the skill introduces: explicit audience zones, a guided reading path, and a conclusion-first panel.
+- Non-discriminating: Diagram portable, Diagram readable and Links work pass in both configurations. The baseline agents were told Graphviz was installed and drew good PNGs, so they never hit the Mermaid-doesn't-render problem. Links work passed vacuously for the baseline eval-2 document, which has zero in-document links. Iteration 2 drops the Graphviz hint for both configurations to test the skill's own tool discovery.
+- The skill under-performed in eval 3 (0.80 vs 0.73): Relationship diagram, Mental model first and Concepts before flows failed. The agent split 11 components into an overview (8) plus a zoom (8), as the skill's size rule says, so no single diagram holds all 11 (the assertion wording conflicts with that rule). It also placed the glossary after the step-by-step flow, so terms such as Schema contract and Lineage record are used before they are defined. That second point is a real gap in the skill.
+- Content accuracy did not suffer from the layout rules: the factual assertions pass in both configurations. The one exception is baseline eval 1, which merged a duplicated incident and reported 11 of 35 instead of 11 of 36 (disclosed, so arguably acceptable; the assertion is ambiguous and is reworded in iteration 2).
+- Glance panel density: all with-skill panels pass the 60-line proxy but render at about 1.5 to 2 screens (long verdict paragraphs, wrapped risk-table cells, a picture). The skill said 'fits on one screen' while also asking for six elements, which the executors flagged as contradictory. Iteration 2 adds a brevity budget and defines the first screen as verdict, decision and top risks.
+- Executor feedback (user_notes.md) listed contradictions now fixed in the skill: '(AI input)' parentheses in skeleton headings versus the plain-link-target rule; 'a verb on every edge' for uniform dependency graphs; absolute paths for documents that live in a repo; the 60-line sibling-file rule versus a request for one self-sufficient document; a single 'Decision needed' versus several asks; checker false positives on archive-only sibling files and no cross-file anchor check.
+- Time and tokens: this harness reports neither. Time is estimated from file timestamps (executor run only) and tokens are shown as 0. With-skill runs were not slower on average, but with one run per eval this is not statistically meaningful.
+- Assertion quality (from the graders): 'Zones labeled' and 'Human part highlighted' overlap; 'one screen' and 'body headings' are not measurable or scoped; Evidence out of the way is satisfied by any report that leaves CSVs in separate files; no assertion covers labelling of inferred content or machine-local paths leaking into a shared document. Iteration 2 tightens or adds these.
+
+## Records
+
+- [benchmark.json](records/benchmark.json) and [benchmark.md](records/benchmark.md): aggregated results in the format of the skill-creator viewer
+- [analyst-notes.json](records/analyst-notes.json): the analyst's observations, quoted above
+- Per scenario: prompt and assertions, grading, checker output, executor notes (see each scenario page)
+- Note: the harness reports no token counts and no true execution time, so neither is compared; the timing files are estimates from file timestamps and include idle waits.

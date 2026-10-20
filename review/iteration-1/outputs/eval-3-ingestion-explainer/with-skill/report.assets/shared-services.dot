@@ -1,0 +1,38 @@
+digraph shared_services {
+  // Figure 2: who calls the four shared services. Every edge comes from Sam's architecture notes; none is inferred.
+  // Arrows point from the caller to the component it calls.
+  rankdir=LR; pad=0.3; nodesep=0.35; ranksep=0.55; bgcolor="white";
+  node  [shape=box, style="rounded,filled", fillcolor="#F2F4F7", color="#98A2B3",
+         fontname="Arial", fontsize=15, margin="0.20,0.12"];
+  edge  [color="#475467", fontname="Arial", fontsize=14, arrowsize=0.8];
+
+  api  [label="Uploader API"];
+  val  [label="Validation Worker"];
+  tr   [label="Transform Worker"];
+  cur  [label="Curated Zone"];
+
+  catalog [label=<<B>Catalog</B><BR/><FONT POINT-SIZE="13">Datasets, Versions, statuses,<BR/>lineage, owners</FONT>>,
+           fillcolor="#D1E9FF", color="#1570EF", penwidth=2.5, fontsize=17];
+  policy  [label=<<B>Policy Engine</B><BR/><FONT POINT-SIZE="13">may this user or tenant<BR/>do X on dataset Y?<BR/>local default: mocked as allow-all</FONT>>,
+           fillcolor="#EBE9FE", color="#6938EF", penwidth=2.5, fontsize=17];
+  schema  [label=<Schema Registry<BR/><FONT POINT-SIZE="13">one Schema contract<BR/>per dataset</FONT>>];
+  notif   [label=<Notifier<BR/><FONT POINT-SIZE="13">email and webhooks,<BR/>fire-and-forget</FONT>>];
+
+  {rank=same; api; val; tr; cur;}
+  api -> val -> tr -> cur [style=invis];
+
+  // calls to the Catalog (blue)
+  api -> catalog [label="received", color="#1570EF", fontcolor="#1849A9", penwidth=1.6];
+  val -> catalog [label="validated or\lquarantined\l", color="#1570EF", fontcolor="#1849A9", penwidth=1.6];
+  tr  -> catalog [label="published +\llineage\l", color="#1570EF", fontcolor="#1849A9", penwidth=1.6];
+
+  // calls to the Policy Engine (purple)
+  api     -> policy [label="may this tenant upload?", color="#6938EF", fontcolor="#5925DC", penwidth=1.6];
+  catalog -> policy [label="who can see\la dataset?\l", color="#6938EF", fontcolor="#5925DC", penwidth=1.6];
+  cur     -> policy [label="row-level rules", color="#6938EF", fontcolor="#5925DC", penwidth=1.6];
+
+  // the other two shared services (grey)
+  val -> schema [label="gets Schema\lcontract\l"];
+  val -> notif  [label="quarantine\lnotice\l"];
+  tr  -> notif  [label="publish\lnotice\l"];
+}

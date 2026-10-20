@@ -1,0 +1,118 @@
+diff --git a/a/SKILL.md b/b/SKILL.md
+index 4a3c109..963aa50 100644
+--- a/a/SKILL.md
++++ b/b/SKILL.md
+@@ -1,6 +1,12 @@
+ ---
+ name: document-formatting
+-description: Use this skill whenever you are about to write a large document or report (analysis, assessment, investigation or root-cause write-up, review or audit findings, design or decision doc, plan, status or handoff note, test or verification report, explainer, or any long multi-section output a person has to read), whether it is saved as a .md file or posted in chat. It makes the output human-first. It separates what people must read from AI-input and archive material, opens with a glanceable overview (verdict, decisions, risks), orders and links sections along a human reading path, and draws a relationship diagram (embedded image or Mermaid) when more than 5 related entities or any web of relationships appear. Load it even if the user never mentions structure, summaries or diagrams; a plain request like 'write a report', 'document this', 'summarize all the findings' or 'write up the investigation' is enough. Not for converting or styling Word, PDF or Excel files.
++description: Use this skill whenever you are about to write a large document or report for people to read (analysis, investigation or root-cause write-up, review or audit, design or decision doc, plan, status or handoff note, test or verification report, explainer), saved as a .md file or posted in chat, and when asked to rewrite or restructure an existing long report, ledger or notes file so people can read it. It makes the output human-first. It separates what people must read from AI-input and archive material, opens with a glanceable overview (verdict, decisions, risks), orders and links sections along a reading path, and draws a relationship diagram (embedded image) when more than 5 related entities or any web of relationships appear. Load it even if the user never mentions structure, summaries or diagrams; 'write a report', 'document this', 'summarize all the findings' or 'nobody can read this report, fix it' is enough. Not for converting or styling Word, PDF or Excel files, nor for short answers.
++license: MIT
++compatibility: The optional scripts need Python 3.9 or newer and nothing else. Graphviz is recommended for drawing diagrams.
++metadata:
++  author: jasonxu08
++  version: "1.0.0"
++  repository: https://github.com/jasonxu08/document-formatting
+ ---
+ 
+ # Document formatting: write large documents for humans first
+@@ -69,7 +75,7 @@ Make the split unmistakable to both audiences:
+ - For people: the two zone headings carry the 👤 and 🗄️ glyphs (they show up in outline and TOC panes as well) and a one-line instruction ("Start here", "Skip unless you need the raw evidence or are an agent continuing this work").
+ - For tools and other agents: invisible markers `<!-- zone:human -->`, `<!-- zone:ai-input -->` and `<!-- zone:archive -->` at the start of each zone or block, so a later agent can jump to what it needs.
+ 
+-Long material goes in a sibling file (`<name>.evidence.md`, `<name>.data.json`), reached through a one-line block in the machine zone, when AI-input and archive content together pass about 60 lines or any single block passes about 25. That is a default, not a rule: if the user asks for material to stay in the document, or wants one self-sufficient file, keep it there, collapsed, whatever its size. When the user wants an audit trail, keep byte-exact copies of the inputs in `<doc-stem>.data/` and record their checksums in the evidence file (an input that stays beside the output, such as the original in a rewrite, needs only its checksum). Start each sibling Markdown file with its zone marker (`<!-- zone:archive -->` or `<!-- zone:ai-input -->`) and run the checker on it too; it then skips the human-zone rules. Several siblings are fine when the material has distinct purposes (evidence, supporting notes, superseded history, handoff): name them `<doc-stem>.<purpose>.md`, open each with a line saying what it is and a contents list, keep block headings plain and unique (they are link targets), point to each from a block in the machine zone, and leave the blocks of an archive-only sibling open, since the file is the destination. A table or listing the user asked for by name (a map, an inventory) is allowed in full: in the human zone when readers use it to decide, otherwise in the machine zone with a link from the reading path.
++Long material goes in a sibling file (`<name>.evidence.md`, `<name>.data.json`), reached through a one-line block in the machine zone, when AI-input and archive content together pass about 60 lines or any single block passes about 25. That is a default, not a rule: if the user asks for material to stay in the document, or wants one self-sufficient file, keep it there, collapsed, whatever its size. When the user wants an audit trail, keep byte-exact copies of the inputs in `<doc-stem>.data/` and record their checksums in the evidence file (an input that stays beside the output, such as the original in a rewrite, needs only its checksum). Start each sibling Markdown file with its zone marker (`<!-- zone:archive -->` or `<!-- zone:ai-input -->`) and run the checker on it too; it then skips the human-zone rules. Several siblings are fine when the material has distinct purposes (evidence, supporting notes, superseded history, handoff): name them `<doc-stem>.<purpose>.md`, open each with a line saying what it is and a contents list, keep block headings plain and unique (they are link targets), point to each from a block in the machine zone, and leave the blocks of an archive-only sibling open, since the file is the destination. A table or listing the user asked for by name (a map, an inventory) is allowed in full: in the human zone when readers use it to decide, otherwise in the machine zone with a link from the reading path. Put `<!-- requested-table -->` on the line above a long one so the checker lets it pass.
+ 
+ ## The glance panel
+ 
+diff --git a/a/references/review-rubric.md b/b/references/review-rubric.md
+index 9eb9075..c83fd50 100644
+--- a/a/references/review-rubric.md
++++ b/b/references/review-rubric.md
+@@ -22,7 +22,7 @@ This is the standard a large document written under this skill is held to. Use i
+ | ID | Pass condition | Tier | Check | For |
+ |---|---|---|---|---|
+ | A1 | Zones are marked and ordered. A human zone comes first, opened by a heading or banner that names who it is for in words (`START HERE - at a glance (for the release managers)`); a glyph alone, or an audience named only in a header pointer line, is not enough. AI-input and archive material, if any, comes last in its own labelled zone. Nothing for people sits after machine content. No raw material means no machine zone is needed. | Blocker for a large document with raw material, else Major | auto (markers, order) + judge | all |
+-| A2 | The human zone holds no raw material: no table over 15 rows, no code block over 25 lines (diagram sources excepted), no logs, listings or data dumps. Shell commands belong in the AI-input block unless the reader must run them. A table the user asked for by name (a map, an inventory) is exempt; place it where its readers look for it and link it from the reading path. | Major | auto | all |
++| A2 | The human zone holds no raw material: no table over 15 rows, no code block over 25 lines (diagram sources excepted), no logs, listings or data dumps. Shell commands belong in the AI-input block unless the reader must run them. A table the user asked for by name (a map, an inventory) is exempt (mark it with `<!-- requested-table -->` on the line above); place it where its readers look for it and link it from the reading path. | Major | auto | all |
+ | A3 | Machine and archive blocks are plain-headed and collapsed in `<details>`, or reduced to a one-line pointer when the material lives in a sibling file (a pointer counts as collapsed). Each opens with a line naming its bin (AI input or archive) and what it supports. Long material sits in a sibling file, unless the user asked for it to stay in the document. Blocks inside an archive-only sibling need not be collapsed: the file is the destination. | Major | judge | large |
+ | A4 | The AI-input block is self-sufficient: current state, repo-relative paths with the root stated once, copy-paste commands, ordered next steps, constraints and what not to do, a definition of done, and what to do while decisions are open and where answers are recorded. | Major | judge | hand |
+ | A5 | No machine-local paths (home folder, temp or session folders). | Major | auto | all |
+@@ -66,7 +66,7 @@ This is the standard a large document written under this skill is held to. Use i
+ | ID | Pass condition | Tier | Check | For |
+ |---|---|---|---|---|
+ | E1 | Every judgment carries a confidence level and what it rests on. | Major | judge | all |
+-| E2 | Inferred, assumed and proposed content is labelled as such, unknowns are listed, and nothing presented as fact is unsourced. When two sources disagree, the document says so and which one it used. | Major | judge | all |
++| E2 | Inferred, assumed and proposed content is labelled as such, unknowns are listed, and nothing presented as fact is unsourced. When two sources disagree, the document says so and which one it used. Evidence from a simulation, mock or stand-in is called that every time it is mentioned, never "verified in production". | Major | judge | all |
+ | E3 | A metadata line under the title gives date, author or agent, status and audience. Sources are named. | Minor | auto (date) + judge | medium+ |
+ 
+ ### F Fit and delivery
+@@ -91,4 +91,4 @@ This is the standard a large document written under this skill is held to. Use i
+ 
+ A reviewer replies with one line, **Verdict: deliver** or **Verdict: fix first**, followed by the counts of Blockers, Majors and Minors. Then a table of only the rules that failed: rule id, line or quote as evidence, and the fix. One line for anything notable that passed on a close call.
+ 
+-The skill's own regression tests (test cases, assertions and the cold-reader test) live in `evals/`.
++The project's own regression tests (test cases with assertions, fixtures, the cold-reader test and the trigger set) live in the repository's `evals/` folder and are not part of the installed skill.
+diff --git a/a/references/rewriting.md b/b/references/rewriting.md
+index 0901c96..0065489 100644
+--- a/a/references/rewriting.md
++++ b/b/references/rewriting.md
+@@ -15,8 +15,8 @@ Read this when the input is a long document that people cannot read (a ledger th
+    Typical outcome: the current layer becomes the human zone; evidence, supporting notes and superseded material become archive siblings; the handoff becomes an AI-input sibling.
+ 3. **Settle contradictions over time.** A ledger keeps stale statements ("not tested yet") beside later ones that overturn them. Put the current truth in the human zone and say that the older note predates it. Keep the stale text verbatim in the archive, labelled superseded. Never choose silently.
+ 4. **Keep every line reachable.** Move large blocks with `source_set.py slice`; do not retype them. Group blocks by purpose into a few siblings (`<stem>.evidence.md`, `<stem>.notes.md`, `<stem>.history.md`). The tool wraps each block in `<!-- src:A-B shift:+N -->` markers and demotes its headings so the sibling's outline stays usable; `verify` promotes them back and proves each block identical to its source lines. If the original stays beside the output it is the audit trail: record its SHA-256 and do not copy it into `<stem>.data/`.
+-5. **Write the human zone as short, faithful restatements** that link to the block behind each claim. Facts come only from the source. Where the source gives no deadline or recommendation, say so ("The original sets no deadline"); attribute a recommendation to where it comes from; say when a ranking is your own. Cite by heading and quoted snippet; bare line numbers go stale, so if you use them, check them with a script.
+-6. **Add the section map**: for each H2 of the source, its line range, where it is summarised and where its verbatim text lives. Make it visible if the user asked for it; otherwise keep it in the machine zone, collapsed, and link it from the reading path ("Checking that nothing got lost? Go to A").
++5. **Write the human zone as short, faithful restatements** that link to the block behind each claim. Facts come only from the source. Where the source gives no deadline or recommendation, say so ("The original sets no deadline"); attribute a recommendation to where it comes from; say when a ranking is your own. Mine the supporting notes (release notes, exceptions, known gaps) for caveats a reviewer must know and carry them into the human zone; they are easy to leave buried in a verbatim block. Cite by heading and quoted snippet; bare line numbers go stale, so if you use them, check them with a script.
++6. **Add the section map**: for each H2 of the source, its line range, where it is summarised and where its verbatim text lives. If the user asked for a *short* map and the source has more than about a dozen sections, give a short grouped map (by layer or by period, up to about eight rows) where readers look, and put the full per-section table in the machine zone, collapsed, marked `<!-- requested-table -->` if it must stay in the human zone. Link the full map from the reading path ("Checking that nothing got lost? Go to A").
+ 7. **Verify.** `python scripts/source_set.py verify <main.md> --source <original> --sha256 <recorded>` must end with ALL OK. Run `check_doc.py` on the main file and every sibling. Confirm the original is byte-identical. Spot-check five numbers of the panel against the source.
+ 
+ ## source_set.py
+@@ -37,6 +37,7 @@ python scripts/source_set.py verify MAIN.md --source SOURCE [--sha256 HEX] [--ve
+ - **A takeaway that overstates its table.** A caption must not claim more than its table shows: no "all passed" above a table with a failed row. Re-read every caption against the table above it.
+ - **Summarising superseded material as if it were current.** Mention it only as context, and only in the archive.
+ - **Unlabelled cross-references.** "Risks 1 and 3" means nothing on a first screen where the risk rows have no numbers.
++- **A status table that files an open item as closed.** Use the source's own status words, or label yours as yours, and re-read each row against the item's last statement in the source. The main open decision must never sit in a row that reads as closed or overtaken.
+ - **Out-of-scope findings among the decisions.** A recommendation for another team (a fix in a file this change does not touch) is worth surfacing, but as one line under the decisions ("Out of scope here: ..."), not as a decision for this document's reader.
+ - **Labelling a whole stack as history.** Several recent entries are usually still current. Label as superseded only what the source itself marks, or what a later entry overturns, and say which.
+ - **Stronger attribution than the source gives.** A recommendation must match the version of the source that says it; where the source only lists options, name the option the source gives and mark your own pick "(suggested)".
+diff --git a/a/scripts/check_doc.py b/b/scripts/check_doc.py
+index 4baedda..3e25608 100644
+--- a/a/scripts/check_doc.py
++++ b/b/scripts/check_doc.py
+@@ -35,6 +35,7 @@ LINK = re.compile(
+     r"(!?)\[((?:[^\]\\]|\\.)*)\]\(\s*<?([^)\s>]+)>?(?:\s+(?:\"[^\"]*\"|'[^']*'))?\s*\)"
+ )
+ ZONE = re.compile(r"<!--\s*zone:\s*([a-z-]+)\s*-->", re.I)
++REQUESTED_TABLE = re.compile(r"<!--\s*requested-table\b", re.I)
+ EXPLICIT_ID = re.compile(r"""<a\s+[^>]*?(?:id|name)\s*=\s*["']([^"']+)["']""", re.I)
+ EDGE = re.compile(r"-\.->|==>|-->|---|->|--")
+ SCHEME = re.compile(r"^[a-z][a-z0-9+.-]*:", re.I)
+@@ -298,8 +299,11 @@ def check(path, args):
+             run_len += 1
+             continue
+         if run_len > args.max_table + 2 and in_human(run_start):
+-            add("MAJOR", "A2", run_start, "%d-row table in the human zone; summarise it and move the full table "
+-                "to the archive" % (run_len - 2))
++            marked = any(REQUESTED_TABLE.search(lines[k]) for k in range(max(run_start - 4, 0), run_start - 1))
++            if not marked:
++                add("MAJOR", "A2", run_start, "%d-row table in the human zone; summarise it and move the full table "
++                    "to the archive (a table the user asked for by name is fine: put <!-- requested-table --> on "
++                    "the line above it)" % (run_len - 2))
+         run_start, run_len = 0, 0
+ 
+     # A5 machine-local paths
+diff --git a/a/scripts/source_set.py b/b/scripts/source_set.py
+index dfb9c8f..4f539a1 100644
+--- a/a/scripts/source_set.py
++++ b/b/scripts/source_set.py
+@@ -141,7 +141,8 @@ def cmd_slice(a):
+         out += ["## %s %s" % (letters[i], title), "",
+                 "*%s %s - verbatim copy of source lines %d-%d (%d lines).*" % (glyph, label, first, last, last - first + 1), "",
+                 "<!-- src:%d-%d shift:+%d -->" % (first, last, shift)] + moved + ["", SRC_CLOSE, ""]
+-    Path(a.out).write_text("\n".join(out), encoding="utf-8", newline="\n")
++    with open(a.out, "w", encoding="utf-8", newline="\n") as fh:  # Path.write_text(newline=) needs Python 3.10
++        fh.write("\n".join(out))
+     print("wrote %s: %d blocks, %d source lines" % (a.out, len(blocks), total))
+ 
+ 

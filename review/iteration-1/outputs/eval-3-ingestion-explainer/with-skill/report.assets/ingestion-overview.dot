@@ -1,0 +1,45 @@
+digraph ingestion_overview {
+  // Figure 1: the path of one file. Every edge comes from Sam's architecture notes; none is inferred.
+  // Arrows point the way a file, message, query or status update travels.
+  rankdir=TB; pad=0.3; nodesep=0.5; ranksep=0.6; bgcolor="white";
+  node  [shape=box, style="rounded,filled", fillcolor="#F2F4F7", color="#98A2B3",
+         fontname="Arial", fontsize=15, margin="0.20,0.12"];
+  edge  [color="#475467", fontname="Arial", fontsize=13, arrowsize=0.8];
+
+  customer [label="Customer"];
+  api   [label=<Uploader API<BR/><FONT POINT-SIZE="12">step 1: accept</FONT>>];
+  raw   [label=<Raw Zone<BR/><FONT POINT-SIZE="12">original upload, kept 1 year</FONT>>];
+  queue [label=<Message Queue<BR/><FONT POINT-SIZE="12">validate and transform messages</FONT>>];
+  val   [label=<Validation Worker<BR/><FONT POINT-SIZE="12">step 2: validate</FONT>>];
+  quar  [label=<Quarantine Store<BR/><FONT POINT-SIZE="12">failed files, 30 days</FONT>>,
+         fillcolor="#FEF0C7", color="#DC6803"];
+  tr    [label=<Transform Worker<BR/><FONT POINT-SIZE="12">step 3: transform and publish</FONT>>];
+  cur   [label=<Curated Zone<BR/><FONT POINT-SIZE="12">tables customers query</FONT>>];
+  catalog [label=<<B>Catalog</B><BR/><FONT POINT-SIZE="12">source of truth<BR/>for status</FONT>>,
+           fillcolor="#D1E9FF", color="#1570EF", penwidth=2.5, fontsize=17];
+
+  {rank=same; val; tr;}
+  {rank=same; quar; cur;}
+  val  -> tr  [style=invis];
+  quar -> cur [style=invis];
+
+  // the path of a file that passes (thick)
+  customer -> api [label="uploads file", penwidth=2.2];
+  api   -> raw    [label="streams file", penwidth=2.2];
+  api   -> queue  [label="validate", penwidth=2.2];
+  queue -> val    [label="validate", penwidth=2.2];
+  raw   -> val    [label="file to check", penwidth=1.2];
+  val   -> queue  [label="pass: transform", penwidth=2.2, constraint=false];
+  queue -> tr     [label="transform", penwidth=2.2];
+  raw   -> tr     [label="file to convert", penwidth=1.2];
+  tr    -> cur    [label="writes tables", penwidth=2.2];
+  customer -> cur [label="queries", penwidth=1.2];
+
+  // the failure branch (orange)
+  val -> quar [label="fail: copy file", color="#DC6803", fontcolor="#B54708", penwidth=1.8];
+
+  // status writes to the Catalog (blue)
+  api -> catalog [label="received", color="#1570EF", fontcolor="#1849A9", penwidth=1.6];
+  val -> catalog [label="validated or quarantined", color="#1570EF", fontcolor="#1849A9", penwidth=1.6];
+  tr  -> catalog [label="published + lineage", color="#1570EF", fontcolor="#1849A9", penwidth=1.6];
+}

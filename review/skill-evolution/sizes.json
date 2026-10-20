@@ -1,0 +1,142 @@
+{
+  "note": "Bytes and lines of every file in each version of the skill folder (the regression kit excluded), measured from snapshots taken at each stage.",
+  "versions": [
+    {
+      "version": "v0.1",
+      "files": {
+        "assets/skeleton.md": {
+          "bytes": 2373,
+          "lines": 85
+        },
+        "references/diagrams.md": {
+          "bytes": 9798,
+          "lines": 155
+        },
+        "scripts/check_doc.py": {
+          "bytes": 12583,
+          "lines": 278
+        },
+        "SKILL.md": {
+          "bytes": 15946,
+          "lines": 156
+        }
+      }
+    },
+    {
+      "version": "v0.2",
+      "files": {
+        "assets/skeleton.md": {
+          "bytes": 3088,
+          "lines": 99
+        },
+        "references/diagrams.md": {
+          "bytes": 10328,
+          "lines": 156
+        },
+        "references/review-rubric.md": {
+          "bytes": 8883,
+          "lines": 86
+        },
+        "scripts/check_doc.py": {
+          "bytes": 22084,
+          "lines": 446
+        },
+        "SKILL.md": {
+          "bytes": 19963,
+          "lines": 173
+        }
+      }
+    },
+    {
+      "version": "v0.3",
+      "files": {
+        "assets/skeleton.md": {
+          "bytes": 3254,
+          "lines": 102
+        },
+        "references/diagrams.md": {
+          "bytes": 10543,
+          "lines": 157
+        },
+        "references/review-rubric.md": {
+          "bytes": 9011,
+          "lines": 86
+        },
+        "scripts/check_doc.py": {
+          "bytes": 22325,
+          "lines": 449
+        },
+        "SKILL.md": {
+          "bytes": 20704,
+          "lines": 173
+        }
+      }
+    },
+    {
+      "version": "v0.4",
+      "files": {
+        "assets/skeleton.md": {
+          "bytes": 3271,
+          "lines": 102
+        },
+        "references/diagrams.md": {
+          "bytes": 11118,
+          "lines": 157
+        },
+        "references/review-rubric.md": {
+          "bytes": 12685,
+          "lines": 94
+        },
+        "references/rewriting.md": {
+          "bytes": 5499,
+          "lines": 43
+        },
+        "scripts/check_doc.py": {
+          "bytes": 23003,
+          "lines": 459
+        },
+        "scripts/source_set.py": {
+          "bytes": 11736,
+          "lines": 259
+        },
+        "SKILL.md": {
+          "bytes": 22697,
+          "lines": 173
+        }
+      }
+    },
+    {
+      "version": "v1.0.0",
+      "files": {
+        "assets/skeleton.md": {
+          "bytes": 3271,
+          "lines": 102
+        },
+        "references/diagrams.md": {
+          "bytes": 11118,
+          "lines": 157
+        },
+        "references/review-rubric.md": {
+          "bytes": 12962,
+          "lines": 94
+        },
+        "references/rewriting.md": {
+          "bytes": 6185,
+          "lines": 44
+        },
+        "scripts/check_doc.py": {
+          "bytes": 23333,
+          "lines": 463
+        },
+        "scripts/source_set.py": {
+          "bytes": 11806,
+          "lines": 260
+        },
+        "SKILL.md": {
+          "bytes": 23069,
+          "lines": 179
+        }
+      }
+    }
+  ]
+}

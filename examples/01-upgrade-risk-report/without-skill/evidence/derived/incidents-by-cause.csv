@@ -1,0 +1,9 @@
+cause,incidents,total_minutes,sev1,sev2,sev3,services
+token-validation-timeout,5,221,1,4,0,auth-service
+dependency,6,183,0,2,4,catalog-service; connector-service; map-service; share-service
+downstream-timeout,6,171,1,1,4,gateway; share-service
+config,6,113,0,1,5,auth-service; catalog-service; gateway; user-store
+runtime-gc,3,82,0,1,2,auth-service; catalog-service; search-index
+deploy,5,73,0,0,5,catalog-service; connector-service; map-service; share-service
+token-refresh-bug,3,72,0,1,2,auth-service
+queue-backlog,2,17,0,0,2,notify-service

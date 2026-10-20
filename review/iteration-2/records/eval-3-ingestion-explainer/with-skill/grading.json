@@ -1,0 +1,243 @@
+{
+  "expectations": [
+    {
+      "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input, archive or reference material sits last in its own labelled zone; nothing for people follows machine content",
+      "passed": true,
+      "evidence": "report.md line 1 is '<!-- zone:human -->', line 2 the H1 'How the ingestion platform works - a first-week explainer for new engineers', line 4 the metadata line ending 'for Priya and later new ingestion engineers', line 6 '## [person glyph] START HERE - at a glance'; no pointer line in the header. The machine side comes last: line 161 '<!-- zone:ai-input -->' with line 162 '## [archive glyph] Machine and archive zone - skip unless you need a lookup table or are an agent updating this page', then Block A (AI input), line 201 '<!-- zone:archive -->' and Blocks B and C. Nothing for people follows it (after Section 6 and the '---' rule come only those three blocks); the checker lists zones human, ai-input, archive in that order with no A1 finding. Close call: the zone heading itself ('START HERE' plus the person glyph) does not literally name an audience; the audience (new engineers, Priya) is named by the H1 and metadata line inside the human zone."
+    },
+    {
+      "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+      "passed": true,
+      "evidence": "Block A ('### A Maintenance notes for the next editor', line 166) opens with '*[robot glyph] AI input - what an agent needs to update this page without breaking it. Paths are relative to the folder that holds report.md.*' and its content sits in the only <details> block (lines 170-199; checker details_blocks=1, no F5 finding). Blocks B (line 202) and C (line 208) are plain-headed, each opens '*[archive glyph] Archive - ... supports ...*' (B: supports 3 Failures and 5 Week one; C: supports Figure 1 and Figure 2) and holds only a one-line pointer: 'Full table: [report.evidence.md](report.evidence.md#b-configuration-reference) - setting, default and note for all 20 settings' and 'Full edge lists: [report.evidence.md](report.evidence.md#c-diagram-edge-lists) - 20 arrows, each with its basis in the notes'. The long material is in the sibling report.evidence.md: I confirmed its 20-row config table is identical to the source notes and its edge list has 20 rows. Close call: the pointer-only blocks B/C and the archive-only sibling's tables are not wrapped in <details>; that fits the 'long material sits in a sibling file behind a pointer' branch and the skeleton's own 'replace the details block with one line' pattern."
+    },
+    {
+      "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+      "passed": true,
+      "evidence": "Title is line 2. 'Read next' (lines 26-33) holds six section links, each with what the reader gets and a time, e.g. line 28 '[1 Six concepts and eleven components](#1-six-concepts-...) - the vocabulary every later section uses (3 min)', line 30 '[3 A bad file is normal, a stuck message is an alarm](#3-...) - failures, retries, the DLQ and who acts (3 min)'. Line 35 says who can stop where: 'Only need the big picture? You can stop here. Starting the checklist? Read 1 and 2, then jump to 5. Before the on-call shadow shift? Add 3. Looking up a setting? Go to [B Configuration reference](report.evidence.md#b-configuration-reference).' Everything sits within 35 lines of the title. My own link script resolved all 49 links and anchors in both files."
+    },
+    {
+      "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive",
+      "passed": true,
+      "evidence": "Mental model first (line 8 'Mental model: every upload becomes an immutable Version ...' plus Figure 1). Section 1 (lines 37-72) then defines the six concepts and eleven components before Sections 2-6 use them (it says 'Later sections use these names without explaining them again'). Order afterwards is flow (2), failures (3), traps (4), week one (5), open questions (6): understanding order, not discovery order. There is no chronology or how-we-found-this narrative in the human zone; provenance sits in archive Block A ('Built from'). Close call: the panel above Section 1 already uses Catalog, Message Queue and DLQ without a glossary, but it is the mental-model summary, spells out 'dead-letter queue (DLQ)', and defines Version inline in the mental-model sentence."
+    },
+    {
+      "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+      "passed": true,
+      "evidence": "H2s read alone: 'START HERE - at a glance' / '1 Six concepts and eleven components make up the platform' / '2 Every upload follows four steps and the Catalog records each one' / '3 A bad file is normal and a stuck message is an alarm' / '4 Six traps catch most newcomers' / '5 Week one means a local stack two runbooks and a starter ticket' / '6 Seven questions the source notes leave open'. That reads as the explainer's outline and argument. No heading is a bare label ('Background', 'Details') or an open question; Section 6 states what it contains rather than posing a question, and the ask (ask Sam or the team) is in its first line."
+    },
+    {
+      "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the mental model itself, not what the document covers",
+      "passed": true,
+      "evidence": "Line 2 title, line 4 the single metadata line, line 6 '## [person glyph] START HERE - at a glance', line 8: '**Mental model:** every upload becomes an immutable *Version*, background workers advance its status from `received` to `validated` to `published` (or `quarantined`), and the Catalog, not the Message Queue, is the record of that status.' That is the model itself, not a description of the document, and nothing (background, method, TOC) precedes it. Checker raises no C1 finding."
+    },
+    {
+      "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words), and the mental model, the few things that matter and the reading path fit the first screen or two",
+      "passed": true,
+      "evidence": "mechanical.json panel_words = 289 for report.md; my re-run of check_doc.py gives the same. A broader hand count that also includes the heading, caption and Read-next link text is about 320, still 'about 300'. The whole panel spans lines 6-35: mental model (8), Figure 1 (10-12), 5-row table (14-20), key facts (22), basis (24), Read next (26-33), stop-where line (35). Figure 1 is 1640x1204 px, about 587 px tall at 800 px wide, so the panel is roughly 1.5-2 rendered screens."
+    },
+    {
+      "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+      "passed": true,
+      "evidence": "The document has no verdict, decision or risk block (user_notes: 'considered and rejected ... a risk table (no risks to rank)'); the explainer variant is used instead. Each of the five 'things that matter' traces to the notes: asynchronous plus 'Catalog is the source of truth ... NOT the queue'; Gotcha 1 (Versions immutable); the Failure-handling paragraph; 'Delivery is at-least-once, so every worker must be idempotent'; Gotcha 4 (POLICY_MODE). The table is an unranked selection (no severity or ranking claimed). Minor: the trap-column phrasings (e.g. 'Paging people over quarantines') are the writer's gloss and are not marked."
+    },
+    {
+      "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived or inferred numbers say so",
+      "passed": true,
+      "evidence": "Spot-checks against architecture-notes.md: 'published within 15 min for files up to 1 GB (target)' = 'Target: published within 15 minutes for files up to 1 GB'; 'typical file 50 to 500 MB, hard limit 5 GB' = 'Typical file: 50 to 500 MB. Maximum: 5 GB' (and MAX_UPLOAD_MB 5120); '3 attempts, then the dead-letter queue (DLQ) pages on-call' = 'Retries: 3 attempts ... Then DLQ. DLQ messages page the on-call engineer'; 'quarantine kept 30 days, raw uploads 1 year' = the retention lines (also the Figure 1 labels 'kept 30 days', 'after 3 failed attempts'). 'The 5 things' is the table's own row count. The only unsourced numbers are the writer's reading-time minutes in Read next (3, 2, 3, 1, 2, 2 min) and the structural counts in link text ('Four steps', 'Seven open questions'), which are navigation aids rather than claims about the platform and are not labelled as estimates."
+    },
+    {
+      "text": "D1 Diagram drawn: the eleven related platform components (Uploader API, Message Queue, Validation Worker, Schema Registry, Quarantine Store, Transform Worker, Raw Zone, Curated Zone, Catalog, Policy Engine, Notifier) are shown in at least one diagram",
+      "passed": true,
+      "evidence": "Two PNG diagrams together show all eleven. Figure 1 (report.assets/journey.png) draws Uploader API, Message Queue, Validation Worker, Transform Worker, Quarantine Store, Curated Zone and Catalog (plus Customer and the DLQ). Figure 2 (report.assets/shared-services.png) draws Catalog, Curated Zone, Uploader API, Transform Worker, Validation Worker, Policy Engine, Raw Zone, Notifier and Schema Registry. Raw Zone, Policy Engine, Schema Registry and Notifier appear only in Figure 2; Message Queue and Quarantine Store only in Figure 1. D2's wording accepts an overview plus a zoomed view, so no single diagram is required to hold all eleven."
+    },
+    {
+      "text": "D2 Coverage and truth: every one of the eleven components appears in at least one diagram (a single diagram or an overview plus zoomed views, the overview's caption saying what it leaves out), every drawn edge exists in the notes, and inferred edges are dashed and captioned",
+      "passed": true,
+      "evidence": "Coverage: all eleven appear in at least one figure (see D1). The overview's caption states its omissions: 'Left out here: Raw Zone, Policy Engine, Schema Registry and Notifier, drawn in Figure 2 in section 1.' Truth: I traced all 20 arrows (11 in journey.dot, 9 in shared-services.dot) to architecture-notes.md and each is stated, e.g. 'puts a validate message on the Message Queue', 'After 3 failed attempts a message goes to the dead-letter queue (DLQ)', 'the file is copied to the Quarantine Store', 'Called by the Uploader API (...), by the Catalog (...) and by the Curated Zone (...)', 'Called by the Validation Worker (on quarantine) and the Transform Worker (on publish)'. No arrow is dashed, and the archive edge list says 'No arrow is inferred, so none is dashed'. Close call: the queue-to-worker 'delivers' arrows interpret 'takes a validate/transform message' (the edge list notes that pull versus push is not stated), but the relationship itself is in the notes."
+    },
+    {
+      "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+      "passed": true,
+      "evidence": "The first diagram is embedded at line 10 as '![Flow of one upload: ...](report.assets/journey.png)'; the file exists (1640x1204 px, inside 500-2600) and the document has no Mermaid or code diagram (checker diagram_blocks=0). I viewed it downscaled to 800x587 and as native-size crops: node labels (15 pt at 150 dpi) and edge labels (13 pt) are readable, no text overlaps other text or nodes (a few labels such as 'copies invalid file' and 'after 3 failed attempts' sit tight against their arrows), and there are no empty glyph boxes. Figure 2 (1317x1070, 800x650 when downscaled) is equally legible."
+    },
+    {
+      "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+      "passed": true,
+      "evidence": "Both images have descriptive alt text (lines 10 and 70). Captions give how to read plus a takeaway: Figure 1 'Arrows run from the component that acts to what it acts on; amber marks the Catalog and the arrows that record a Version's status. Takeaway: validation and transformation are separate queue-driven steps, and each reports to the Catalog.'; Figure 2 'Arrows run from the caller to the service it uses; blue marks the Policy Engine. Takeaway: three components call the Policy Engine ...'. The colour legend is in the captions (amber, blue). Edges carry verbs ('uploads file', 'sends validate message', 'writes tables', 'streams file in', 'fetches contract') and the relation is stated once more in each caption. Sources sit beside the images: report.assets/journey.dot and shared-services.dot next to the PNGs. The edge list is in the archive: report.evidence.md '## C Diagram edge lists' (20 rows with a 'Basis in the notes' column), pointed to from report.md Block C. Each figure has one focal point (Catalog in amber, Policy Engine in blue)."
+    },
+    {
+      "text": "E1 E2 Honesty: content not in the inputs (assumptions, suggestions, inferences) is labelled as such; ambiguities in the notes are flagged rather than silently resolved; unknowns are listed",
+      "passed": true,
+      "evidence": "Writer-derived content is labelled: '(derived from the cache settings, not stated in the notes)' (Section 3), '(suggested order)' and '(derived from the ticket titles)' (Section 5), '(guess)' and '(derived)' (Section 6), the panel's 'Items marked derived, suggested or guess are the writer's own', and the 'draft for team review' status. Ambiguities are flagged, not resolved: Section 6 Q1 (3 attempts vs 'retried 3 times' vs three backoff delays, with the 2.5 vs 12.5 minute consequence, which I verified), Q2 (POLICY_MODE default strict in the config table vs allow-all in the local stack), Q3 (INGEST-310's 'Schema Registry validator' and the repo-to-component mapping), Q4 (Version status while in the DLQ); Section 3's table adds 'the exact count is open, see 6 question 1'. Seven unknowns are listed in Section 6. Close call: a few small writer glosses are unmarked (e.g. 'Only its status moves on' in the Version row, 'so the transform is the slow step')."
+    },
+    {
+      "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (the mental model, the few things that matter, the file path, where to start) and does not paste the document",
+      "passed": true,
+      "evidence": "final_reply.md (about 290 words) gives the mental model ('Mental model: every upload becomes an immutable Version. ... The Catalog, not the queue, is the record of that status.'), the few things that matter ('The traps most likely to bite in week one': three bullets) plus the gaps in the notes, where to start ('the top panel takes about a minute. Then read sections 1 and 2, then section 5, which maps her week-one checklist to the page') and the files ('Files are in the outputs folder you named: report.md, report.evidence.md, report.assets/, user_notes.md'). It does not paste the document. Close call: the file path is given as a folder name plus file names rather than a full path."
+    },
+    {
+      "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+      "passed": true,
+      "evidence": "mechanical.json: report.md 0 blockers, 0 majors, 0 minors; report.evidence.md 0 blockers, 0 majors, 1 minor (A1 'machine/archive-only file: human-zone rules skipped'); gate passed = true. I re-ran scripts/check_doc.py (skill-snapshot-iter2) on both files with identical output. Note: the checker reports 0 internal links for the evidence file, so cross-file anchors are not machine-verified; my own link script found all 49 links in both files resolve."
+    },
+    {
+      "text": "Mental model first: the first screen or two has a diagram showing the main flow (at least the eight core components) and calls out that the Catalog, not the queue, is the source of truth for status",
+      "passed": false,
+      "evidence": "The Catalog call-out is met: line 8 says 'the Catalog, not the Message Queue, is the record of that status' and Figure 1 (line 10, first screen) labels and highlights the Catalog node 'source of truth for status'. The 'at least the eight core components' part is not met: Figure 1 draws seven of the eleven platform components (Uploader API, Message Queue, Validation Worker, Transform Worker, Quarantine Store, Curated Zone, Catalog) plus the external Customer and a DLQ box, and the document's own Section 1 table treats the dead-letter queue as part of the Message Queue, not a twelfth component. The Raw Zone, which the Uploader API writes and both workers read, is left out of the flow (caption: 'Left out here: Raw Zone, Policy Engine, Schema Registry and Notifier') and appears only in Figure 2 at line 70, well below the first two screens. Eight boxes can be counted only by counting the DLQ, so the burden of proof is not met."
+    },
+    {
+      "text": "Concepts before flows: Dataset, Version, Schema contract, Quarantine, Lineage record and Tenant are defined (glossary or definition on first use) before the step-by-step flow that uses them",
+      "passed": true,
+      "evidence": "The Section 1 table (lines 43-50) defines Tenant, Dataset, Version, Schema contract, Quarantine and Lineage record, each with its meaning, before the step-by-step flow in Section 2 (line 76, four numbered steps) that uses Version, Schema contract, Quarantine and Lineage record. Section 1 itself says 'Later sections use these names without explaining them again.' The panel's mental-model sentence also defines Version inline ('every upload becomes an immutable Version') before Figure 1."
+    },
+    {
+      "text": "Week-one use: includes the six gotchas and what to do in week one (runbooks, starter tickets INGEST-310 and INGEST-322, the weekly sync)",
+      "passed": true,
+      "evidence": "Section 4 'Six traps' (line 109) has six rows matching the notes' six gotchas: local POLICY_MODE=strict, 'Fixing' a Version (immutable), breaking schema change needs a new dataset major version, UTC timestamps, Notifier fire-and-forget (a missing email is not a failed upload), retention 30 days vs 1 year. Section 5 (line 124) maps all eight checklist items: runbooks 'replay-dlq' and 'quarantine-release' (item 4), 'INGEST-310 (add a column type to the Schema Registry validator) or INGEST-322 (improve the quarantine email wording)' (item 7), and 'Join the weekly ingestion sync (Wednesdays 10:00 CET) and the Friday incident review' (item 8)."
+    },
+    {
+      "text": "Figures: retry behaviour (3 attempts, backoff 30 s, 2 min, 10 min, then the dead-letter queue) and the 15-minute publish target for files up to 1 GB are right, and the notes' ambiguity between attempts and retries is flagged or handled without silently contradicting the notes",
+      "passed": true,
+      "evidence": "Section 3 table: 'The message is retried (3 attempts, delays of 30 s, 2 min and 10 min; the exact count is open, see 6 question 1), then moves to the DLQ', matching 'Retries: 3 attempts with backoff 30 s, 2 min, 10 min. Then DLQ.' Panel key facts: '3 attempts, then the dead-letter queue (DLQ) pages on-call' and 'published within 15 min for files up to 1 GB (target)'; Section 2: 'The target is publication within 15 minutes for files up to 1 GB.' The ambiguity is flagged: Section 6 Q1 quotes the notes' '3 failed attempts' and 'retried 3 times' beside the three delays and shows the consequence (about 2.5 minutes vs about 12.5 minutes before on-call is paged; checked: 30 s + 2 min = 2.5 min, 30 s + 2 min + 10 min = 12.5 min). Nothing contradicts the notes."
+    },
+    {
+      "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+      "passed": true,
+      "evidence": "Recall 6/6 = 100%. Recovered: K1, K2, K3, K4, K5, K6. Missed: none."
+    }
+  ],
+  "summary": {
+    "passed": 20,
+    "failed": 1,
+    "total": 21,
+    "pass_rate": 0.95
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 0,
+    "errors_encountered": 0,
+    "output_chars": 0,
+    "transcript_chars": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 1684.0,
+    "total_duration_seconds": 1684.0,
+    "note": "executor estimate from file timestamps"
+  },
+  "claims": [
+    {
+      "claim": "The checker finds 0 blockers, 0 majors and 0 minors on report.md; the sibling file gets only the expected machine-only-file note (final_reply.md).",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Re-ran scripts/check_doc.py from skill-snapshot-iter2: report.md 0/0/0 (panel_words 289, human_zone_words 2362); report.evidence.md 0/0/1 (A1 'machine/archive-only file: human-zone rules skipped'). Matches mechanical.json."
+    },
+    {
+      "claim": "All 49 links, including cross-file anchors, resolve (final_reply.md, user_notes.md).",
+      "type": "factual",
+      "verified": true,
+      "evidence": "My own script over report.md and report.evidence.md: 49 links checked, 0 missing files, 0 broken anchors, no duplicate headings. check_doc.py reports 0 internal links for the evidence file, so the executor's manual check was needed and is confirmed."
+    },
+    {
+      "claim": "Both PNGs are 1640 and 1317 px wide (user_notes.md).",
+      "type": "factual",
+      "verified": true,
+      "evidence": "PIL: journey.png 1640x1204, shared-services.png 1317x1070; both inside the rubric's 500-2600 px range."
+    },
+    {
+      "claim": "The 20-row configuration table in the sibling file is identical to the source notes (user_notes.md).",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Parsed both tables: header plus 20 rows in each, all cells identical."
+    },
+    {
+      "claim": "The edge list holds 20 arrows, each with its basis in the notes, and no arrow is inferred so none is dashed (report.evidence.md, Block C).",
+      "type": "factual",
+      "verified": true,
+      "evidence": "journey.dot has 11 edges and shared-services.dot 9; the evidence file lists rows 1-20. I traced all 20 to architecture-notes.md and each is stated. Caveat: the queue-to-worker 'delivers' arrows interpret 'takes a message' (the edge list itself says pull versus push is not stated)."
+    },
+    {
+      "claim": "Section 6 Q1: about 2.5 minutes of waiting if the third failure goes straight to the DLQ, about 12.5 minutes if '3' means retries after a first attempt (derived).",
+      "type": "factual",
+      "verified": true,
+      "evidence": "30 s + 2 min = 2.5 min; 30 s + 2 min + 10 min = 12.5 min (waiting time only). Correctly labelled as derived."
+    },
+    {
+      "claim": "Section 6 Q6: a 5 GB file would land right at the 30-minute transform timeout if time scales linearly (derived).",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Transform p95 is 6 minutes for 1 GB; 5 x 6 = 30 minutes = TRANSFORM_TIMEOUT_S 1800 s in the notes' config table. Labelled derived."
+    },
+    {
+      "claim": "Every arrow in Figure 2 is stated in Sam's notes (Figure 2 caption).",
+      "type": "factual",
+      "verified": true,
+      "evidence": "All 9 arrows (3 into the Policy Engine, 3 into the Raw Zone, 1 to the Schema Registry, 2 to the Notifier) match the 'Called by ...', 'streams the file into the Raw Zone', 'reads the file from the Raw Zone' and 'fetches the Schema contract' statements."
+    },
+    {
+      "claim": "Panel prose is 289 words and the human zone 2,362 words (user_notes.md).",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Matches mechanical.json and my re-run; a broader hand count of the panel including the heading and link text is about 320."
+    },
+    {
+      "claim": "Everything not stated in Sam's notes is marked derived, suggested or guess in the text (final_reply.md).",
+      "type": "quality",
+      "verified": false,
+      "evidence": "Mostly true (cache-staleness tip, suggested order, ticket-to-topic mapping and repo guesses are all labelled) but the universal claim is overstated: unmarked writer glosses remain, e.g. 'Only its status moves on' (Version row), 'so the transform is the slow step', 'Setting it explicitly is safe either way', trap-column phrases such as 'Paging people over quarantines', the 'four steps' split of the Transform Worker's work, and the reading-time minutes. Low impact."
+    },
+    {
+      "claim": "No verdict, decision or risk block was added because the sources contain nothing to judge (user_notes.md).",
+      "type": "process",
+      "verified": true,
+      "evidence": "report.md uses the explainer variant: mental model, 5-row table, key facts, basis line, Read next; there is no verdict, decisions or risk table."
+    },
+    {
+      "claim": "Both diagrams were viewed and re-laid out before delivery; one scratch .dot written through PowerShell was deleted (user_notes.md, final_reply.md).",
+      "type": "process",
+      "verified": false,
+      "evidence": "No transcript exists, so the process cannot be confirmed. The final PNGs are legible and the outputs folder holds only the two intended .dot files, which is consistent with the claim."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+      "Gaps in Sam's notes flagged rather than resolved: attempts vs retried 3 times vs three backoff delays; POLICY_MODE default (strict in the config table, allow-all in the local stack); the smoke-test command; which repo owns which component; the Catalog status of a dead-lettered Version; what the upload call returns and who receives webhooks; where sample files and the Catalog UI are.",
+      "Writer inferences, all labelled in the text: the 2.5 vs 12.5 minute arithmetic, the cache staleness window, the 5 GB transform-timeout headroom (assumes linear scaling), the repo-to-component guess from repo names, the ticket-to-topic mapping.",
+      "Selection and order of the 5 things that matter is the writer's judgment; whether the queue pushes or workers pull is not stated, so the arrows show message flow; status 'draft', 'Sam' as the person to ask, and the reading-time minutes are assumptions or rough estimates."
+    ],
+    "needs_review": [
+      "report.evidence.md may show up as a separate page in the wiki; the executor offers to paste it back into Blocks B and C if a single file is preferred.",
+      "HTML details blocks are not documented for Azure DevOps repo pages and the wiki rendering was not tested.",
+      "Human zone is 2,362 words against the 2,500-word advisory limit."
+    ],
+    "workarounds": [
+      "Block A (AI input) repurposed as 'Maintenance notes for the next editor' because the handoff template does not fit an explainer; rubric A4 was not applied in full.",
+      "The 20-row config table and 20-row edge list moved to the sibling report.evidence.md because they pass the block-length threshold, leaving pointers in Blocks B and C.",
+      "Process slip admitted: one scratch .dot written through PowerShell against the create/edit-only rule, then deleted; all deliverables were created with the create and edit tools."
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Mental model first: the first screen or two has a diagram showing the main flow (at least the eight core components) ...",
+        "reason": "The eight core components are never named, so the verdict depends on counting rules. In this run Figure 1 has eight boxes besides Customer (including a DLQ box) but only seven of the eleven named components; the Raw Zone is missing. List the eight (for example Uploader API, Message Queue, Raw Zone, Validation Worker, Transform Worker, Quarantine Store, Curated Zone, Catalog) and say whether the DLQ counts."
+      },
+      {
+        "assertion": "A1 Zones marked and ordered: ... whose heading or banner names its audience ...",
+        "reason": "The skill's standard zone heading ('START HERE' with a person glyph) does not literally name an audience. This run passes only because the H1 and metadata line say 'for new engineers' / 'for Priya'. State whether the zone heading itself must name who it is for, or whether the glyph plus START HERE convention is accepted."
+      },
+      {
+        "assertion": "E1 E2 Honesty: content not in the inputs ... is labelled as such; ambiguities in the notes are flagged ...",
+        "reason": "Too generic: it would pass if only the attempts-vs-retries ambiguity were flagged. The notes contain other planted conflicts this run caught (POLICY_MODE strict in the config table vs allow-all locally; 'Schema Registry validator' in INGEST-310 vs the component list; Version status while dead-lettered). Name them, and add a check that derived numbers (2.5 vs 12.5 minutes; 6 min x 5 GB = the 1800 s timeout) are arithmetically right."
+      },
+      {
+        "reason": "Nothing asserts that a multi-file deliverable is portable, although the user asked for 'a doc we can drop into the team wiki repo'. check_doc.py reports 0 internal links for report.evidence.md, so its cross-file anchors are not machine-checked; I verified all 49 links by script. Add a B4-style assertion (all links, cross-file anchors and image paths resolve) or extend the checker."
+      },
+      {
+        "assertion": "A3 Machine and archive blocks are collapsed in details blocks ... long material sits in a sibling file behind a pointer",
+        "reason": "Ambiguous for pointer-only blocks and for the archive-only sibling file, whose tables are not in details blocks. Say explicitly that a one-line pointer block or an archive-only sibling satisfies the collapse requirement. The same applies to F3's 'file path' (folder name plus file names was judged enough) and to C5, which does not say whether writer-made counts and reading-time minutes in the panel need a derived label."
+      }
+    ],
+    "overall": "Mostly solid: the content checks (six gotchas, week-one items, retry and 15-minute figures, concepts before flows) and the diagram checks are discriminating. Weak spots are the unnamed 'eight core components', the loosely worded A1 and A3 pass conditions, and a generic honesty check that would not separate a run that flagged one ambiguity from one that flagged all of them."
+  }
+}

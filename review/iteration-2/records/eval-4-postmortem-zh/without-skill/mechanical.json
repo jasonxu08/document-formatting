@@ -1,0 +1,85 @@
+{
+  "files": {
+    "report.md": {
+      "file": "<workspace>\\iteration-2\\eval-4-postmortem-zh\\without_skill\\run-1\\outputs\\report.md",
+      "stats": {
+        "lines": 270,
+        "headings": 19,
+        "internal_links": 6,
+        "images": 3,
+        "diagram_blocks": 0,
+        "details_blocks": 0,
+        "zones": [],
+        "panel_words": 359,
+        "human_zone_words": 3851
+      },
+      "gate": {
+        "blockers": 0,
+        "majors": 4,
+        "minors": 6
+      },
+      "blockers": [],
+      "majors": [
+        {
+          "rule": "A1",
+          "line": 0,
+          "message": "no <!-- zone:... --> markers; human-read and machine/archive content are not marked (for a large document with raw material this is a Blocker)"
+        },
+        {
+          "rule": "C2",
+          "line": 14,
+          "message": "the first section runs to about 359 words (budget 300, tables and picture excluded); keep the panel short and link to detail"
+        },
+        {
+          "rule": "A2",
+          "line": 69,
+          "message": "23-row table in the human zone; summarise it and move the full table to the archive"
+        },
+        {
+          "rule": "A2",
+          "line": 241,
+          "message": "28-line code block in the human zone; move raw material to the machine/archive zone"
+        }
+      ],
+      "minors": [
+        {
+          "rule": "F2",
+          "line": 1,
+          "message": "the human zone runs to about 3850 words (advice: 2500); check that detail only some readers need has moved to the archive"
+        },
+        {
+          "rule": "D6",
+          "line": 54,
+          "message": "no source file beside figures/fig1-phases.png (.dot, .mmd, .py ...); keep it so the image can be regenerated"
+        },
+        {
+          "rule": "D6",
+          "line": 101,
+          "message": "no source file beside figures/fig2-propagation.png (.dot, .mmd, .py ...); keep it so the image can be regenerated"
+        },
+        {
+          "rule": "B6",
+          "line": 136,
+          "message": "heading '6. 改进项与优先级建议' is a link target but contains punctuation or emoji; its anchor may differ between viewers - use plain words and digits"
+        },
+        {
+          "rule": "D6",
+          "line": 144,
+          "message": "no source file beside figures/fig3-budget.png (.dot, .mmd, .py ...); keep it so the image can be regenerated"
+        },
+        {
+          "rule": "B6",
+          "line": 194,
+          "message": "heading '7. 待确认事项' is a link target but contains punctuation or emoji; its anchor may differ between viewers - use plain words and digits"
+        }
+      ]
+    }
+  },
+  "gate": {
+    "blockers": 0,
+    "majors": 4,
+    "minors": 6,
+    "passed": false
+  },
+  "note": "Blocker/Major/Minor findings of scripts/check_doc.py; passed = no Blocker and at most 2 Majors."
+}

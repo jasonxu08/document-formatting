@@ -1,0 +1,10 @@
+service,owner_team,criticality,runtime,depends_on,rollback_path,staging_result
+gateway,Platform,critical,v8,auth-service;catalog-service;share-service;connector-service,yes,pass
+auth-service,Identity,critical,v8,user-store,no,fail (2 of 148 integration tests)
+user-store,Identity,critical,v8,,no,not tested (no staging environment)
+catalog-service,Data,high,v8,auth-service;search-index;map-service,yes,pass
+share-service,Data,high,v8,auth-service;catalog-service;notify-service,yes,pass
+connector-service,Integration,medium,v8,auth-service;catalog-service,yes,pass
+map-service,Data,medium,v8,auth-service;catalog-service,yes,pass
+search-index,Data,medium,v8,,yes,pass
+notify-service,Platform,low,v8,auth-service,yes,pass

@@ -1,0 +1,10 @@
+service,depends_on,depended_on_by,dependent_count,mutual_with
+gateway,auth-service;catalog-service;share-service;connector-service,,0,
+auth-service,user-store,catalog-service;connector-service;gateway;map-service;notify-service;share-service,6,
+user-store,,auth-service,1,
+catalog-service,auth-service;search-index;map-service,connector-service;gateway;map-service;share-service,4,map-service
+share-service,auth-service;catalog-service;notify-service,gateway,1,
+connector-service,auth-service;catalog-service,gateway,1,
+map-service,auth-service;catalog-service,catalog-service,1,catalog-service
+search-index,,catalog-service,1,
+notify-service,auth-service,share-service,1,

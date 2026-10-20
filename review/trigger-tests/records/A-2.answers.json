@@ -1,0 +1,26 @@
+{
+  "answers": [
+    {"id": 1, "skills": ["document-formatting"], "why": "Multi-section findings write-up for managers; human-first report."},
+    {"id": 2, "skills": ["document-formatting"], "why": "Root-cause write-up for the wiki is a long human-read report."},
+    {"id": 3, "skills": ["document-formatting"], "why": "Design/decision doc with options and migration plan for board review."},
+    {"id": 4, "skills": ["pr-reviewer", "document-formatting"], "why": "PR review skill first, then document-formatting for the multi-file review report."},
+    {"id": 5, "skills": ["document-formatting"], "why": "Investigation summary for non-technical owner needing findings and decisions."},
+    {"id": 6, "skills": ["document-formatting"], "why": "Handoff note read by people and a coding agent."},
+    {"id": 7, "skills": ["document-formatting"], "why": "Test report for release manager go/no-go decision."},
+    {"id": 8, "skills": ["document-formatting"], "why": "Explainer doc with six related components; needs reading path and diagram."},
+    {"id": 9, "skills": ["document-formatting"], "why": "Security assessment document with findings by severity and recommendations."},
+    {"id": 10, "skills": ["document-formatting"], "why": "Detailed post-mortem report for whole team with multi-service call relationships."},
+    {"id": 11, "skills": ["docx"], "why": "Markdown to Word conversion; document-formatting excludes Word files."},
+    {"id": 12, "skills": [], "why": "Trivial typo fix; no skill applies."},
+    {"id": 13, "skills": [], "why": "Single paragraph rewrite, not a large document."},
+    {"id": 14, "skills": [], "why": "One diagram added to an existing doc, not writing a large document."},
+    {"id": 15, "skills": [], "why": "Writing a unit test; no listed skill matches."},
+    {"id": 16, "skills": ["pdf"], "why": "Script producing PDF output; pdf skill, not document-formatting."},
+    {"id": 17, "skills": ["xlsx"], "why": "Excel spreadsheet with chart creation."},
+    {"id": 18, "skills": [], "why": "Proofreading only, explicitly no restructuring; not writing a large document."},
+    {"id": 19, "skills": [], "why": "Short three-bullet chat summary; no skill applies."},
+    {"id": 20, "skills": ["pdf"], "why": "Extracting tables from a PDF file."},
+    {"id": 21, "skills": ["document-formatting"], "why": "Restructure long notes for readers while keeping archive material."},
+    {"id": 22, "skills": ["document-formatting"], "why": "Rewrite long post-mortem: glanceable overview for VP, details for engineers."}
+  ]
+}

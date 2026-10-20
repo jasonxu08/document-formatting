@@ -1,0 +1,46 @@
+// Figure 2 of report.md: what each stage reads, writes and asks, and who asks the Policy Engine.
+// Every node and edge comes from architecture-notes.md ("The pieces"). Nothing is inferred.
+// Status writes to the Catalog are drawn in Figure 1 (flow-map.dot) and not repeated here.
+// Encoding: white boxes = the three stage components, grey boxes = other services, cylinders = stores,
+// ovals = people, blue = Catalog (same as Figure 1), orange = expected failure path.
+// Render: dot -Tpng -Gdpi=150 report.assets/touch-map.dot -o report.assets/touch-map.png
+digraph touch {
+  rankdir=LR; pad=0.25; nodesep=0.36; ranksep=1.15; bgcolor="white"; newrank=true;
+  graph [fontname="Arial"];
+  node [shape=box, style="rounded,filled", fillcolor="#F2F4F7", color="#98A2B3",
+        fontname="Arial", fontsize=17, margin="0.18,0.12"];
+  edge [color="#667085", fontname="Arial", fontsize=15, arrowsize=0.9];
+
+  "Uploader API"      [label="Uploader API\n(stage 1)",      fillcolor="#FFFFFF", color="#475467", penwidth=1.6];
+  "Validation Worker" [label="Validation Worker\n(stage 2)", fillcolor="#FFFFFF", color="#475467", penwidth=1.6];
+  "Transform Worker"  [label="Transform Worker\n(stage 3)",  fillcolor="#FFFFFF", color="#475467", penwidth=1.6];
+
+  "Raw Zone"         [shape=cylinder, label="Raw Zone\n(originals, 1 year)"];
+  "Quarantine Store" [shape=cylinder, label="Quarantine Store\n(30 days)", fillcolor="#FEF0C7", color="#DC6803"];
+  "Curated Zone"     [shape=cylinder, label="Curated Zone\n(lakehouse tables)"];
+  "Catalog"          [shape=cylinder, label="Catalog\n(metadata)", fillcolor="#D1E9FF", color="#1570EF", penwidth=2.4];
+  "Schema Registry";
+  "Policy Engine";
+  "Notifier";
+  "Dataset owner"    [shape=ellipse, style=filled];
+
+  { rank=same; "Uploader API" -> "Validation Worker" -> "Transform Worker" [style=invis]; }
+  { rank=same; "Catalog" -> "Schema Registry" -> "Quarantine Store" -> "Raw Zone" -> "Notifier" -> "Curated Zone" [style=invis]; }
+  { rank=same; "Policy Engine" -> "Dataset owner" [style=invis]; }
+
+  "Uploader API"      -> "Raw Zone"         [label="streams file in"];
+  "Uploader API"      -> "Policy Engine"    [label="asks: may this\ntenant upload?"];
+
+  "Validation Worker" -> "Raw Zone"         [label="reads file"];
+  "Validation Worker" -> "Schema Registry"  [label="fetches contract"];
+  "Validation Worker" -> "Quarantine Store" [label="copies failed file", color="#DC6803", fontcolor="#B54708"];
+  "Validation Worker" -> "Notifier"         [label="notifies: quarantined", color="#DC6803", fontcolor="#B54708"];
+
+  "Transform Worker"  -> "Raw Zone"         [label="reads file"];
+  "Transform Worker"  -> "Curated Zone"     [label="writes tables"];
+  "Transform Worker"  -> "Notifier"         [label="notifies: published"];
+
+  "Catalog"           -> "Policy Engine"    [label="asks: who may\nsee a dataset?"];
+  "Curated Zone"      -> "Policy Engine"    [label="asks: row-level\nrules"];
+  "Notifier"          -> "Dataset owner"    [label="emails or\nwebhooks"];
+}

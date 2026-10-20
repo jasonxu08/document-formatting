@@ -1,0 +1,251 @@
+{
+  "expectations": [
+    {
+      "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input or archive material sits last in its own labelled zone; nothing for people follows machine content",
+      "passed": false,
+      "evidence": "No zone markers at all (mechanical.json stats.zones = [] and Major A1 'no <!-- zone:... --> markers'). The document does not open with a human zone whose heading or banner names its audience: line 1 is the title, lines 3-10 are a metadata table, and its row ‘读者 | 研发团队全体；技术负责人张伟据此决定改进项的先后’ (line 8) is exactly the header pointer line the expectation says does not count; the first heading is ‘## 1. 摘要与待决事项’ (line 14). The raw chat does sit last (Appendix C, line 237) and nothing for people follows it, but under a plain ‘附录 C’ heading, not in a labelled archive or AI-input zone."
+    },
+    {
+      "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+      "passed": false,
+      "evidence": "stats.details_blocks = 0, so nothing is collapsed. The only raw/archive material, the chat log, is an open 28-line fenced block (lines 241-270) under ‘附录 C 原始群聊记录’ (line 237), and Appendices A and B (lines 208-235) are open tables. The Appendix C lead-in (line 239: ‘以下为故障群聊记录原文，共 28 条，未做任何修改…’) does not name a bin (archive or AI input) or say which claim it supports, and the log is not in a sibling file behind a one-line pointer."
+    },
+    {
+      "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+      "passed": false,
+      "evidence": "Lines 1-60 hold only scattered inline links: line 9 (→ 附录 C, inside the metadata table), line 30 (→ 第 6 节, ‘依据和取舍见’), lines 43 and 50 (→ 附录 B). There is no reading-path block telling the reader what each section gives them, and no line saying who can stop where (a search for such wording finds nothing; the only audience text is the ‘读者’ metadata row on line 8). check_doc.py's link-count test passes (no B1 finding), but the judged part of the rule is not met."
+    },
+    {
+      "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive (or is a compact timeline in the human zone with the raw chat log in the archive)",
+      "passed": false,
+      "evidence": "The structure is Summary → Impact → Timeline → Cause, i.e. chronology first. A 23-row, discovery-order timeline table (§3.2, lines 67-93) sits in the main body before the root-cause section (§4, line 95) and before the propagation diagram that is the real mental model (§4.1, lines 99-108); mechanical.json flags it as A2 ‘23-row table in the human zone’. Only §3.1 (5-row phase table) is compact. Terms are mostly defined before use (A1-A6 glossed in the decision box, † defined on line 50), but ‘A7’ is used in the §4.2 table (line 115) before it is explained in §6.4 (line 191). The §1 summary gives a short causal story, which does not satisfy the ‘chronology in the archive or compact’ clause."
+    },
+    {
+      "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+      "passed": false,
+      "evidence": "The H2s are bare topic labels: ‘1. 摘要与待决事项’, ‘2. 影响’, ‘3. 时间线’, ‘4. 根因与促成因素’, ‘5. 做得好的与靠运气的’, ‘6. 改进项与优先级建议’, ‘7. 待确认事项’, then three ‘附录’ headings. Read alone they give a generic postmortem table of contents, not the argument (no cause, no 105-minute / ~3,800-order impact, no 17-vs-10 person-day squeeze). The two decision-type headings (‘摘要与待决事项’, ‘改进项与优先级建议’) do not carry their ask or answer, e.g. the recommended plan."
+    },
+    {
+      "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the conclusion itself, not what the document covers",
+      "passed": true,
+      "evidence": "After the title and a compact metadata table (lines 3-10, plus a one-line no-blame note on line 12) the document goes straight into ‘## 1. 摘要与待决事项’ (line 14). It opens with the finding, not a description of the document: CFG-2231 changed the order-service pool limit 200 → 20, ‘本意只针对测试环境，却落在了全局默认值上’, pushed at 14:02 with no canary (line 16); then impact (line 18), why it took so long (line 20) and a decision box for 张伟 with a recommendation (lines 22-30). check_doc.py raised no C1 finding. Close call: there is no labelled one-line bottom-line or verdict element; the opening causal paragraph carries the conclusion."
+    },
+    {
+      "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words, where one Chinese character counts as 0.6 words), one line per decision and per risk, and verdict, decisions and top risks fit the first screen",
+      "passed": false,
+      "evidence": "mechanical.json stats.panel_words = 359 and Major C2 (line 14: the first section runs to about 359 words, budget 300). The decision is three multi-clause bullets (lines 26-28), not one line, and the panel lists no risks at all, so ‘one line per decision and per risk’ and ‘top risks fit the first screen’ are not met. The decision box itself does sit on the first screen (lines 22-30)."
+    },
+    {
+      "text": "C3 Verdict, decisions and risks are complete and loud in the panel: the verdict has a glyph, confidence and basis; each decision has who, what, by when and a recommendation; at most 5 ranked risks, each with severity and consequence",
+      "passed": false,
+      "evidence": "The panel (lines 14-32) has no verdict line with a glyph, confidence level and basis. The decision (lines 22-30) gives who (张伟), what (which improvement items first) and a recommendation (方案一) but no ‘by when’ (only ‘下个迭代’ in the title). There is no ranked risk list with severity and consequence in the panel at all; the cost of deferring A2 appears only deep in §6.3 point 4 (line 185)."
+    },
+    {
+      "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+      "passed": true,
+      "evidence": "Every decision element is grounded: the options are built only from timeline.md's six items and the ~10 person-day budget (3+8+0.5+0.5+4+1 = 17; option 1 = 9; option 2 = 10, all re-computed and correct); the ranking rationale is stated (line 28, the cumulative table at lines 150-157, lines 180-185); the extra item A7 is labelled ‘候选’ with ‘没有负责人和估算’ (line 191) and rests on 李娜's chat line at 15:03; effect statements are labelled estimates (line 159). No verdict or risk block is fabricated and there are no empty slots. (The unlabelled no-blame sentence on line 12 is an addition but not a verdict, decision or risk.)"
+    },
+    {
+      "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived, merged or de-duplicated numbers say so",
+      "passed": true,
+      "evidence": "Spot-checks against timeline.md all match: 105 min (14:02-15:47), ~3,800 failed orders, ~1,200 users, availability 99.97% → 99.93% vs the 99.95% SLO, six items = 17 person-days, ~10 available (panel lines 16-28, ‘约’ preserved). Derived figures are signalled as sums or differences (‘合计 17 人天’, ‘缺 7 人天’, ‘共 9 人天，余 1 人天’, ‘合计只要 2 人天’). The 38 and 37 minute phase lengths are the writer's own intervals (14:20-14:58, 15:10-15:47); they are shown with their time ranges in §3.1 (lines 58-65) but are not flagged as derived inside the panel itself (minor weakness). The timeline's unreliable ‘约 40 分钟’ CPU duration is deliberately left out of the panel and reconciled in Appendix B."
+    },
+    {
+      "text": "D1 Diagram drawn: the eight related services (gateway, order-service, payment-service, inventory-service, user-service, notification-service, config-center, cache) and their call and push relationships are shown in at least one diagram",
+      "passed": true,
+      "evidence": "figures/fig2-propagation.png (embedded at line 101) draws all eight services (配置中心, 网关, 订单服务, 支付服务, 通知服务, 用户服务, 库存服务, 缓存) with the call edges (grey), the config-center push edges to gateway / order / payment (blue) and the inferred retry edge (red dashed)."
+    },
+    {
+      "text": "D2 Coverage and truth: every one of the eight services appears in at least one diagram, every drawn edge exists in services.csv, and inferred edges are dashed and captioned",
+      "passed": true,
+      "evidence": "All eight services appear as nodes. Every solid edge matches a calls entry in services.csv: config-center→gateway/order/payment, gateway→order/user, order→payment/inventory/user, payment→notification, inventory→cache, user→cache (11 edges; checked in the image and in make_figures.py). The only edge not in services.csv, payment→order ‘重试风暴 *’, is red dashed, starred, explained in the in-image legend (‘重试（* 服务清单未列出此方向）’), in the caption on line 103 and in §7 item 5."
+    },
+    {
+      "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+      "passed": true,
+      "evidence": "All three figures are embedded PNGs that exist (fig1 1980x800, fig2 2200x1420, fig3 1910x666 px, inside 500-2600 px; no B4/D4 finding; diagram_blocks = 0). The first image (fig1, line 54) and the service diagram (fig2, line 101) are both images, no Mermaid. Viewed at 800 px width (downscaled copies): node names, sub-labels, annotations, the legend and the arrow label stay readable, nothing overlaps, and every Chinese glyph renders with no empty boxes."
+    },
+    {
+      "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+      "passed": false,
+      "evidence": "Present: alt text on all three images (lines 54, 101, 144); in-image legends for colour and line meaning (fig2: 直接故障 / 被牵连 / 变更来源 / 资料未提及受影响; 调用关系 / 配置推送 / 重试), which also states the relation types once; figures/make_figures.py sits in the same folder and regenerates all three; Appendix A (lines 208-221) lists each service's call targets. Not met: a caption giving how to read the diagram and its takeaway. The fig1 (line 56) and fig3 (line 146) captions are bare titles with the message only in alt text, and fig2's caption (line 103) explains only the dashed edge and provenance, the takeaway living in the numbered list below. The edge list is not in a labelled archive (the retry edge is not listed as an edge there), and check_doc.py reports D6 ‘no source file beside’ for each PNG (same-stem rule). With no partial credit this fails."
+    },
+    {
+      "text": "E1 E2 Honesty: every judgment has a confidence level and its basis; content not in the inputs (assumptions, suggestions, inferences) is labelled as such; unknowns are listed",
+      "passed": false,
+      "evidence": "Only part met. Labelling and unknowns are good: ‘假设“10 人天”是团队合计’ (line 141), ‘（推断，未验证）’ (line 127), ‘均为…估算，不是实测’ (line 159), ‘A7（候选）’ (line 191), † marks plus the Appendix B reconciliation, and §7 lists 7 unknowns with owners (lines 194-206). But no judgment carries a confidence level (no 把握 / 置信 / high-medium-low anywhere): the root cause, the recommendation of 方案一 (lines 26-28, 180-185) and the ‘做得好 / 靠运气’ judgments (lines 126-134) give a basis but no stated confidence. The panel also presents the writer's inference as fact (‘定位慢，是因为排查先后走了“数据库”和“有没有发布”两条路’, line 20), and the no-blame line (line 12) is an unlabelled addition, admitted only in user_notes.md."
+    },
+    {
+      "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (verdict, decisions, top risks, the file path, where to start) and does not paste the document",
+      "passed": false,
+      "evidence": "final_reply.md is short, does not paste the report, gives the full output path, a recommendation (‘我建议先做 A4、A3、A6、A1、A5（9 人天），把 A2 灰度推送（8 人天）放到后续迭代’, plus the alternative) and where to start (‘报告开头就是摘要和给张伟的决策框’, trade-offs in §6). But there is no verdict: it never states the root cause (CFG-2231) or the impact (105 min, ~3,800 orders, SLO miss). The ‘top risks’ slot is filled by four report-reliability caveats (‘发出前请留意’: source conflicts, A7, A3 benefit, 7 open items) with no severity or consequence, followed by notes about browser scratch files. It reads as a hand-off note, not the panel in miniature."
+    },
+    {
+      "text": "F4 Language: the document, its headings, labels and diagram text are in Chinese, the language of the request, and no glyph shows as an empty box (look at the diagram image)",
+      "passed": true,
+      "evidence": "report.md, every heading, table label, caption and the figure text are in Chinese; only identifiers (CFG-2231, P99, CPU, 5xx, CODEOWNERS, service ids such as order-service) stay Latin, as in the sources. All three PNGs (viewed full size and at 800 px) show no empty glyph boxes; make_figures.py sets Microsoft YaHei."
+    },
+    {
+      "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+      "passed": false,
+      "evidence": "mechanical.json gate: 0 Blockers, 4 Majors, 6 Minors, passed = false. Majors: A1 (no zone markers), C2 (panel 359 words > 300, line 14), A2 (23-row table, line 69), A2 (28-line code block, line 241). mechanical.json covers only report.md (no report.*.md siblings), and 4 Majors already exceeds the allowance of 2."
+    },
+    {
+      "text": "Root cause and factors right: CFG-2231 changed the order-service connection pool limit from 200 to 20 (meant for test only, applied to the global default); the config centre had no value-range validation; the push had no canary; the 5 s latency alert threshold was too lax; the runbook lacked a check of recent config changes; payment retries without backoff amplified the failure",
+      "passed": true,
+      "evidence": "§1 (line 16) and §3.2 (line 71): CFG-2231, merged 13:58, changed the order-service pool limit 200 → 20, ‘本意只改测试环境，却改到了全局默认值’. §4 and the §4.2 table (lines 97, 114-119) give: no value-range validation (plus no per-environment defaults, from the chat), push without canary (‘配置推送没有灰度’), 5 s alert threshold too lax (‘偏松’), runbook missing the ‘先查最近的配置变更’ step, and payment retries without backoff causing a retry storm (CPU 90%) that spreads the failure from order to payment (line 165). All consistent with timeline.md and the chat."
+    },
+    {
+      "text": "Impact right: 105 minutes (14:02 to 15:47), about 3,800 failed orders, about 1,200 affected users, availability down from 99.97% to 99.93% against a 99.95% SLO",
+      "passed": true,
+      "evidence": "Line 18 and the §2 table (lines 36-44): ‘持续 105 分钟’ (14:02–15:47), ‘失败订单约 3,800 笔，受影响用户约 1,200 人’, ‘当月可用性从 99.97% 降到 99.93%，低于 99.95% 的 SLO’. All match timeline.md."
+    },
+    {
+      "text": "Decision for the tech lead: the panel asks Zhang Wei to prioritise the six follow-ups A1-A6, notes that they total about 17 person-days against about 10 available, and recommends which to do first",
+      "passed": true,
+      "evidence": "Lines 22-30: the boxed ‘需要张伟决定：下个迭代先做哪些改进项’ states the 6 items total 17 person-days against about 10 available (‘缺 7 人天’), recommends doing A4, A3, A6, A1, A5 first (9 person-days, 1 spare) with A2 (8 person-days) deferred, names an alternative (A2, A3, A4, A6 = 10) and gives the rationale. All six items A1-A6 appear in the panel by code and name."
+    },
+    {
+      "text": "Raw chat log preserved: the chat excerpt is kept in the archive part or a linked file, not in the human zone, as the user asked",
+      "passed": true,
+      "evidence": "Appendix C (heading line 237, fenced block lines 241-270) keeps all 28 chat lines; a line-by-line comparison with chat-log.txt is identical. It is the last section after all analysis, outside the §1-7 reading flow, and is linked from the metadata table (line 9). Caveat: it is an open, uncollapsed 28-line block in an unlabelled appendix (no sibling file, no details block), which A2/A3 treat as a defect; it is credited here only on ‘kept for reference, not in the main body’."
+    },
+    {
+      "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+      "passed": true,
+      "evidence": "Recall 5/6 = 83%. Recovered: K1, K2, K3, K4, K5. Missed: How the services relate: gateway calls order and user; order calls payment, inventory and user; config-center pushes config to gateway, order and payment.. Only the config-center push targets were stated; the call relations among services were not visible in the first 60 lines."
+    }
+  ],
+  "summary": {
+    "passed": 12,
+    "failed": 11,
+    "total": 23,
+    "pass_rate": 0.52
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 0,
+    "errors_encountered": 0,
+    "output_chars": 0,
+    "transcript_chars": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 2074.2,
+    "total_duration_seconds": 2074.2,
+    "note": "executor estimate from file timestamps"
+  },
+  "claims": [
+    {
+      "claim": "Appendix C reproduces all 28 chat lines verbatim, identical to chat-log.txt (final_reply.md and user_notes.md)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Extracted the fenced block (report.md lines 241-270, 28 lines) and compared it line by line with chat-log.txt (28 non-empty lines): identical."
+    },
+    {
+      "claim": "The six improvement items total 17 person-days; option 1 (A4, A3, A6, A1, A5) is 9 and option 2 (A2, A3, A4, A6) is 10",
+      "type": "factual",
+      "verified": true,
+      "evidence": "From timeline.md: 3+8+0.5+0.5+4+1 = 17; 0.5+0.5+1+3+4 = 9; 8+0.5+0.5+1 = 10. The per-owner split in §6.3 (周杰 3 / 赵敏 4 / 王磊 1 / 李娜 1 for option 1) also adds up."
+    },
+    {
+      "claim": "The five phases last 7 / 11 / 38 / 12 / 37 minutes, sum to 105, and the two longest total 75 minutes (71%)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Re-computed from the timestamps in report §3.1 and the chat: 14:02-14:09, 14:09-14:20, 14:20-14:58, 14:58-15:10, 15:10-15:47; 38+37 = 75, 75/105 = 71.4%; percentages in the table (6.7 / 10.5 / 36.2 / 11.4 / 35.2) are correct."
+    },
+    {
+      "claim": "The timeline's ‘约 25 分钟’ for the database detour and ‘约 40 分钟’ payment CPU conflict with the chat timestamps (DB step 14:27-14:35 = 8 min; 14:22 to 15:31 = 69 min)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Chat-log.txt shows the DB request at 14:27 and the answer at 14:35; payment CPU 90% at 14:22 and recovered at 15:31. 14:27 to 14:52 (thread dump) is indeed 25 min, as Appendix B says. The ‘conflict’ for CPU is arguably only an ambiguity (above 90% could have lasted ~40 min inside that window); the report handles it cautiously by omitting the duration."
+    },
+    {
+      "claim": "The timeline credits 赵敏 at 14:58 for noticing the full thread pool, but 王磊's thread dump at 14:52 found it first (Appendix B)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Chat 14:52 王磊: ‘线程栈里大部分线程都在等连接池’; timeline.md 14:58: ‘赵敏注意到订单服务线程池已满’."
+    },
+    {
+      "claim": "SLO arithmetic: 0.03% used before, 0.04% by the incident (80% of the 0.05% monthly budget), 0.07% total, 0.02 pp over; 105 minutes of full outage would be about 99.77%",
+      "type": "factual",
+      "verified": true,
+      "evidence": "100-99.97 = 0.03; 99.97-99.93 = 0.04; 0.04/0.05 = 80%; 0.07-0.05 = 0.02. 1 - 105/44,640 (31-day month) = 99.765%, i.e. about 99.77%. The figures are the executor's derivations and are labelled as such."
+    },
+    {
+      "claim": "Services and call relationships in fig2 come from services.csv; the retry edge payment→order is not in services.csv and is drawn dashed (user_notes.md, report line 103)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "services.csv lists payment-service → notification-service only; make_figures.py draws the retry arrow with a dashed style and the legend marks it ‘* 服务清单未列出此方向’. All 11 other edges match the csv."
+    },
+    {
+      "claim": "Images were chosen over Mermaid so they render in any viewer, with alt text and captions; figures/ must travel with report.md",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Three PNGs exist at relative paths (figures/fig1-phases.png etc.), no Mermaid blocks, alt text on all three. Captions exist but for fig1 and fig3 are bare titles."
+    },
+    {
+      "claim": "Structural checks with markdown-it found 10 tables, no stray bold markers, and all anchors resolve (user_notes.md)",
+      "type": "process",
+      "verified": true,
+      "evidence": "The report contains 10 tables (metadata, impact, phases, timeline, causes, order, options, open items, Appendix A, Appendix B); check_doc.py reports no B4 finding, so all in-document links and image paths resolve."
+    },
+    {
+      "claim": "The browser preview left two scratch files in a git repository's .playwright-mcp folder, which were deleted; a temporary server shared port 8765 with another process and was stopped (final_reply.md, user_notes.md)",
+      "type": "process",
+      "verified": false,
+      "evidence": "Unverifiable: no transcript exists. The only repository visible to the grader (<repo>) contains no .playwright-mcp folder, which is consistent with, but does not prove, the claim."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+      "Whether ‘about 10 person-days’ is a team total or per person: assumed team total (§6.1), so option 1's parallel plan depends on 周杰 and 赵敏 each having 3-4 days; the 17 person-days were not re-estimated.",
+      "How the timeline and chat were reconciled (chat wins for who/when, timeline for monitoring data): DB detour ~25 min vs 8 min, payment CPU ~40 min vs ~69 min, 赵敏 14:58 vs 王磊 14:52 thread dump, first response 14:12 vs 14:20; all logged in Appendix B.",
+      "The payment→order retry direction is not in services.csv; drawn as a dashed starred edge and listed as an open question.",
+      "Unknown whether the push also changed the payment service's and gateway's own pool limits, whether CFG-2231 was reviewed, and whether 20 is a legitimate test value (the basis for candidate A7).",
+      "The alert text ‘P99 > 5s, sustained 5 min’ implies a 5-minute window, so A3 (threshold only) may save just 1-2 minutes; this is the executor's own inference.",
+      "The SLO arithmetic (0.04 pp = 80% of the monthly budget) is derived by the executor and the availability basis (request vs time) is not stated; assumed request-based.",
+      "Author, date and addressee are unknown: no author field, report date 2026-10-17.",
+      "Rendering was never checked in a real Markdown viewer (browser preview failed); only structural checks with markdown-it and viewing each PNG."
+    ],
+    "needs_review": [
+      "The added line ‘本复盘只讨论流程与系统，不追究个人’ is not from the sources; the executor says to remove it if it is not the team's norm.",
+      "Candidate A7 (distinguish per-environment defaults) has no owner or estimate and needs 周杰 and 李娜 to assess.",
+      "王磊 should confirm the full latency-alert rule (threshold and window).",
+      "张伟 should confirm what ‘10 person-days’ means before the plan is committed."
+    ],
+    "workarounds": [
+      "Browser preview failed (file:// blocked, screenshots only saveable inside the repo); fell back to markdown-it structural checks and viewing the PNGs directly.",
+      "The browser tool left two scratch files in a git repo's .playwright-mcp folder; the executor reports deleting them (not verifiable from the outputs).",
+      "Port 8765 was already used by another process; the executor used a different port and stopped its own server."
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend ..., the diagram source file beside each image, and an edge list or equivalent in the archive",
+        "reason": "Bundles six sub-conditions from two rules, so the verdict hinges on its weakest piece (here the caption takeaway and a labelled archive edge list). check_doc.py's D6 test also accepts only a same-stem source file, so it reports ‘no source file’ for all three PNGs although one make_figures.py in the same folder regenerates them, while the rubric text says ‘script file sits beside each image’. Align the checker and the rubric, and split D5 from D6."
+      },
+      {
+        "assertion": "Raw chat log preserved: the chat excerpt is kept in the archive part or a linked file, not in the human zone, as the user asked",
+        "reason": "Passes for an open, uncollapsed 28-line block in a trailing appendix, the layout that A2 and A3 count as a defect, so it cannot tell an archive from a dump at the end of the page. State what counts (e.g. collapsed or in a sibling file under a labelled archive heading, not inline in the numbered sections) and keep the verbatim 28/28 check, which is solid."
+      },
+      {
+        "reason": "No assertion scores whether the report surfaces the discrepancies and gaps in the fixtures: ‘~25 min wasted on the DB’ vs the chat timestamps (8 min), first response 14:12 vs 14:20, 14:52 thread dump vs 14:58 credit, the payment→order retry edge missing from services.csv, ‘no per-environment defaults’ appearing only in the chat, and the ‘10 person-days’ ambiguity. This run found and reconciled all of them (Appendix B, §7, the dashed edge), so a run that silently picked one source would score the same on content. Add an assertion that conflicts and gaps are named and say which source was used."
+      },
+      {
+        "assertion": "C2 Compact panel: about 300 words of prose or fewer ...",
+        "reason": "‘About 300’ is ambiguous next to the script's hard 300 limit: 359 words fails the checker but could be read as ‘about 300’. Give a number (e.g. at most 330) or defer to panel_words. Also, a panel with no risk lines is only caught indirectly through ‘one line per risk’."
+      },
+      {
+        "assertion": "Decision for the tech lead: the panel asks Zhang Wei to prioritise the six follow-ups A1-A6, notes ... 17 person-days against about 10 available, and recommends which to do first",
+        "reason": "‘Recommends which to do first’ would also pass a recommendation that overshoots the ~10 person-day budget. Require that the recommended set sums to at most 10 person-days (this run: 9) and that the deferred items are named; that is the real quality test of this decision."
+      },
+      {
+        "assertion": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the conclusion itself ...",
+        "reason": "Passes for any report that starts with a summary paragraph. This run has no labelled bottom-line sentence (the first block is a causal narrative) and I credited it on judgement although the rule is Blocker-tier. State whether a one-sentence conclusion (root cause plus the ask) must be the first element."
+      }
+    ],
+    "overall": "The content assertions (root cause, impact, decision, raw log kept verbatim) are met by this no-skill baseline and mostly guard against regression rather than measure the skill. The format assertions discriminate, but several are bundled (D5 D6, E1 E2, A1) or depend on judgement calls (C1 bottom line, C2 ‘about’, raw-log ‘archive part’). The biggest gap is that nothing scores surfacing the source conflicts, which this run did well."
+  }
+}

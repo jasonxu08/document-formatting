@@ -1,0 +1,9 @@
+service,name_zh,owner,calls
+gateway,网关,平台组,order-service;user-service
+order-service,订单服务,交易组,payment-service;inventory-service;user-service
+payment-service,支付服务,交易组,notification-service
+inventory-service,库存服务,交易组,cache
+user-service,用户服务,账号组,cache
+notification-service,通知服务,平台组,
+config-center,配置中心,平台组,gateway;order-service;payment-service
+cache,缓存,平台组,

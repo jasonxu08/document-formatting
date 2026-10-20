@@ -1,0 +1,12 @@
+date,weekday,event,source
+2026-10-14,Wednesday,Platform team notes written,"upgrade-notes.md, header"
+2026-10-23,Friday,Decision due from the Engineering Lead,"upgrade-notes.md, header"
+2026-10-26,Monday,"Earliest start for the Data team (four services, about one week); one Identity engineer's leave begins","upgrade-notes.md, Costs and options"
+2026-10-30,Friday,Last working day before the code freeze,derived (Mon-Fri before 2026-11-01)
+2026-11-01,Sunday,Code freeze starts (only P1 hotfixes; otherwise CAB exception),"upgrade-notes.md, Context"
+2026-11-05,Thursday,Last day to order v8 extended support,"upgrade-notes.md, Costs and options"
+2026-11-12,Thursday,v8 end of security support,"upgrade-notes.md, Context"
+2026-11-13,Friday,End of the Identity engineer's leave,"upgrade-notes.md, Costs and options"
+2026-11-30,Monday,IdentityModel 6.0 promised 'by end of November' (not committed),"upgrade-notes.md, breaking change 3"
+2026-12-15,Tuesday,"Proposed checkpoint on January readiness (vendor library, failing tests, user-store staging)","proposed in report.md, section 4.4"
+2027-01-05,Tuesday,Code freeze ends,"upgrade-notes.md, Context"

@@ -1,0 +1,53 @@
+// Task dependency map for the exports migration handoff.
+// Render: dot -Tpng -Gdpi=110 task-dependencies.dot -o ..\task-dependencies.png
+// An arrow A -> B means "B needs A to be finished first".
+digraph exports_tasks {
+  rankdir=TB;
+  graph [fontname="Arial", nodesep=0.35, ranksep=0.5, pad=0.2, bgcolor="white"];
+  node  [fontname="Arial", fontsize=15, shape=box, style="rounded,filled", penwidth=1.8, margin="0.14,0.09"];
+  edge  [color="#555555", arrowsize=0.9, penwidth=1.5];
+
+  // Done
+  T1 [label="T1  Job definition\nDONE", fillcolor="#d5ecd4", color="#3d8b3d"];
+  T2 [label="T2  Streaming\nCSV writer\nDONE", fillcolor="#d5ecd4", color="#3d8b3d"];
+  T3 [label="T3  Idempotency key +\nexport_runs (staging only)\nDONE", fillcolor="#d5ecd4", color="#3d8b3d"];
+
+  // Blocked on a person or a decision
+  T4 [label="T4  Apply migration 0042\nin production\nBLOCKED:\nDBA window (Q4)", fillcolor="#f8d4d0", color="#b83a2e"];
+  T5 [label="T5  XLS above\n1M rows\nBLOCKED:\nproduct decision (Q1)", fillcolor="#f8d4d0", color="#b83a2e"];
+  T6 [label="T6  Pool 3 to\n6 workers\nBLOCKED:\nbudget decision (Q2)", fillcolor="#f8d4d0", color="#b83a2e"];
+  T7 [label="T7  Email template\n(wiring done)\nWAITING:\nMarketing approval (Q3)", fillcolor="#fdebb8", color="#b8860b"];
+
+  // Not started
+  T8  [label="T8  Map the 3\nunmapped cron jobs\nTO DO: can start now\n(owners: Q5)", fillcolor="#ececec", color="#555555"];
+  T9  [label="T9  Per-tenant rollout:\ninternal, Acme, then all\nTO DO:\nneeds T4, T5, T6, T7", fillcolor="#ececec", color="#555555"];
+  T10 [label="T10  Decommission\nlegacy cron\nTO DO: needs T8, T9", fillcolor="#ececec", color="#555555"];
+  T11 [label="T11  Fix flaky\ncancel test\nTO DO: low priority", fillcolor="#ececec", color="#555555"];
+
+  T1 -> T2;
+  T1 -> T3;
+  T3 -> T4;
+  T2 -> T5;
+  T2 -> T6;
+  T2 -> T7;
+  T4 -> T9;
+  T5 -> T9;
+  T6 -> T9;
+  T7 -> T9;
+  T9 -> T10;
+  T8 -> T10;
+
+  {rank=same; T9; T8;}
+  {rank=same; T10; T11;}
+
+  legend [shape=plaintext, style="", fontsize=14, label=<
+    <table border="0" cellborder="1" cellspacing="5" cellpadding="5">
+      <tr>
+        <td bgcolor="#d5ecd4">Done</td>
+        <td bgcolor="#f8d4d0">Blocked on a decision or slot</td>
+        <td bgcolor="#fdebb8">Waiting on another team</td>
+        <td bgcolor="#ececec">Not started</td>
+      </tr>
+    </table>>];
+  {rank=sink; legend;}
+}

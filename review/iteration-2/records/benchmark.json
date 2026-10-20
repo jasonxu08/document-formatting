@@ -1,0 +1,1208 @@
+{
+  "metadata": {
+    "skill_name": "document-formatting",
+    "skill_path": "<skill>",
+    "executor_model": "claude-sonnet-5.5 (harness default for general-purpose subagents)",
+    "analyzer_model": "claude-sonnet-5.5",
+    "timestamp": "2026-10-17T04:03:00Z",
+    "evals_run": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 22,
+        "failed": 0,
+        "total": 22,
+        "time_seconds": 2435.4,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input or archive material sits last in its own labelled zone; nothing for people follows machine content",
+          "passed": true,
+          "evidence": "report.md line 1 is the marker 'zone:human'; line 2 is the title; line 4 is the metadata line ending 'for Marcus Hale, Engineering Lead'; line 6 is the visible human-zone heading '## [person glyph] START HERE - at a glance' (the skeleton's own wording). The human zone is therefore opened by a real heading plus a banner that names its audience. The machine zone starts at lines 186-187 (marker 'zone:ai-input', heading '[cabinet glyph] Machine and archive zone - skip unless you need the evidence or are an agent continuing this work'). mechanical.json zones = human, ai-input, archive, archive, archive; lines 1-183 are all human content and nothing for people follows line 186. Close call: the H2 itself says START HERE rather than naming Marcus; the audience is named in the metadata line directly above it and in the zone marker."
+        },
+        {
+          "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+          "passed": true,
+          "evidence": "Block A (line 191 'A Handoff context for the next agent') opens with the italic line 'AI input - lets a later agent update this report once Marcus decides, regenerate its pictures and verify its numbers' and its content is inside a details block (lines 195-242). Block B (line 245 'B Decision record') opens 'Archive - the audit trail of what was decided ... Supports the Decisions needed block in the glance panel' and is inside details (249-264). Blocks C (267) and D (276) each open with an 'Archive - ... supports ...' line; C is a two-line pointer to report.evidence.md and report.data/, D is three pointer bullets to the .dot/.py sources and evidence anchors. All four block headings are plain words. The long material (9-row inventory, 36-row incident log, statistics, claim table, date checks) sits in sibling report.evidence.md behind that pointer, and that file starts with its own zone:archive marker. Close call: only 2 of 4 blocks use details; C and D are pointer blocks, which the skeleton and the expectation's last clause allow in place of a details block."
+        },
+        {
+          "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+          "passed": true,
+          "evidence": "Title is line 2. Lines 34-42 are 'Read next' with 7 section links, each followed by what the reader gets and a time, e.g. line 37 '[2 auth-service and user-store must wait for January](#...) - the reasons - 3 min', line 39 'options, cost - 2 min', line 42 'who does what - 1 min'. Line 44: 'Only deciding? Stop here. Checking the plan? Read 2, 4 and 5. Auditing? See the machine zone.' All of it is within 42 lines of the title; mechanical.json has no B1 finding. The descriptors are terse (for example 'terms, table') but do say what each section holds."
+        },
+        {
+          "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive",
+          "passed": true,
+          "evidence": "Order is: glance panel with the dependency map and takeaway (lines 6-44); section 1 (line 46) opens with the mental model 'Six services call auth-service directly, and auth-service rests on user-store ...' and then a glossary 'Terms used in this report' (lines 54-61: the seven, Identity pair, split plan, shim, freeze, CAB exception, extended support, mixed-version check) before sections 2-7 use the vocabulary; then findings (2, 3), options and recommendation (4), plan (5), unknowns (6), next steps (7). Chronology lives in report.evidence.md (Date checks, Method); the body has no investigation narrative. Minor leak: the panel uses 'the shim' (line 27) and 'mixed-version check' (line 10) before their glossary entries (lines 59, 61); Identity pair and CAB are glossed inline in the panel. Accepted because the glossary sits right after the mental model (SKILL.md: 'a short glossary right after the mental model') and inside the first 62 lines."
+        },
+        {
+          "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+          "passed": true,
+          "evidence": "H2 list (lines 6-173): 'START HERE - at a glance'; '1 Seven of nine services are ready and two are not'; '2 auth-service and user-store must wait for January'; '3 Q3 incidents point the same way'; '4 The split costs no more than waiting'; '5 The seven fit before the freeze with no slack'; '6 Five unknowns could change the call'; '7 Next steps if Marcus approves'. Read alone they give the argument (split plan; Identity pair waits; incidents agree; cost is no worse; no slack; five unknowns; next steps). '6 Five unknowns could change the call' and '7 Next steps if Marcus approves' carry their answer or ask."
+        },
+        {
+          "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the conclusion itself, not what the document covers",
+          "passed": true,
+          "evidence": "Line 2 title, line 4 one metadata line, line 6 START HERE heading, line 8 the verdict blockquote; check_doc.py reports no C1 finding. Bottom line (line 10): 'The seven services that passed staging roll back in 10 to 15 minutes, so they move now once a mixed-version check passes. auth-service and user-store (the Identity pair) have no rollback and are not ready, so they wait for January; extended support is needed either way.' That is a conclusion, not a list of topics."
+        },
+        {
+          "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words), one line per decision and per risk, and verdict, decisions and top risks fit the first screen",
+          "passed": true,
+          "evidence": "mechanical.json (and my own re-run of check_doc.py) gives panel_words = 292 against a 300 budget. The verdict (lines 8-12), the 3 decisions (lines 16-18, one list item each) and the 5-row risk table (lines 24-28, one row per risk) all sit within the first 28 lines, well inside the first 60 lines (one or two screens). Close to the limit because the 7-item reading path counts toward the 292 (executor's own note, user_notes item 2.1)."
+        },
+        {
+          "text": "C3 Verdict, decisions and risks are complete and loud in the panel: the verdict has a glyph, confidence and basis; each decision has who, what, by when and a recommendation; at most 5 ranked risks, each with severity and consequence",
+          "passed": true,
+          "evidence": "Verdict (line 8): yellow-circle glyph, 'Go with conditions: seven services before the freeze, auth-service and user-store in January'; line 12: 'Confidence: medium - Platform's staging results and estimates, none re-run by me; high for the Identity pair, lower for the seven's schedule.' Decisions (lines 16-18) each give who/what/when/recommendation: 'Marcus decides whether to approve the split plan ... by Fri 2026-10-23 - recommend: approve'; '... order v8 extended support (18,000 USD a quarter) by Thu 2026-11-05 - recommend: order'; '... request a change advisory board (CAB) exception ... by Fri 2026-10-23 - recommend: ask'. Risks (lines 22-28): exactly 5 rows under the header 'Top risks (ranked by consequence)', a severity glyph per row (1 red, 3 orange, 1 yellow), an Impact column (for example 'No rollback, 4 h restore, every login down') and a 'Where it is handled' link."
+        },
+        {
+          "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+          "passed": true,
+          "evidence": "Every panel item traces to the inputs. The split verdict derives from the notes and services.csv (7 of 9 pass staging; rollback 10-15 min versus none and RTO 4 h for auth-service/user-store; 6.0 uncommitted; one Identity engineer on leave). Decision 1's deadline is the notes' 'Decision needed by Friday 2026-10-23'; decision 2's is 'Must be ordered by 2026-11-05'; risks 1, 3 and 4 come straight from the notes; risk 2 follows from the freeze rule plus Data's week ending Fri 30 Oct (Monday-to-Friday assumption labelled in section 5); risk 5 is hedged as 'not shown tested' and listed as unknown 3 in section 6. Report-owned proposals (decision 3's date, the mid-December review) are labelled Proposal in sections 5-7. The ranking basis is stated ('ranked by consequence') and visible in the Impact column. The optional Key facts slot was dropped rather than filled, and no placeholders remain (B4 clean)."
+        },
+        {
+          "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived, merged or de-duplicated numbers say so",
+          "passed": true,
+          "evidence": "Spot-checked against the fixtures: 10 to 15 minutes and 4 h RTO (notes 'Rollback'); 18,000 USD a quarter and 'order by 2026-11-05' (notes 'Costs and options'); end of support 2026-11-12 (notes 'Context'); Fri 2026-10-23 (notes header); '2 of 148' (services.csv); six dependents (I counted 6 rows listing auth-service: gateway, catalog, share, connector, map, notify). Weekday labels also verified (23 Oct Fri, 26 Oct Mon, 5 Nov Thu). Derived figures say so: the section 1 table caption 'Depended on by = direct dependents, counted from services.csv' and the evidence file's Claim traceability table; the merged 11 Jul pair is disclosed in section 3 ('counted once') and in the incident chart caption."
+        },
+        {
+          "text": "D1 Diagram drawn: the nine related services (gateway, auth-service, user-store, catalog-service, share-service, connector-service, map-service, search-index, notify-service) are shown in at least one diagram",
+          "passed": true,
+          "evidence": "report.assets/dependency-map.png (embedded at line 30, 1474x1137 px) draws all nine services as labelled nodes: gateway, share-service, connector-service, notify-service, catalog-service, map-service, search-index, auth-service, user-store (confirmed by viewing the image)."
+        },
+        {
+          "text": "D2 Coverage and truth: every one of the nine services appears in at least one diagram (a single diagram or an overview plus zoomed views), every drawn edge exists in services.csv, and inferred edges are dashed and captioned",
+          "passed": true,
+          "evidence": "All nine nodes appear in the single dependency map. I compared the 16 drawn edges (dependency-map.dot, cross-checked against the PNG) with services.csv depends_on: gateway -> auth/catalog/share/connector; auth -> user-store; catalog -> auth/search-index/map; share -> auth/catalog/notify; connector -> auth/catalog; map -> auth/catalog; notify -> auth. That is 16 edges with none extra and none missing; catalog<->map is drawn as one two-way orange arrow and both directions exist in the CSV. No edge is inferred (stated in the .dot header and the evidence 'Dependency edges' table), so no dashed edge is needed; the timeline's gateway box is dashed and captioned as a proposal."
+        },
+        {
+          "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+          "passed": true,
+          "evidence": "The first picture a reader meets is the embedded PNG at line 30 (report.assets/dependency-map.png). The file exists (134,121 bytes, 1474x1137 px, inside the 500-2600 range) and there are no diagram code blocks (diagram_blocks = 0). I downscaled it to 800 px wide and viewed it: node labels (roughly 12-14 px tall) and the in-image legend lines (roughly 10-11 px) read clearly, no label or node overlaps another (edges cross but carry no labels), and there are no emoji or empty glyph boxes. incidents.png and timeline.png also read at 800 px; one nit, not affecting this verdict: in timeline.png two dashed vertical lines run through the 'Code freeze: P1 hotfixes only' label."
+        },
+        {
+          "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+          "passed": true,
+          "evidence": "Alt text (line 30) describes the content and colours ('auth-service (red) is the hub with six dependents and user-store (amber) sits behind it; the other seven (grey) passed staging; catalog-service and map-service depend on each other'). Caption (line 32): 'Arrows mean depends on. Takeaway: six services depend on auth-service, the one that is not ready.' Legend inside the image: 'Arrow = depends on. Grey = the seven ... Red and amber = the Identity pair ... Orange = mutual dependency'. The relation is stated once (all edges alike). Source files sit beside each image in report.assets/: dependency-map.dot, incidents.py, timeline.py. The text equivalent is the 16-row 'Dependency edges' table in report.evidence.md (column 'Verified?' = 'yes, services.csv'), pointed to from block D (line 280). incidents.png and timeline.png also have alt text, how-to-read captions with takeaways, and in-chart legends."
+        },
+        {
+          "text": "E1 E2 Honesty: every judgment has a confidence level and its basis; content not in the inputs (assumptions, suggestions, inferences) is labelled as such; unknowns are listed",
+          "passed": true,
+          "evidence": "The verdict carries 'Confidence: medium' with its basis and a split (high for the Identity pair, lower for the seven's schedule), line 12. Line 52 sets the convention: 'Unmarked facts come from the three source files ...; the rest is marked Inference, Assumption or Proposal.' Labels are used consistently: Inference (sections 2 x2, 4, 5), Assumption (sections 2, 4, 5: flat 18,000 USD, a quarter from 2026-11-12, Monday-to-Friday week, freeze limits production only, Marcus can approve the spend), Proposal (section 2 gate, section 5 order, section 6 fallback, section 7 owners and mid-December date). Unknowns: the 5-row table in section 6 with who can settle each, plus 'Not done' (Method item 7) in the evidence file. Close call: sub-judgments such as individual risk ranks carry no separate confidence figure; only the verdict-level confidence plus the labels."
+        },
+        {
+          "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (verdict, decisions, top risks, the file path, where to start) and does not paste the document",
+          "passed": true,
+          "evidence": "final_reply.md (390 words) opens with the verdict (yellow glyph, 'Go with conditions: upgrade seven services before the freeze, move auth-service and user-store to January', confidence medium with its basis), lists the 3 decisions with dates and recommendations, gives 3 top risks, says 'Where to start: the panel at the top of report.md. Stop there if you're only deciding.' and names the file as report.md in the outputs folder (a relative path, no absolute path). It does not paste the report. Extras (assumptions, audit-trail files, checker status) make it longer than a bare miniature, but it stays a summary."
+        },
+        {
+          "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+          "passed": true,
+          "evidence": "mechanical.json: report.md 0 Blockers / 0 Majors / 0 Minors; report.evidence.md 0 / 0 / 1 (informational A1 'machine/archive-only file: human-zone rules skipped'); gate passed. I re-ran check_doc.py and got identical results. Out of scope per the task statement: user_notes.md (executor notes; it trips a B4 false positive only because it mentions the literal tag in inline code on lines 19 and 39) and report.data/upgrade-notes.md (an unedited input copy; only B1 and C1 Majors, which would still total 2)."
+        },
+        {
+          "text": "Verdict and ask: the panel gives a clear recommendation on upgrading before the freeze versus deferring (a split or conditional answer is fine) and names the decision Marcus must make with its deadline (Friday 23 Oct)",
+          "passed": true,
+          "evidence": "Panel line 8: 'Go with conditions: seven services before the freeze, auth-service and user-store in January'. Decision 1 (line 16): 'Marcus decides whether to approve the split plan (seven from Mon 2026-10-26, Identity pair in January) by Fri 2026-10-23 - recommend: approve.' That is a clear split recommendation, the decision Marcus must take, and the Friday 23 Oct deadline (matches the notes' 'Decision needed by Friday 2026-10-23')."
+        },
+        {
+          "text": "Key risks present: the 12 Nov end of support and the missing rollback path for auth-service (and user-store) appear among the top risks",
+          "passed": true,
+          "evidence": "Risk table lines 24-28: row 1 (red) 'Identity pair upgraded before it is ready | No rollback, 4 h restore, every login down' (Identity pair = auth-service and user-store, defined at line 10); row 3 (orange) 'Identity pair on unpatched v8 after 2026-11-12 | No CVE fixes for login unless support is ordered', which is the 12 Nov end of security support. Both are among the five ranked risks. Note the end-of-support risk is framed for the Identity pair only, because the seven move to v10 first."
+        },
+        {
+          "text": "Figures: the report states that auth-service has 6 dependents and accounts for 11 of the 36 incident rows (11 of 35 is also acceptable if the merged 11 Jul pair is disclosed)",
+          "passed": true,
+          "evidence": "Six dependents: section 1 line 50 'Six services call auth-service directly', the table column 'Depended on by' = 6, and the picture alt text 'six dependents'; I confirmed 6 rows of services.csv list auth-service. 11 of 36: section 3 bullet 'auth-service is the incident hub. 11 of 36 records, 380 minutes, and 7 of the 11 SEV1 or SEV2 events (the gateway's SEV1 of 2026-07-11 is the same event as auth-service's, so it is counted once)' and the chart title 'auth-service had 11 of Q3's 36 incident records'. Recomputed from incidents-q3.csv: 36 rows, 11 for auth-service, 380 minutes, 7 SEV1/SEV2 rows."
+        },
+        {
+          "text": "Audit data kept: the 36 incident rows and the 9-service inventory are preserved for audit (archive part or linked files), as the user asked",
+          "passed": true,
+          "evidence": "report.evidence.md holds 'Service inventory' (9 rows) and 'Incident log' (36 rows plus a Note column); I compared every row with the fixtures programmatically: 36 of 36 incident rows and 9 of 9 inventory rows match. report.data/ holds byte-identical copies of upgrade-notes.md, services.csv and incidents-q3.csv (SHA-256 equal to the fixtures, and the hashes are recorded in the evidence file). Both are linked from block C (lines 271-273) of report.md."
+        },
+        {
+          "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+          "passed": true,
+          "evidence": "Recall 5/6 = 83%. Recovered: K1, K2, K3, K4, K5. Missed: auth-service accounts for about a third of the Q3 incidents (11 of 36 records, mostly token-validation timeouts).. K6 (11 of 36 Q3 incidents) is an evidence-level detail; both configurations missed it."
+        }
+      ],
+      "notes": [
+        "The split-plan recommendation is the executor's judgment from three files, rated medium confidence: high that the Identity pair must wait, lower that the seven fit the schedule",
+        "Assumptions: extended support is a flat 18,000 USD for the whole v8 estate and a quarter runs from 2026-11-12; one week means Monday to Friday; the freeze limits production deployments only; Marcus can approve the spend",
+        "Inferences: the 2 failing token-refresh tests may share a cause with the 3 Q3 refresh incidents; a non-P1 fix would not qualify for a CAB exception; the mixed v8/v10 estate is untested; staging results would be re-run in January",
+        "Counting choice: the 2026-07-11 gateway and auth-service SEV1 rows are one event in event totals and two rows in per-service counts",
+        "The 10 to 15 minute rollback estimate is supported but not proven by 5 Q3 rollbacks that were ordinary deploys, not runtime upgrades",
+        "Could not render the Markdown in VS Code or Azure DevOps, so how the numbered list inside a blockquote and the details blocks display is unchecked; the report is dated 2026-10-17 from the system clock",
+        "Skill ambiguity: the 300-word panel budget versus a 7-link reading path (the executor cut every descriptor to 2-3 words to fit)",
+        "Skill ambiguity: A3 says blocks are collapsed in details, but the skeleton says to replace long blocks with a one-line pointer; blocks A and B are collapsed, C and D are pointer blocks",
+        "Skill gap: no named home for verbatim input copies (the executor invented report.data/ with SHA-256 hashes) and no guidance on a decision record or handoff block for a decision report",
+        "No cold-reader test was run by the executor (delegation not allowed); it is scored separately",
+        "Used Copy-Item instead of the create tool for byte-exact copies of the three inputs (hashes verified identical)",
+        "Deleted and re-created two of its own draft files because the create tool cannot overwrite",
+        "Importing the checker as a module wrote a __pycache__ into the skill snapshot scripts folder; the executor deleted it (only check_doc.py remains)",
+        "Made scratch 800 px previews in report.assets/_preview and deleted them (confirmed absent)"
+      ]
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 22,
+        "failed": 0,
+        "total": 22,
+        "time_seconds": 1817.5,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input or archive material sits last in its own labelled zone; nothing for people follows machine content",
+          "passed": true,
+          "evidence": "report.md L1 has <!-- zone:human -->; L2 title; L4 metadata line ends 'for Dana (manager) and the AI agent that continues the work'; L6 opens the human zone with a real zone heading, 'START HERE - at a glance' with the person glyph (the skill's own human-zone heading, not a header pointer line). The machine zone starts at L178 (<!-- zone:ai-input -->) under the heading 'Machine and archive zone - skip unless you need the evidence or are an agent continuing this work'; block A is labelled 'AI input' (L185), archive blocks B (L340-345) and C (L347-373) follow. Nothing for people follows L178 (sections 1-4 all end at L174). CLOSE CALL: the human heading names its audience only through the glyph plus 'START HERE' (Dana is named in the L4 metadata line, not in the heading); accepted because that is the skeleton heading and both zones are marked visibly and with markers. Checker reports no A1 finding."
+        },
+        {
+          "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+          "passed": true,
+          "evidence": "Block A (L183-338): plain heading 'A Handoff context for the next agent'; opening line L185 starts '[robot glyph] AI input - lets you continue the migration without asking Alex ... Supports sections 2 and 3.'; content is inside <details> L187 ... </details> L338. Block B (L341-345): 'Archive - benchmarks, XLS options, dead ends, a dated digest ... supports sections 1 to 4.' followed by the one-line pointer 'Full evidence: [report.evidence.md](report.evidence.md) - ...'; the sibling file exists, starts with <!-- zone:archive --> and an 'Archive - supports report.md' line. Block C (L347-373): 'Archive - how the task map in the panel was built ...' inside <details>. The ~150-line AI block stays inline but collapsed, which the request ('the agent will pick up the work from this same document') and the skill's stated exception allow; the long archive material is in the sibling file."
+        },
+        {
+          "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+          "passed": true,
+          "evidence": "Title at L2. 'Read next' at L37-43 has 5 section links (L39-43), each with what the reader gets and minutes, e.g. '[2 The six decisions](#2-six-decisions-are-open-and-four-of-them-block-the-rollout) - options, evidence, recommendation, 4 min' and '[A Handoff context](#a-handoff-context-for-the-next-agent) - everything an agent needs, agent only'. L45: 'Only deciding? Stop after 2. Agent? Go straight to A.' All within 45 lines of the title; all anchors resolve (my own link check: 22 links in report.md, none unresolved)."
+        },
+        {
+          "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive",
+          "passed": true,
+          "evidence": "The panel (L6-45) gives the conclusion and the task-map picture as the mental model; section 1 (L47-75) then says what exists today and holds a 'Terms' table (JobRunner, Pool, Legacy cron, Tenant flag, Idempotency key, Acme and the SLA, DBA window, Cutover, T1-T11/Q1-Q6 IDs) before the decision, calendar and assumption sections 2-4 that use those terms. The human zone is organised by decision (Q1-Q6) and forward calendar, not by what happened when; the dated work-log digest is in report.evidence.md ('Chronology lives here on purpose'). Minor: the panel itself already uses 'DBA window', 'SLA' and T/Q IDs before the glossary, but it is the pre-section glance block and the glossary follows at once."
+        },
+        {
+          "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+          "passed": true,
+          "evidence": "H1 + H2s of the human zone read alone: 'Exports migration handoff: staging works, the 10 Nov cutover needs four answers by 30 Oct' / 'START HERE - at a glance' / '1 Three of eleven tasks are done and production is untouched' / '2 Six decisions are open and four of them block the rollout' / '3 The 10 Nov date holds only if the blockers clear by 30 Oct' / '4 What is assumed and what is still unknown' - that is the argument (status, decisions, date condition, trust). Decision headings (H3) carry the answer or ask: 'Q1 XLS above 1M rows needs a policy and a ZIP of files is recommended', 'Q2 Three workers miss the Acme SLA and six are expected to fix it', 'Q4 Migration 0042 needs a booked DBA window and a person on call', 'Q6 Keep or move the 10 Nov cutover is decided on 30 Oct'. H2 '4' is a topic-style heading but still an accurate outline entry."
+        },
+        {
+          "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the conclusion itself, not what the document covers",
+          "passed": true,
+          "evidence": "L2 title, L4 one metadata line, L6 panel heading, L8 verdict 'Go with conditions - 10 Nov holds only if four blockers clear by 30 Oct', L10 'Bottom line: CSV exports run on the new JobRunner platform in staging; none of it is in production. Four of six open decisions block the rollout; Alex is on leave 17 Oct to 6 Nov and an AI agent continues unblocked work.' - a conclusion, not a statement of coverage. Checker: no C1 finding (no more than 12 text lines before the first panel element)."
+        },
+        {
+          "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words), one line per decision and per risk, and verdict, decisions and top risks fit the first screen",
+          "passed": true,
+          "evidence": "mechanical.json panel_words = 298 (my re-run of check_doc.py gives the same; my own rough count of L6-45 minus tables and image is about 301 including headings, i.e. about 300). Each of the 6 decisions is one bullet (L16-21) and each of the 5 risks one table row (L27-31) with short cells. Verdict (L8-12), decisions (L14-23) and risks (L25-31) all sit within the first 31 lines. At the limit: 298 of 300 words, reached by dropping the optional Key facts slot (user_notes.md)."
+        },
+        {
+          "text": "C3 Verdict, decisions and risks are complete and loud in the panel: the verdict has a glyph, confidence and basis; each decision has who, what, by when and a recommendation; at most 5 ranked risks, each with severity and consequence",
+          "passed": true,
+          "evidence": "Verdict L8: yellow glyph + 'Go with conditions' as a heading-sized blockquote line; L12 'Confidence: medium - Alex's notes up to 15 Oct, not re-checked; rollout duration is unestimated.' (confidence + basis). Decisions L16-21, each with who, what, by when and 'recommend:', e.g. 'Q2 - Dana decides on +1,200 USD/month for 6 workers by 30 Oct - recommend: approve', 'Q3 - Marketing approves email wording and logo by 30 Oct - recommend: Dana chases now'; invented dates are marked '(suggested)'; L23 states the cost of being wrong once. Risks L25-31: exactly 5 rows ranked by glyph (1 red, 3 orange, 1 yellow), each with an Impact column (e.g. 'No rollout can start, so 10 Nov slips') and a link to where it is handled."
+        },
+        {
+          "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+          "passed": true,
+          "evidence": "The six decisions map one-to-one to open-questions.md items 1-6 (XLS, pool size, email template, DBA window, cron owner, cutover date). The verdict rests on tasks.md (T4-T7 blocked or waiting, T9 depends on them) and open question 6 (30 Oct). Risks 1-4 trace to tasks.md/work-log (T9 dependencies; 21 min vs 15 min SLA on 2026-10-09; XLS stub on 10-06; 3 unmapped cron jobs on 10-15); risk 5 (stale or unpushed work) is grounded in the missing branch/push information and listed under 'Assumed' in section 4 (L162-166). Added dates (20 Oct, 6 Nov, Tue 27 Oct) are labelled '(suggested)'. The empty Key facts slot was omitted. Ranking is traceable through the Impact column and sources, but no explicit ranking criterion is stated. Small stretch: L28 'Monday mornings are the peak' (the log only says Acme 'runs several on Monday mornings')."
+        },
+        {
+          "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived, merged or de-duplicated numbers say so",
+          "passed": true,
+          "evidence": "Spot-checks against the fixtures, all correct: 21 min with 3 parallel exports vs 15-minute SLA (work-log 2026-10-09); +1,200 USD/month for 6 workers (work-log 10-09, open-questions 2); 30 Oct deadline (open-questions 6); 3 unmapped cron jobs (work-log 10-15); 4.2M rows (10-06); 10 Nov cutover (work-log header); 'four blockers' = T4-T7 (tasks.md). Derived items are flagged: '(suggested)' beside 20 Oct and 6 Nov in the panel; report.evidence.md has a table 'Where each number in the panel comes from' that marks '4 of 6' (Q4/T4, Q1/T5, Q2/T6, Q3/T7) as derived from the Depends-on/Status columns, '5 files' as derived (4.2M/1M rounded up; I confirmed 5 at both 1,000,000 and 1,048,576), and the suggested dates. Calendar arithmetic re-verified by script: 30 Oct Fri, 10 Nov Tue, 7 Nov Sat, DBA windows Tue 20/Thu 22/Tue 27/Thu 29 Oct and Tue 3/Thu 5 Nov, 25 Oct is the clock change."
+        },
+        {
+          "text": "D1 Diagram drawn: the eleven related tasks T1-T11 and their dependencies are shown in at least one diagram",
+          "passed": true,
+          "evidence": "report.assets/tasks.png (embedded at L33) was opened and shows T1-T11 as boxes with 12 dependency arrows (T1->T2, T1->T3, T3->T4, T2->T5/T6/T7, T4/T5/T6/T7->T9, T8->T10, T9->T10) and T11 standing alone. 11 related entities with a web of dependencies, so the diagram is warranted."
+        },
+        {
+          "text": "D2 Coverage and truth: every one of the eleven tasks appears in at least one diagram, every drawn dependency edge exists in tasks.md, and inferred edges are dashed and captioned",
+          "passed": true,
+          "evidence": "All eleven nodes T1-T11 are visible in tasks.png. Compared the 12 drawn edges (also in report.assets/tasks.dot and the block C table) with the 'Depends on' column of tasks.md: T2<-T1, T3<-T1, T4<-T3, T5<-T2, T6<-T2, T7<-T2, T9<-T4,T5,T6,T7, T10<-T8,T9, T8 and T11 none - exact match, no extra or missing edge. No edge is inferred (block C states 'none is inferred'), so no dashed edge is required; the only dashed element is the T11 node outline (low priority), not an edge. Node statuses match tasks.md (T7 'waiting', T8-T11 'to do')."
+        },
+        {
+          "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+          "passed": true,
+          "evidence": "The first (and only) diagram is the embedded PNG at L33, ![...](report.assets/tasks.png); the file exists (131,539 bytes, 1381x1056 px, inside the 500-2600 px range); stats show diagram_blocks = 0 (no Mermaid). I viewed it at native size and at a scratch 800 px-wide copy (deleted afterwards): every node label and status line reads clearly (roughly 18 px text at 800 px), boxes and arrows do not overlap, text is Latin only so there are no empty glyph boxes."
+        },
+        {
+          "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+          "passed": true,
+          "evidence": "Alt text (L33): 'Task map: three tasks are done, four blocked or waiting tasks all feed the production rollout T9, which feeds the legacy cron switch-off T10'. Caption (L35): 'Arrows mean \"must finish before\"; green is done, red is blocked on a person, amber is waiting on Marketing, grey is to do. Takeaway: the production rollout (thick outline) needs all of T4 to T7, and each needs someone else's answer.' - how to read, colour legend, relation stated once, takeaway, one focal point (T9 thick outline). Source report.assets/tasks.dot sits beside tasks.png (header gives the re-render command). Edge list: block C (L347-373) table From / Relation / To / Verified for all 12 edges plus a link to tasks.dot. Nit: the white/dashed style of T11 is not in the legend, but its label says 'to do, low priority'."
+        },
+        {
+          "text": "E1 E2 Honesty: every judgment has a confidence level and its basis; content not in the inputs (assumptions, suggestions, inferences) is labelled as such; unknowns are listed",
+          "passed": true,
+          "evidence": "The verdict carries 'Confidence: medium - Alex's notes up to 15 Oct, not re-checked; rollout duration is unestimated.' (L12). A label system is declared in section 4 (L157: 'Alex' / 'derived' / 'suggested') and applied: Q2 fallback '(inferred)', Q4 slots 'derived', Q5 '(inferred, not checked)', Q6 '(suggested, not in the notes)', section 3 table 'Basis' column, block A 'Done when (suggested)', 'suggested pre-flight, not in Alex's notes', 'Assumption: the notes name no approver, so Dana is it', Rule 12 '(suggested; ...)'. Unknowns are listed: section 4 'Unknown, and it could change a decision' (4 bullets), block A 'Not in the notes' (10 bullets), and report.evidence.md flags that the 5M-row/1-worker and 4.2M-row/3-worker runs are not comparable and that the 6-worker case was never measured. CLOSE CALL: some procedural additions in block A (rules 5, 6, 13; steps 6-8) are not individually marked as suggested, and risk severities carry no separate confidence; the overall verdict and every recommendation do carry basis."
+        },
+        {
+          "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (verdict, decisions, top risks, the file path, where to start) and does not paste the document",
+          "passed": true,
+          "evidence": "final_reply.md (about 270 words): verdict 'Go with conditions' with the 10 Nov / 30 Oct condition; six one-line decisions Q1-Q6 with dates and recommendations; three top risks (blockers wait on people, 3 workers miss the 15-minute SLA at 21 min, XLS above 1M rows is a stub); 'Where to read: report.md has the glance panel first. Dana can stop after section 2. The agent goes straight to block A ...'; 'Files are in outputs: report.md, report.evidence.md, ...'; plus brief 'Before you leave' and 'What I assumed' notes. It does not paste the document. The path is given as the relative folder 'outputs' plus the file name, not an absolute path."
+        },
+        {
+          "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+          "passed": true,
+          "evidence": "mechanical.json gate.passed = true: report.md 0 Blocker / 0 Major / 0 Minor; report.evidence.md 0 / 0 / 1 (informational A1 Minor 'machine/archive-only file: human-zone rules skipped'). I re-ran scripts/check_doc.py on both files and got identical output. Totals: 0 Blockers, 0 Majors."
+        },
+        {
+          "text": "Dana's view: the panel says where things stand (how many of the 11 tasks are done, blocked and open) and lists the decisions she must make (XLS above 1M rows, pool size and its cost, DBA window, email template, owner of the 3 cron jobs), each with an option or a recommendation",
+          "passed": true,
+          "evidence": "Where things stand: L8/L10 'none of it is in production', 'four blockers'; the panel picture (L33) labels every one of the 11 tasks with its status (3 'done', 3 'blocked', 1 'waiting: Marketing', 4 'to do'), the alt text says 'three tasks are done, four blocked or waiting tasks', and the first heading under the panel (L47) says 'Three of eleven tasks are done and production is untouched'. Counts match tasks.md (T1-T3 done; T4-T6 blocked, T7 in progress waiting; T8-T11 todo). Decisions L16-21: XLS above 1M rows (recommend ZIP of files), +1,200 USD/month for 6 workers (recommend approve), email wording and logo (Marketing; recommend Dana chases now), DBA window for 0042 (recommend Tue 27 Oct), owner of the 3 unmapped cron jobs (recommend agent investigates first), plus the cutover keep/move call - each with a recommendation. CLOSE CALL: the open (to do) count and the total of 11 are carried by the picture and the L47 heading, not by a prose tally inside the panel text."
+        },
+        {
+          "text": "Cutover risk: states that the 10 Nov cutover depends on tasks T4 to T7 and slips if the decisions land after about 30 Oct",
+          "passed": true,
+          "evidence": "Verdict L8: '10 Nov holds only if four blockers clear by 30 Oct'; risk row L27: 'Four blockers wait on people, not on code | No rollout can start, so 10 Nov slips'; caption L35: 'the production rollout (thick outline) needs all of T4 to T7'; H2 '3 The 10 Nov date holds only if the blockers clear by 30 Oct'; Q6 (L125): 'The rollout (T9) cannot start until T4 to T7 are done, and Alex's notes put the date at risk if decisions slip past 30 Oct.' Matches open-questions.md item 6 and the T9 row of tasks.md."
+        },
+        {
+          "text": "Agent-ready: the AI-input part holds exact commands and paths from the log (for example pytest tests/exports -q, the staging deploy command, jobs/export-dataset.yaml) and an ordered next-steps list that respects the task dependencies",
+          "passed": true,
+          "evidence": "Block A contains, verbatim from the log: 'pytest tests/exports -q', './scripts/deploy.ps1 -Env staging -Service exports-runner', 'docker compose up -d postgres', 'python -m exports.cli run --dataset demo --format csv --rows 100000', 'kubectl get pods -n exports'; paths jobs/export-dataset.yaml, src/exports/streaming_csv.py, src/exports/xls_writer.py, migrations/0042_export_runs.sql, templates/export_ready.html, legacy/crontab.txt, docs/cron-mapping.md, with the repo root stated once (L185). Ordered steps L254-269: 1-5 need no decision (checks, T8, T4 prep, T11, optional dashboards); 6-9 are triggered by answers (T5, T6, T7, T4); step 10 'T4 to T7 done and Dana's written go-ahead: do T9'; step 11 'T8 and T9 done and ...: do T10' - consistent with every Depends-on in tasks.md. The Task board (L234-250) mirrors tasks.md statuses and dependencies."
+        },
+        {
+          "text": "Guardrails and protocol: the AI-input part says what not to do (no in-memory or OFFSET retries, no migration 0042 in production outside the DBA window, no copying secrets) and what to do while decisions are open and where answers are recorded",
+          "passed": true,
+          "evidence": "Rules L271-285: rule 7 'Dead ends, do not retry: loading all rows into memory before writing ... and LIMIT/OFFSET paging'; rule 8 'Never copy production secrets (kv://nimbus/exports/prod/*) anywhere' (also in Mission L192); rule 1 'Do not run a production action yourself (migration, deploy, tenant switch, pool resize, cron change) without Dana's written OK. T4 is run by a DBA in the window', with step 9 'a human DBA applies migration 0042 in the window (T4)' and rule 3 (0042 is staging only) - this covers 'no 0042 in production outside the DBA window', phrased as 'never run it yourself, a DBA applies it in the window' rather than the literal 'outside the window'. 'While decisions are open' (L287-292): work only on steps 1-5, record every question and answer in the Decision log (date, who, their words, source), re-ask Dana at the 19/27/30 Oct checkpoints, set 'asked, no channel' if she is unreachable. Decision log table L294-303 (Q1-Q6 with owner, needed by, status, answer, date, source)."
+        },
+        {
+          "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+          "passed": true,
+          "evidence": "Recall 5/6 = 83%. Recovered: K1, K2, K3, K4, K5. Missed: The agent can continue work that needs no decision (for example mapping the 3 cron jobs) but must not touch production.. The panel says the agent investigates the unmapped cron jobs first, but not what the agent may do alone or that it must not touch production."
+        }
+      ],
+      "notes": [
+        "Today's date: system clock says 2026-10-17 while the user says leave starts 'tomorrow'; the doc uses 'Status as of 2026-10-15' (last log entry).",
+        "Who decides Q2-Q6: the notes name Dana only for Q1; the doc assumes she decides or routes all of them (stated in section 4 and rule 1).",
+        "Meaning of 'cutover': assumed to be every customer on JobRunner (T9 done), with T10 after it.",
+        "All statuses are as Alex reported; repo, staging and production were not opened (branch and push state unknown).",
+        "Notes inconsistency flagged but unresolved: 5M rows in 6 min on 1 worker vs 4.2M rows in 9.5 min on 3 workers, so 'six workers fix it' is unproven.",
+        "Rendering in VS Code / Azure DevOps was not seen; collapsed blocks with #### headings and tables inside <details> are expected to render.",
+        "Human zone is about 2,140 words: under the 2,500 limit but long for a skim.",
+        "Suggested content that is not in the notes and may be unwelcome: dates 20 Oct, 27 Oct, 6 Nov; DBA booking recommendation; staging re-test before enabling Acme; T4 pre-flight; 20-run rule for the flaky test; branch/PR rule; rollback hint; the idea of starting the internal-tenant stage after T4 alone.",
+        "Alex must push his work and add the branch name to block A before leaving (final reply, 'Before you leave').",
+        "Panel first drafted at 464 words (a Major); trimmed to 298 by dropping the optional Key facts slot and shortening captions and link texts.",
+        "Diagram re-laid top-to-bottom (2,397 px to 1,381 px) because its text was only about 10 px high at 800 px.",
+        "Used punctuation-free decision headings instead of the skill's example 'Q1 Allow XLS above 1M rows? Recommend: split', because the headings are link targets.",
+        "Kept the AI-input block inline (collapsed) under the skill's one-self-sufficient-document exception and moved only the archive to report.evidence.md.",
+        "Reported skill friction: panel budget vs six decisions, 'write each fact once' vs a self-sufficient AI block, and no check on effective diagram font size at 800 px."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.95,
+        "passed": 20,
+        "failed": 1,
+        "total": 21,
+        "time_seconds": 1684.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input, archive or reference material sits last in its own labelled zone; nothing for people follows machine content",
+          "passed": true,
+          "evidence": "report.md line 1 is '<!-- zone:human -->', line 2 the H1 'How the ingestion platform works - a first-week explainer for new engineers', line 4 the metadata line ending 'for Priya and later new ingestion engineers', line 6 '## [person glyph] START HERE - at a glance'; no pointer line in the header. The machine side comes last: line 161 '<!-- zone:ai-input -->' with line 162 '## [archive glyph] Machine and archive zone - skip unless you need a lookup table or are an agent updating this page', then Block A (AI input), line 201 '<!-- zone:archive -->' and Blocks B and C. Nothing for people follows it (after Section 6 and the '---' rule come only those three blocks); the checker lists zones human, ai-input, archive in that order with no A1 finding. Close call: the zone heading itself ('START HERE' plus the person glyph) does not literally name an audience; the audience (new engineers, Priya) is named by the H1 and metadata line inside the human zone."
+        },
+        {
+          "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+          "passed": true,
+          "evidence": "Block A ('### A Maintenance notes for the next editor', line 166) opens with '*[robot glyph] AI input - what an agent needs to update this page without breaking it. Paths are relative to the folder that holds report.md.*' and its content sits in the only <details> block (lines 170-199; checker details_blocks=1, no F5 finding). Blocks B (line 202) and C (line 208) are plain-headed, each opens '*[archive glyph] Archive - ... supports ...*' (B: supports 3 Failures and 5 Week one; C: supports Figure 1 and Figure 2) and holds only a one-line pointer: 'Full table: [report.evidence.md](report.evidence.md#b-configuration-reference) - setting, default and note for all 20 settings' and 'Full edge lists: [report.evidence.md](report.evidence.md#c-diagram-edge-lists) - 20 arrows, each with its basis in the notes'. The long material is in the sibling report.evidence.md: I confirmed its 20-row config table is identical to the source notes and its edge list has 20 rows. Close call: the pointer-only blocks B/C and the archive-only sibling's tables are not wrapped in <details>; that fits the 'long material sits in a sibling file behind a pointer' branch and the skeleton's own 'replace the details block with one line' pattern."
+        },
+        {
+          "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+          "passed": true,
+          "evidence": "Title is line 2. 'Read next' (lines 26-33) holds six section links, each with what the reader gets and a time, e.g. line 28 '[1 Six concepts and eleven components](#1-six-concepts-...) - the vocabulary every later section uses (3 min)', line 30 '[3 A bad file is normal, a stuck message is an alarm](#3-...) - failures, retries, the DLQ and who acts (3 min)'. Line 35 says who can stop where: 'Only need the big picture? You can stop here. Starting the checklist? Read 1 and 2, then jump to 5. Before the on-call shadow shift? Add 3. Looking up a setting? Go to [B Configuration reference](report.evidence.md#b-configuration-reference).' Everything sits within 35 lines of the title. My own link script resolved all 49 links and anchors in both files."
+        },
+        {
+          "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive",
+          "passed": true,
+          "evidence": "Mental model first (line 8 'Mental model: every upload becomes an immutable Version ...' plus Figure 1). Section 1 (lines 37-72) then defines the six concepts and eleven components before Sections 2-6 use them (it says 'Later sections use these names without explaining them again'). Order afterwards is flow (2), failures (3), traps (4), week one (5), open questions (6): understanding order, not discovery order. There is no chronology or how-we-found-this narrative in the human zone; provenance sits in archive Block A ('Built from'). Close call: the panel above Section 1 already uses Catalog, Message Queue and DLQ without a glossary, but it is the mental-model summary, spells out 'dead-letter queue (DLQ)', and defines Version inline in the mental-model sentence."
+        },
+        {
+          "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+          "passed": true,
+          "evidence": "H2s read alone: 'START HERE - at a glance' / '1 Six concepts and eleven components make up the platform' / '2 Every upload follows four steps and the Catalog records each one' / '3 A bad file is normal and a stuck message is an alarm' / '4 Six traps catch most newcomers' / '5 Week one means a local stack two runbooks and a starter ticket' / '6 Seven questions the source notes leave open'. That reads as the explainer's outline and argument. No heading is a bare label ('Background', 'Details') or an open question; Section 6 states what it contains rather than posing a question, and the ask (ask Sam or the team) is in its first line."
+        },
+        {
+          "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the mental model itself, not what the document covers",
+          "passed": true,
+          "evidence": "Line 2 title, line 4 the single metadata line, line 6 '## [person glyph] START HERE - at a glance', line 8: '**Mental model:** every upload becomes an immutable *Version*, background workers advance its status from `received` to `validated` to `published` (or `quarantined`), and the Catalog, not the Message Queue, is the record of that status.' That is the model itself, not a description of the document, and nothing (background, method, TOC) precedes it. Checker raises no C1 finding."
+        },
+        {
+          "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words), and the mental model, the few things that matter and the reading path fit the first screen or two",
+          "passed": true,
+          "evidence": "mechanical.json panel_words = 289 for report.md; my re-run of check_doc.py gives the same. A broader hand count that also includes the heading, caption and Read-next link text is about 320, still 'about 300'. The whole panel spans lines 6-35: mental model (8), Figure 1 (10-12), 5-row table (14-20), key facts (22), basis (24), Read next (26-33), stop-where line (35). Figure 1 is 1640x1204 px, about 587 px tall at 800 px wide, so the panel is roughly 1.5-2 rendered screens."
+        },
+        {
+          "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+          "passed": true,
+          "evidence": "The document has no verdict, decision or risk block (user_notes: 'considered and rejected ... a risk table (no risks to rank)'); the explainer variant is used instead. Each of the five 'things that matter' traces to the notes: asynchronous plus 'Catalog is the source of truth ... NOT the queue'; Gotcha 1 (Versions immutable); the Failure-handling paragraph; 'Delivery is at-least-once, so every worker must be idempotent'; Gotcha 4 (POLICY_MODE). The table is an unranked selection (no severity or ranking claimed). Minor: the trap-column phrasings (e.g. 'Paging people over quarantines') are the writer's gloss and are not marked."
+        },
+        {
+          "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived or inferred numbers say so",
+          "passed": true,
+          "evidence": "Spot-checks against architecture-notes.md: 'published within 15 min for files up to 1 GB (target)' = 'Target: published within 15 minutes for files up to 1 GB'; 'typical file 50 to 500 MB, hard limit 5 GB' = 'Typical file: 50 to 500 MB. Maximum: 5 GB' (and MAX_UPLOAD_MB 5120); '3 attempts, then the dead-letter queue (DLQ) pages on-call' = 'Retries: 3 attempts ... Then DLQ. DLQ messages page the on-call engineer'; 'quarantine kept 30 days, raw uploads 1 year' = the retention lines (also the Figure 1 labels 'kept 30 days', 'after 3 failed attempts'). 'The 5 things' is the table's own row count. The only unsourced numbers are the writer's reading-time minutes in Read next (3, 2, 3, 1, 2, 2 min) and the structural counts in link text ('Four steps', 'Seven open questions'), which are navigation aids rather than claims about the platform and are not labelled as estimates."
+        },
+        {
+          "text": "D1 Diagram drawn: the eleven related platform components (Uploader API, Message Queue, Validation Worker, Schema Registry, Quarantine Store, Transform Worker, Raw Zone, Curated Zone, Catalog, Policy Engine, Notifier) are shown in at least one diagram",
+          "passed": true,
+          "evidence": "Two PNG diagrams together show all eleven. Figure 1 (report.assets/journey.png) draws Uploader API, Message Queue, Validation Worker, Transform Worker, Quarantine Store, Curated Zone and Catalog (plus Customer and the DLQ). Figure 2 (report.assets/shared-services.png) draws Catalog, Curated Zone, Uploader API, Transform Worker, Validation Worker, Policy Engine, Raw Zone, Notifier and Schema Registry. Raw Zone, Policy Engine, Schema Registry and Notifier appear only in Figure 2; Message Queue and Quarantine Store only in Figure 1. D2's wording accepts an overview plus a zoomed view, so no single diagram is required to hold all eleven."
+        },
+        {
+          "text": "D2 Coverage and truth: every one of the eleven components appears in at least one diagram (a single diagram or an overview plus zoomed views, the overview's caption saying what it leaves out), every drawn edge exists in the notes, and inferred edges are dashed and captioned",
+          "passed": true,
+          "evidence": "Coverage: all eleven appear in at least one figure (see D1). The overview's caption states its omissions: 'Left out here: Raw Zone, Policy Engine, Schema Registry and Notifier, drawn in Figure 2 in section 1.' Truth: I traced all 20 arrows (11 in journey.dot, 9 in shared-services.dot) to architecture-notes.md and each is stated, e.g. 'puts a validate message on the Message Queue', 'After 3 failed attempts a message goes to the dead-letter queue (DLQ)', 'the file is copied to the Quarantine Store', 'Called by the Uploader API (...), by the Catalog (...) and by the Curated Zone (...)', 'Called by the Validation Worker (on quarantine) and the Transform Worker (on publish)'. No arrow is dashed, and the archive edge list says 'No arrow is inferred, so none is dashed'. Close call: the queue-to-worker 'delivers' arrows interpret 'takes a validate/transform message' (the edge list notes that pull versus push is not stated), but the relationship itself is in the notes."
+        },
+        {
+          "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+          "passed": true,
+          "evidence": "The first diagram is embedded at line 10 as '![Flow of one upload: ...](report.assets/journey.png)'; the file exists (1640x1204 px, inside 500-2600) and the document has no Mermaid or code diagram (checker diagram_blocks=0). I viewed it downscaled to 800x587 and as native-size crops: node labels (15 pt at 150 dpi) and edge labels (13 pt) are readable, no text overlaps other text or nodes (a few labels such as 'copies invalid file' and 'after 3 failed attempts' sit tight against their arrows), and there are no empty glyph boxes. Figure 2 (1317x1070, 800x650 when downscaled) is equally legible."
+        },
+        {
+          "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+          "passed": true,
+          "evidence": "Both images have descriptive alt text (lines 10 and 70). Captions give how to read plus a takeaway: Figure 1 'Arrows run from the component that acts to what it acts on; amber marks the Catalog and the arrows that record a Version's status. Takeaway: validation and transformation are separate queue-driven steps, and each reports to the Catalog.'; Figure 2 'Arrows run from the caller to the service it uses; blue marks the Policy Engine. Takeaway: three components call the Policy Engine ...'. The colour legend is in the captions (amber, blue). Edges carry verbs ('uploads file', 'sends validate message', 'writes tables', 'streams file in', 'fetches contract') and the relation is stated once more in each caption. Sources sit beside the images: report.assets/journey.dot and shared-services.dot next to the PNGs. The edge list is in the archive: report.evidence.md '## C Diagram edge lists' (20 rows with a 'Basis in the notes' column), pointed to from report.md Block C. Each figure has one focal point (Catalog in amber, Policy Engine in blue)."
+        },
+        {
+          "text": "E1 E2 Honesty: content not in the inputs (assumptions, suggestions, inferences) is labelled as such; ambiguities in the notes are flagged rather than silently resolved; unknowns are listed",
+          "passed": true,
+          "evidence": "Writer-derived content is labelled: '(derived from the cache settings, not stated in the notes)' (Section 3), '(suggested order)' and '(derived from the ticket titles)' (Section 5), '(guess)' and '(derived)' (Section 6), the panel's 'Items marked derived, suggested or guess are the writer's own', and the 'draft for team review' status. Ambiguities are flagged, not resolved: Section 6 Q1 (3 attempts vs 'retried 3 times' vs three backoff delays, with the 2.5 vs 12.5 minute consequence, which I verified), Q2 (POLICY_MODE default strict in the config table vs allow-all in the local stack), Q3 (INGEST-310's 'Schema Registry validator' and the repo-to-component mapping), Q4 (Version status while in the DLQ); Section 3's table adds 'the exact count is open, see 6 question 1'. Seven unknowns are listed in Section 6. Close call: a few small writer glosses are unmarked (e.g. 'Only its status moves on' in the Version row, 'so the transform is the slow step')."
+        },
+        {
+          "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (the mental model, the few things that matter, the file path, where to start) and does not paste the document",
+          "passed": true,
+          "evidence": "final_reply.md (about 290 words) gives the mental model ('Mental model: every upload becomes an immutable Version. ... The Catalog, not the queue, is the record of that status.'), the few things that matter ('The traps most likely to bite in week one': three bullets) plus the gaps in the notes, where to start ('the top panel takes about a minute. Then read sections 1 and 2, then section 5, which maps her week-one checklist to the page') and the files ('Files are in the outputs folder you named: report.md, report.evidence.md, report.assets/, user_notes.md'). It does not paste the document. Close call: the file path is given as a folder name plus file names rather than a full path."
+        },
+        {
+          "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+          "passed": true,
+          "evidence": "mechanical.json: report.md 0 blockers, 0 majors, 0 minors; report.evidence.md 0 blockers, 0 majors, 1 minor (A1 'machine/archive-only file: human-zone rules skipped'); gate passed = true. I re-ran scripts/check_doc.py (skill-snapshot-iter2) on both files with identical output. Note: the checker reports 0 internal links for the evidence file, so cross-file anchors are not machine-verified; my own link script found all 49 links in both files resolve."
+        },
+        {
+          "text": "Mental model first: the first screen or two has a diagram showing the main flow (at least the eight core components) and calls out that the Catalog, not the queue, is the source of truth for status",
+          "passed": false,
+          "evidence": "The Catalog call-out is met: line 8 says 'the Catalog, not the Message Queue, is the record of that status' and Figure 1 (line 10, first screen) labels and highlights the Catalog node 'source of truth for status'. The 'at least the eight core components' part is not met: Figure 1 draws seven of the eleven platform components (Uploader API, Message Queue, Validation Worker, Transform Worker, Quarantine Store, Curated Zone, Catalog) plus the external Customer and a DLQ box, and the document's own Section 1 table treats the dead-letter queue as part of the Message Queue, not a twelfth component. The Raw Zone, which the Uploader API writes and both workers read, is left out of the flow (caption: 'Left out here: Raw Zone, Policy Engine, Schema Registry and Notifier') and appears only in Figure 2 at line 70, well below the first two screens. Eight boxes can be counted only by counting the DLQ, so the burden of proof is not met."
+        },
+        {
+          "text": "Concepts before flows: Dataset, Version, Schema contract, Quarantine, Lineage record and Tenant are defined (glossary or definition on first use) before the step-by-step flow that uses them",
+          "passed": true,
+          "evidence": "The Section 1 table (lines 43-50) defines Tenant, Dataset, Version, Schema contract, Quarantine and Lineage record, each with its meaning, before the step-by-step flow in Section 2 (line 76, four numbered steps) that uses Version, Schema contract, Quarantine and Lineage record. Section 1 itself says 'Later sections use these names without explaining them again.' The panel's mental-model sentence also defines Version inline ('every upload becomes an immutable Version') before Figure 1."
+        },
+        {
+          "text": "Week-one use: includes the six gotchas and what to do in week one (runbooks, starter tickets INGEST-310 and INGEST-322, the weekly sync)",
+          "passed": true,
+          "evidence": "Section 4 'Six traps' (line 109) has six rows matching the notes' six gotchas: local POLICY_MODE=strict, 'Fixing' a Version (immutable), breaking schema change needs a new dataset major version, UTC timestamps, Notifier fire-and-forget (a missing email is not a failed upload), retention 30 days vs 1 year. Section 5 (line 124) maps all eight checklist items: runbooks 'replay-dlq' and 'quarantine-release' (item 4), 'INGEST-310 (add a column type to the Schema Registry validator) or INGEST-322 (improve the quarantine email wording)' (item 7), and 'Join the weekly ingestion sync (Wednesdays 10:00 CET) and the Friday incident review' (item 8)."
+        },
+        {
+          "text": "Figures: retry behaviour (3 attempts, backoff 30 s, 2 min, 10 min, then the dead-letter queue) and the 15-minute publish target for files up to 1 GB are right, and the notes' ambiguity between attempts and retries is flagged or handled without silently contradicting the notes",
+          "passed": true,
+          "evidence": "Section 3 table: 'The message is retried (3 attempts, delays of 30 s, 2 min and 10 min; the exact count is open, see 6 question 1), then moves to the DLQ', matching 'Retries: 3 attempts with backoff 30 s, 2 min, 10 min. Then DLQ.' Panel key facts: '3 attempts, then the dead-letter queue (DLQ) pages on-call' and 'published within 15 min for files up to 1 GB (target)'; Section 2: 'The target is publication within 15 minutes for files up to 1 GB.' The ambiguity is flagged: Section 6 Q1 quotes the notes' '3 failed attempts' and 'retried 3 times' beside the three delays and shows the consequence (about 2.5 minutes vs about 12.5 minutes before on-call is paged; checked: 30 s + 2 min = 2.5 min, 30 s + 2 min + 10 min = 12.5 min). Nothing contradicts the notes."
+        },
+        {
+          "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+          "passed": true,
+          "evidence": "Recall 6/6 = 100%. Recovered: K1, K2, K3, K4, K5, K6. Missed: none."
+        }
+      ],
+      "notes": [
+        "Gaps in Sam's notes flagged rather than resolved: attempts vs retried 3 times vs three backoff delays; POLICY_MODE default (strict in the config table, allow-all in the local stack); the smoke-test command; which repo owns which component; the Catalog status of a dead-lettered Version; what the upload call returns and who receives webhooks; where sample files and the Catalog UI are.",
+        "Writer inferences, all labelled in the text: the 2.5 vs 12.5 minute arithmetic, the cache staleness window, the 5 GB transform-timeout headroom (assumes linear scaling), the repo-to-component guess from repo names, the ticket-to-topic mapping.",
+        "Selection and order of the 5 things that matter is the writer's judgment; whether the queue pushes or workers pull is not stated, so the arrows show message flow; status 'draft', 'Sam' as the person to ask, and the reading-time minutes are assumptions or rough estimates.",
+        "report.evidence.md may show up as a separate page in the wiki; the executor offers to paste it back into Blocks B and C if a single file is preferred.",
+        "HTML details blocks are not documented for Azure DevOps repo pages and the wiki rendering was not tested.",
+        "Human zone is 2,362 words against the 2,500-word advisory limit.",
+        "Block A (AI input) repurposed as 'Maintenance notes for the next editor' because the handoff template does not fit an explainer; rubric A4 was not applied in full.",
+        "The 20-row config table and 20-row edge list moved to the sibling report.evidence.md because they pass the block-length threshold, leaving pointers in Blocks B and C.",
+        "Process slip admitted: one scratch .dot written through PowerShell against the create/edit-only rule, then deleted; all deliverables were created with the create and edit tools."
+      ]
+    },
+    {
+      "eval_id": 4,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.96,
+        "passed": 22,
+        "failed": 1,
+        "total": 23,
+        "time_seconds": 1822.3,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input or archive material sits last in its own labelled zone; nothing for people follows machine content",
+          "passed": true,
+          "evidence": "report.md L1 `<!-- zone:human -->`, L2 H1, L4 one metadata line (…面向全体研发团队，决策人：技术负责人张伟), then L6 `## 👤 从这里开始 - 一眼看懂`: a real zone heading (not a pointer line) that opens the human zone with the 👤 human-reader glyph and a 'start here' instruction, the pattern the skill prescribes. Machine material comes last and is labelled: L175 `<!-- zone:ai-input -->` + L176 `## 🗄️ 机器与存档区 - 不需要原始证据、也不是接手这项工作的 AI，可以跳过`, then blocks A (L180), B (marker L201, heading L202) and C (marker L242, heading L243). Checker zones = [human, ai-input, archive, archive]; the last human content is L171 and nothing meant for people follows L175. Judgement call: the heading names its audience through the glyph and the instruction (this zone is for human readers), not by spelling out a reader group; the readers are named only in the L4 metadata line."
+        },
+        {
+          "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+          "passed": false,
+          "evidence": "Met: blocks A (L180-199), B (L202-240) and C (L243-267) are each collapsed in `<details>` (3, balanced), have plain-word headings (`### A 给后续接手者的上下文`, `### B 群聊原文`, `### C 示意图的来源和边清单`) and open with an italic line naming the bin and what it supports (L182 `🤖 AI 输入 - 让接手的人或 AI 知道这份复盘停在哪、决定之后要更新哪里…`; L204 `🗄️ 存档 - 2026-10-09 故障群聊导出…支撑第 3 节的耗时拆解和第 5 节的核对`; L245 `🗄️ 存档 - 概览图是怎么画出来的…支撑第 1 节的链路和第 5 节的第 4 行`). NOT met: long material is not in a sibling file behind a pointer. The raw chat is a 28-line code block (L209-238), over the skill's ~25-line single-block threshold, and the machine zone is 93 lines (75 non-blank), over the ~60-line combined threshold (SKILL.md Step 3). No report.evidence.md or any other sibling Markdown file exists and there is no one-line pointer to one (the only pointer is to services.dot, L250). user_notes.md 2.1 concedes the deviation (kept inline because the user said '留在报告里'), but the final assertion accepts 'a linked file' too, so a sibling file would not have broken the user's request. With the burden on the expectation and one of its four clauses unmet this is a FAIL, though a borderline one: everything else in A3 is done well."
+        },
+        {
+          "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+          "passed": true,
+          "evidence": "Title is L2. L32-39 '接着读' lists six section links, each with what the reader gets and a time, all inside the first 41 lines: L34 `[1 经过与影响](#…) - 出了什么事、影响了谁 · 2 分钟`, L35 `[2 根因] - 七个没拦住的环节 · 3 分钟`, L37 `[4 改进排序] - 张伟的决策依据和备选 · 4 分钟`, L39 `[B 群聊原文](#b-群聊原文) - 存档，核对原话时看`. Who can stop where: L41 `只做决定？读到第 4 节。要核对数字，读第 5 节和 B。` Checker reports no B1 finding (25 internal links)."
+        },
+        {
+          "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive (or is a compact timeline in the human zone with the raw chat log in the archive)",
+          "passed": true,
+          "evidence": "The panel (L8-30) opens with the verdict and the eight-service picture of the push; §1 (L43-74) gives the failure-propagation chain (L49-55) as the mental model and then a glossary `几个会反复出现的词` (L65-72: 连接池上限, 全量/灰度推送, 重试风暴, A1–A6) before §2-§5, which lean on those terms. Chronology: a compact six-phase table in §3 (L104-111, 7+11+38+12+15+22 = 105 min) in the human zone, and the raw chat appears only in archive block B (L202-240). Nit: the panel and the first chain steps (L52 '没有灰度', L54 '没有退避') use 灰度/退避 a few lines before the glossary; tolerable for an R&D audience and it is the placement the skill prescribes ('a short glossary right after the mental model')."
+        },
+        {
+          "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+          "passed": true,
+          "evidence": "The numbered H2s read alone: '配置推送先卡住订单服务再拖垮支付服务' → '根因是误改的配置畅通无阻地到了生产' → '105 分钟里有 38 分钟花在定位上' → '建议先做 A4 A6 A3 A1 A5 共 9 人天 A2 灰度推送后排' → '四处资料对不上 两件事资料里没有'. That is the argument, and the decision heading (§4, L123) carries its answer. The first H2 (L6) is the zone/panel label."
+        },
+        {
+          "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the conclusion itself, not what the document covers",
+          "passed": true,
+          "evidence": "L1 zone marker, L2 H1, L4 the single metadata line, L6 zone heading, then the panel: L8 `🟡 故障已恢复，但让它发生的缺口还没补上` and L10 `结论：CFG-2231 本想只改测试环境，却把订单服务连接池上限的全局默认值从 200 改成 20，14:02 无灰度全量推送：订单提交和支付故障 105 分钟，约 3,800 笔订单失败、1,200 位用户受影响`. It states what happened, why and who was hit, not what the document covers. Checker: no C1 finding."
+        },
+        {
+          "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words, where one Chinese character counts as 0.6 words), one line per decision and per risk, and verdict, decisions and top risks fit the first screen",
+          "passed": true,
+          "evidence": "mechanical.json panel_words = 283 (<= 300); my re-run of check_doc.py --json gives the same 283. One bullet per decision (L16, 73 Chinese characters plus Latin/numbers, about 2 rendered lines) and one 'cost if wrong' line (L18); one table row per risk (L22-26, five rows). The verdict (L8-12), the decision (L14-18) and all five risks (L20-26) sit in the first 26 lines, inside the first screen or two."
+        },
+        {
+          "text": "C3 Verdict, decisions and risks are complete and loud in the panel: the verdict has a glyph, confidence and basis; each decision has who, what, by when and a recommendation; at most 5 ranked risks, each with severity and consequence",
+          "passed": true,
+          "evidence": "Verdict: glyph 🟡 in a heading-sized blockquote (L8), confidence with basis on L12 `根因高（回滚后线程释放、延迟恢复）；改进排序中（收益是推断）；4 处数字待核对`. Decision (L14-18, 🧭 blockquote): who 张伟, what 先做哪些改进项, by when 下个迭代排期前, recommendation `先做 A4 手册、A6 评审、A3 告警、A1 校验、A5 退避（共 9 人天），A2 灰度推送（8 人天）后排`, plus a cost-if-wrong line. Risks (L20-26): exactly five, ranked 🔴🟠🟠🟡🟡 under the header '按再次发生时的影响排序', each with a consequence column and a link. The 'by when' is an assumption (the sources give no date) that is flagged only in §4 L151, not in the panel, but it is present."
+        },
+        {
+          "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+          "passed": true,
+          "evidence": "Each panel element traces to the inputs: the verdict to timeline.md (incident closed, six improvements 待决定优先级); the decision to the user's prompt and timeline.md ('下个迭代大约能腾出 10 个人天'); the risks to timeline factors (no validation, no canary, 5 s alert, runbook, retry without backoff) and chat 15:03; the one risk that goes beyond the inputs is marked '（推断）' (L23). The ranking basis is stated (L20 header; §4 L127 '“这次故障的证据显示它本来能改变什么 ÷ 人天”；这是推断，不是实测，把握：中'). Empty slots are omitted (no Key-facts line). Cross-checking the phase table, sums and owner assignments against the inputs found no unlabelled invented fact."
+        },
+        {
+          "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived, merged or de-duplicated numbers say so",
+          "passed": true,
+          "evidence": "Spot-checks: 200→20, 14:02, 105 分钟, 约 3,800 笔, 1,200 位 all match timeline.md; '迭代约 10 人天' matches '大约能腾出 10 个人天'. Derived numbers say so: '17 人天' = 3+8+0.5+0.5+4+1, panel says '估时相加' and §4 L127 says '（本报告相加得出）'; '共 9 人天' = 0.5+1+0.5+3+4 with the cumulative column at L131-135; '38 分钟' = 14:20→14:58 from chat times, covered by the L47 convention '时长由两份资料里的时间点相减得出' and the §3 table. Small looseness: the panel says '4 处数字待核对' although one of the four (retry direction) is not a number."
+        },
+        {
+          "text": "D1 Diagram drawn: the eight related services (gateway, order-service, payment-service, inventory-service, user-service, notification-service, config-center, cache) and their call and push relationships are shown in at least one diagram",
+          "passed": true,
+          "evidence": "report.assets/services.png, embedded at L28, shows all eight services (配置中心, 网关, 订单服务, 支付服务, 通知服务, 库存服务, 用户服务, 缓存), the 8 call edges, the 3 config-push edges and one dashed retry edge."
+        },
+        {
+          "text": "D2 Coverage and truth: every one of the eight services appears in at least one diagram, every drawn edge exists in services.csv, and inferred edges are dashed and captioned",
+          "passed": true,
+          "evidence": "All eight nodes appear in the image. Edges cross-checked against services.csv: solid grey calls gateway→order-service, gateway→user-service, order-service→payment-service, order-service→inventory-service, order-service→user-service, payment-service→notification-service, inventory-service→cache, user-service→cache (8, all in the csv); red pushes config-center→gateway, →order-service, →payment-service (3, in the csv and in the timeline's 14:02 push). The only edge not in services.csv, payment→order retry, is dashed, labelled '重试(未核实)' in the image and captioned at L30 (`橙色虚线是群聊所说的重试（服务清单里没有，未核实）`); block C row 12 repeats it as '未核实'."
+        },
+        {
+          "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+          "passed": true,
+          "evidence": "The only diagram is the embedded PNG at L28 (`report.assets/services.png`, file exists, 1512x661 px, inside the checker's 500-2600 px range); diagram_blocks = 0, so no Mermaid. I viewed it at full size and at an 800x350 downscale: node names, team tags, the three '推送' labels, '重试(未核实)' and the in-node status text are all legible, nothing overlaps or is cut off, and no glyph is an empty box (Microsoft YaHei is set in services.dot)."
+        },
+        {
+          "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+          "passed": true,
+          "evidence": "Alt text L28 describes the picture in one sentence. Italic caption L30: '怎么看：灰色箭头是调用，红色箭头是 14:02 的配置推送，橙色虚线是群聊所说的重试（服务清单里没有，未核实）。要点：一次推送同时到了三个服务，没有“先试一小部分”的环节。' Colour meaning: arrow colours are explained in the caption; the coloured nodes state their role in the node text ('CFG-2231 的来源', '连接池上限被改成 20', '重试风暴 CPU 超过 90%'), so no colour is unexplained, although there is no formal in-image legend (user_notes 2.6). Relation: '推送' on the three red edges and '重试(未核实)' on the dashed one; the eight identical call edges are stated once in the caption and in L250. Source: report.assets/services.dot sits beside services.png. Edge list: block C L252-265, 12 rows with a verified column."
+        },
+        {
+          "text": "E1 E2 Honesty: every judgment has a confidence level and its basis; content not in the inputs (assumptions, suggestions, inferences) is labelled as such; unknowns are listed",
+          "passed": true,
+          "evidence": "Confidence with basis: L12 (verdict), L80 '置信度高：线程栈显示线程都在等连接池，配置值是 20，回滚后线程释放、延迟恢复', L127 '这是推断，不是实测，把握：中'. Labelling: the L47 convention line ('没有标注的内容来自时间线或群聊原文；“（推断）”是本报告的判断…'), '（推断）' at L23, L86, L94, L117 (also '待王磊确认'), L138 '“如果当时已有”都是推断', L145 '前提是“观察”会自动卡关（资料没写）', and the assumptions paragraph L151 ('下个迭代排期前'是本报告的假设; no A1-A6 started). Unknowns are listed in §5 (L159-171): four source conflicts with who should verify each, plus two things the sources do not say (gateway/payment pool limits, whether CFG-2231 was reviewed). Minor: the 做得好 remark (L119) and the per-risk severity glyphs carry a basis but no explicit confidence."
+        },
+        {
+          "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (verdict, decisions, top risks, the file path, where to start) and does not paste the document",
+          "passed": true,
+          "evidence": "final_reply.md (about 2 KB) carries: the verdict '🟡 故障已恢复，但让它发生的缺口还没补上' with a two-sentence bottom line; '🧭 需要张伟在下个迭代排期前决定先做哪些改进项' with 17 vs about 10 人天 and the recommended 9-人天 set (A2 后排); three top risks; the file location (outputs folder: report.md, report.assets/services.png and .dot, user_notes.md); and '先读：开头的一屏概览，只做决定的话读到第 4 节'. It adds a short list of the four §5 conflicts and two assumptions, but does not paste the document."
+        },
+        {
+          "text": "F4 Language: the document, its headings, labels and diagram text are in Chinese, the language of the request, and no glyph shows as an empty box (look at the diagram image)",
+          "passed": true,
+          "evidence": "Title, metadata line, every heading, table header, caption, zone and block labels and summaries are in Chinese; the diagram text is Chinese (配置中心, 平台组, 推送, 重试(未核实), 连接池上限被改成 20…). Latin text is limited to identifiers (CFG-2231, P99, SLO, CODEOWNERS, service ids in the edge list). Image inspected: no empty glyph boxes."
+        },
+        {
+          "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+          "passed": true,
+          "evidence": "mechanical.json covers report.md (the only Markdown deliverable; no report.*.md sibling exists, user_notes.md is the executor's notes): blockers 0, majors 0, minors 0, gate passed = true. My re-run of check_doc.py --json on report.md gave the same result (25 internal links, 1 image, 3 details blocks, panel_words 283, human_zone_words 2480)."
+        },
+        {
+          "text": "Root cause and factors right: CFG-2231 changed the order-service connection pool limit from 200 to 20 (meant for test only, applied to the global default); the config centre had no value-range validation; the push had no canary; the 5 s latency alert threshold was too lax; the runbook lacked a check of recent config changes; payment retries without backoff amplified the failure",
+          "passed": true,
+          "evidence": "All six present and correct. L10/L51/L80: CFG-2231 changed the order-service pool limit 200→20, meant for the test environment only but applied to the global default. §2 table (L84-92): row 2 config center has no value-range validation (A1); row 4 pushed all at once with no canary/灰度 (A2); row 5 latency alert threshold 5 s too lax (A3); row 6 runbook lacks '先查最近的配置变更' (A4); row 7 payment retries to order-service without backoff (A5; L54 says the retries drove CPU to 90%). The report adds two more links (no mandatory two-person review, labelled as inference; no per-environment defaults, from chat 15:03) without contradicting the sources."
+        },
+        {
+          "text": "Impact right: 105 minutes (14:02 to 15:47), about 3,800 failed orders, about 1,200 affected users, availability down from 99.97% to 99.93% against a 99.95% SLO",
+          "passed": true,
+          "evidence": "L2/L10 '105 分钟', '约 3,800 笔订单失败、1,200 位用户受影响'; §1 L57-61 '约 3,800 笔订单失败，约 1,200 位用户受影响' and '当月可用性从 99.97% 降到 99.93%，低于 99.95% 的 SLO'. The 14:02 to 15:47 window is carried by the §3 phase table (L106 '14:02–14:09' … L111 '15:25–15:47 … 15:47 错误率低于 0.1%，宣布结束', summing to 105); it is never stated as one '14:02 至 15:47' sentence, but nothing is wrong or missing."
+        },
+        {
+          "text": "Decision for the tech lead: the panel asks Zhang Wei to prioritise the six follow-ups A1-A6, notes that they total about 17 person-days against about 10 available, and recommends which to do first",
+          "passed": true,
+          "evidence": "Panel L16: '张伟 在下个迭代排期前决定先做哪些改进项：6 项估时相加 17 人天，迭代约 10 人天。建议先做 A4 手册、A6 评审、A3 告警、A1 校验、A5 退避（共 9 人天），A2 灰度推送（8 人天）后排，详见第 4 节。' Checks: 3+8+0.5+0.5+4+1 = 17 versus timeline.md's 'about 10 person-days'; the recommended five total 9, leaving 1 as buffer (§4 L147). §4 also gives the A2-first alternative."
+        },
+        {
+          "text": "Raw chat log preserved: the chat excerpt is kept in the archive part or a linked file, not in the human zone, as the user asked",
+          "passed": true,
+          "evidence": "The chat is in archive block B (L202-240), inside a collapsed `<details>` in the archive zone; none of it is in the human zone. I extracted the 28 lines of the code block (L210-237) and compared them with fixtures/postmortem-zh/chat-log.txt: identical text and order."
+        },
+        {
+          "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+          "passed": true,
+          "evidence": "Recall 6/6 = 100%. Recovered: K1, K2, K3, K4, K5, K6. Missed: none."
+        }
+      ],
+      "notes": [
+        "The raw chat log was kept inline in a collapsed block instead of a sibling evidence file (28 lines against the skill's ~25-line rule); the executor thinks inline matches the user's intent but concedes a strict reviewer could count it against A3.",
+        "The prioritisation (A4, A6, A3, A1, A5, then A2) is the executor's judgment; the effects are inferences and the A2-versus-A5 order is a close call (the A2-first alternative is laid out in §4).",
+        "The A1 caveat (one global range check cannot stop a value that is legitimate in test) is inferred from a single chat message (15:03) and may enlarge A1's 3-day estimate.",
+        "Four source conflicts are unresolved: payment CPU 'about 40 minutes' vs 69 minutes between chat timestamps; database direction 'about 25 minutes' vs 8; the alert text '已持续 5 分钟' vs the 5 s threshold explanation; the payment→order retry direction is missing from services.csv.",
+        "Assumptions: none of A1-A6 started since 10-09; the decision deadline is 'before next iteration planning'; the report date 2026-10-17 comes from the system clock; the named verifiers are the right owners.",
+        "The 🟡 verdict glyph is stretched to mean 'resolved, but the gaps are open'; the 300-word budget is ambiguous for Chinese (the executor followed the checker's 283); the document was not rendered in VS Code or Azure DevOps, so CJK heading anchors are untested in Azure DevOps.",
+        "§5 items 1-4 need confirmation from 赵敏 and 王磊 before the numbers are quoted.",
+        "The assumed decision deadline and the 'nothing started yet' assumption need the tech lead's confirmation.",
+        "Whether keeping the chat log inline is acceptable under A3 (see the failed expectation).",
+        "Abandoned an in-image legend (Graphviz swatches distorted the layout) and used in-node status words plus the caption instead.",
+        "Added a second `<!-- zone:archive -->` marker before block C so every block starts with a marker.",
+        "Used 从这里开始 plus the 👤 glyph for the 'START HERE' loudness, since uppercase does not exist in Chinese.",
+        "Included an AI-input block although rubric A4 targets handoff documents, because the document will be updated after the decision.",
+        "Cut the glance panel from 504 to 283 words after the first checker run flagged C2 (executor-reported, unverifiable)."
+      ]
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.45,
+        "passed": 10,
+        "failed": 12,
+        "total": 22,
+        "time_seconds": 1972.1,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input or archive material sits last in its own labelled zone; nothing for people follows machine content",
+          "passed": false,
+          "evidence": "mechanical.json: zones=[] and check_doc A1 Major 'no <!-- zone:... --> markers'. The file opens with the H1 and a 5-bullet metadata block (lines 3-7, including '- **For:** Marcus Hale, Engineering Lead (decision owner)'), then '## 1. Recommendation' (line 9). No heading or banner marks a human zone; the For: line is header metadata, not a zone banner. Archive-type material does sit last (Appendix A line 204, Appendix B line 235) but is not in a labelled zone: the headings are 'Appendix A. Evidence and method' and 'Appendix B. Q3 2026 incident summary', and neither names a bin (archive / AI input)."
+        },
+        {
+          "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+          "passed": false,
+          "evidence": "details_blocks=0; grep finds no <details> or <summary> in report.md. Appendix A (file table, A.2, A.3 data notes) and Appendix B (two aggregate tables, lines 235-264) are open on the page, and neither opens with a line naming its bin or what it supports. Only the sibling-file part holds: the raw data sits in evidence/source/*.csv behind links in A.1 (lines 206-220)."
+        },
+        {
+          "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+          "passed": false,
+          "evidence": "check_doc B1: 0 in-document links in the 60 lines after the title (0 internal links in the whole file). Lines 3-7 hold one link, to the folder [evidence/source/](evidence/source/), which is not a section. Line 7 is a plain-text 'Reading guide: Sections 1 and 2 are enough to decide. Sections 3 to 6 hold the evidence, plan, risks and open questions. Section 7 records the outcome.' It says where a reader can stop but has no section links."
+        },
+        {
+          "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive",
+          "passed": false,
+          "evidence": "Chronology is fine: incident dates live only in evidence/source/incidents-q3.csv and the body has aggregates. But terms are used before they are defined and the mental model comes late. 'Option C' is introduced on line 11; 'which both B and C need' (line 24) and 'fall back to Option B' (line 28) are used before the options table (header line 35) defines A/B/C. Codes T1/T6/T7 appear in the Section 2 table (lines 40, 41, 48) but are only explained on line 52 in Section 3. 'compatibility shim' (line 15) and 'RTO' (line 74) are never defined. The dependency picture, which is the mental model, first appears in 3.1 (line 56), after the recommendation, options table and criteria."
+        },
+        {
+          "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+          "passed": false,
+          "evidence": "H2s are '1. Recommendation', '2. Options', '3. Evidence', '4. Plan', '5. Risks', '6. Open questions and assumptions', '7. Decision record', 'Appendix A. Evidence and method', 'Appendix B. Q3 2026 incident summary'. Read alone they are generic topic labels, not the argument: 'Recommendation' does not carry the recommendation, and 'Open questions and assumptions' and 'Decision record' carry no answer or ask. Only an H3 (3.1 'The risk is concentrated in two services') is argumentative."
+        },
+        {
+          "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the conclusion itself, not what the document covers",
+          "passed": false,
+          "evidence": "check_doc C1: '21 lines of text come before the first panel element'. Directly after the H1 come five metadata, provenance and reading-guide bullets (lines 3-7: For, Decision needed by, Prepared, Based on, Reading guide), not one metadata line, and there is no separate glance panel; provenance and a reading guide sit ahead of the conclusion. The conclusion itself is stated plainly once Section 1 starts (line 11: 'Split the upgrade (Option C). Move the seven services that passed staging to v10 before the code freeze...'), so only the position and format fail."
+        },
+        {
+          "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words), one line per decision and per risk, and verdict, decisions and top risks fit the first screen",
+          "passed": false,
+          "evidence": "mechanical.json panel_words=495 against a budget of about 300 (check_doc C2: 'the first section runs to about 495 words'). Section 1 (lines 9-31) is a recommendation paragraph, five 'Why' items, four numbered decisions (several run 2-3 sentences, e.g. line 24) and two multi-sentence gate bullets, so decisions are not one line each. No risk lines appear in the first screen at all; the risk table is in Section 5 (line 144)."
+        },
+        {
+          "text": "C3 Verdict, decisions and risks are complete and loud in the panel: the verdict has a glyph, confidence and basis; each decision has who, what, by when and a recommendation; at most 5 ranked risks, each with severity and consequence",
+          "passed": false,
+          "evidence": "Verdict (line 11) is plain prose with no glyph and no confidence level (grep for 'confiden' finds nothing); the basis is the 'Why' list. Decisions (lines 21-26) give what and by-when ('Decisions needed by Friday 2026-10-23'; 'ordered by Thursday 2026-11-05') but no per-decision owner (Marcus appears only in the header) and the recommendation is implicit in 'Approve...'. Risks: none in the opening section; the Section 5 table (lines 144-153) lists R1-R6 as 'Risk | Why it matters | Response' with no severity and no ranking."
+        },
+        {
+          "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+          "passed": true,
+          "evidence": "Checked verdict, decisions and risks against the inputs; each is grounded. Verdict: 7 of 9 pass staging, auth-service fails 2 of 148, user-store untested, no rollback for the two (upgrade-notes.md, services.csv). Decisions: $18,000 ordered by 2026-11-05, Data team Monday start and the CAB exception rule are all in upgrade-notes.md. Risks R1-R6 are built from gaps in the notes and say so ('the notes do not say staging ran this mix'; R4 'This is an inference, not a finding'). Author additions are labelled: key dates 'Derived, proposed' / 'Proposed' (lines 98, 103) and assumptions in 6.2. No ranking is claimed for R1-R6. No panel slot is padded; the blank Section 7 decision record (line 182) is a deliberate form for Marcus's outcome (the audit-trail ask), not template filler. Close call on the blank record."
+        },
+        {
+          "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived, merged or de-duplicated numbers say so",
+          "passed": true,
+          "evidence": "Section 1 numbers checked: '2 of 148 integration tests' and 'estimated at 4 hours' (upgrade-notes.md); '$18,000 ... ordered by Thursday 2026-11-05 to be active on 2026-11-12' (notes; 5 Nov 2026 is a Thursday); Identity engineer on leave 2026-10-26 to 2026-11-13 (notes); 'called directly by 6 of the other 8 services, and 7 of the 8 depend on user-store' (services.csv: 6 callers, 7 via transitive closure); 'five failed rollouts (all SEV3) ... 10-19 minutes' (incidents-q3.csv: 10, 14, 15, 15, 19); 'about three times the longest incident (78 minutes)' (240/78 = 3.08). Derived figures are hedged or defined ('about', 'directly' vs 'beneath it') and Section 3 plus Appendix A.3 give the codes (D1, D2, I16, I20) and the counting rule; the 36-rows vs 35-events merge is disclosed at line 84 and in A.3."
+        },
+        {
+          "text": "D1 Diagram drawn: the nine related services (gateway, auth-service, user-store, catalog-service, share-service, connector-service, map-service, search-index, notify-service) are shown in at least one diagram",
+          "passed": true,
+          "evidence": "Figure 1 (figures/dependency-map.png, embedded at line 56) shows all nine services as labelled nodes: gateway, share-service, connector-service, catalog-service, map-service, notify-service, auth-service, search-index, user-store."
+        },
+        {
+          "text": "D2 Coverage and truth: every one of the nine services appears in at least one diagram (a single diagram or an overview plus zoomed views), every drawn edge exists in services.csv, and inferred edges are dashed and captioned",
+          "passed": true,
+          "evidence": "All nine nodes are in the single diagram. Every drawn edge checked against services.csv depends_on: gateway->catalog/share/connector; share->catalog and share->notify; connector->catalog; catalog->search-index; catalog<->map ('mutual': both catalog->map-service and map->catalog-service exist); auth->user-store; and the aggregate arrow 'cluster -> auth-service, 6 services' stands for gateway, catalog, share, connector, map and notify, all of which list auth-service. Nothing is drawn that is not in the CSV. No inferred edges are drawn, so none needs dashing (the only dashed line is the grouping box)."
+        },
+        {
+          "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+          "passed": true,
+          "evidence": "report.md line 56 embeds ![...](figures/dependency-map.png); the file exists at 1784 x 1338 px (inside 500-2600) and diagram_blocks=0. Viewed at 800 px wide: bold node names, owner/criticality lines, the small 'staging: ... rollback: ...' status lines, the 'mutual' and '6 services' edge labels and the 3-line legend are all readable (status lines are small but legible), with no overlapping text and no empty glyph boxes."
+        },
+        {
+          "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+          "passed": false,
+          "evidence": "Present: long alt text (line 56); an in-image legend that also states the relation ('An arrow from A to B means A depends on B (calls it). Green: ... Red: ... Grey: ... Thick outline: critical service. Amber double arrow: ...'); figures/dependency-map.dot beside the PNG; and an edge-list equivalent (evidence/derived/dependency-analysis.csv lists depends_on and direct_dependents per service; evidence/source/services.csv). Missing: the caption (line 58) is only 'Figure 1. Dependencies and v10 readiness, built from services.csv by evidence/analysis.py (diagram source: figures/dependency-map.dot).' It says neither how to read the diagram nor the takeaway; the takeaway sits in the H3 above and a bullet below, and the reading key is inside the image, so the caption requirement is not met."
+        },
+        {
+          "text": "E1 E2 Honesty: every judgment has a confidence level and its basis; content not in the inputs (assumptions, suggestions, inferences) is labelled as such; unknowns are listed",
+          "passed": false,
+          "evidence": "E2 half holds: inferences and proposals are labelled (line 85 'this link is an inference, not something the notes state'; R4 'This is an inference, not a finding'; key dates 'Derived, proposed' / 'Proposed'), assumptions are listed (6.2, lines 170-180) and unknowns are listed (6.1 open questions with owner and needed-by; A.3 'Not in the data'). E1 fails: no confidence level appears anywhere in report.md (grep for 'confiden' returns nothing). The verdict (line 11), its basis (Why 1-5) and risks R1-R6 carry reasons but no stated confidence."
+        },
+        {
+          "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (verdict, decisions, top risks, the file path, where to start) and does not paste the document",
+          "passed": false,
+          "evidence": "final_reply.md (about 230 words) does not paste the document. It gives the verdict (upgrade the 7 services that passed staging before 2026-11-01, keep auth-service and user-store on v8, order $18,000 extended support by 2026-11-05), five short reasons that act as top risks, and the full path to the outputs folder. Missing: it never names the decision Marcus must make or its Friday 2026-10-23 deadline (the word 'Friday' does not appear), and it gives no where-to-start pointer (only a file list: report.md, user_notes.md, evidence/, figures/). The only ask it makes is that the requester check three assumptions."
+        },
+        {
+          "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+          "passed": false,
+          "evidence": "mechanical.json gate.passed=false: 0 Blockers but 5 Majors (A1 no zone markers; B5 0 in-document links; B1 0 links within 60 lines; C1 21 lines before the first panel element; C2 panel 495 words) and 1 Minor (F2, human zone about 4126 words). Re-ran scripts/check_doc.py on report.md and got the same result. Five Majors exceeds the limit of two."
+        },
+        {
+          "text": "Verdict and ask: the panel gives a clear recommendation on upgrading before the freeze versus deferring (a split or conditional answer is fine) and names the decision Marcus must make with its deadline (Friday 23 Oct)",
+          "passed": true,
+          "evidence": "Line 11: 'Split the upgrade (Option C). Move the seven services that passed staging to v10 before the code freeze starts on Sunday 2026-11-01. Keep auth-service and user-store on v8 until January...' is a clear split recommendation on before-the-freeze versus January. Line 4 'Decision needed by: Friday 2026-10-23' and line 21 'Decisions needed by Friday 2026-10-23: 1. Approve Option C. 2. Approve $18,000 ...' name what Marcus must decide and the deadline (23 Oct 2026 is a Friday)."
+        },
+        {
+          "text": "Key risks present: the 12 Nov end of support and the missing rollback path for auth-service (and user-store) appear among the top risks",
+          "passed": true,
+          "evidence": "Both appear in risk-bearing parts of the document. Missing rollback: Section 1 'Why' item 2 (line 16) 'Neither can be rolled back. Recovery after the one-way migration is a restore from backup, estimated at 4 hours...', repeated in the Option A 'If it goes wrong' cell (line 42) and 3.1 (line 77). 12 Nov end of support: risk R5 (line 152) 'Critical identity services unpatched after 2026-11-12 ... v8 patches stop on 2026-11-12', plus criterion 2 (line 46), key dates (line 101, 'v8 end of security support') and decision 2 (line 24, 'to be active on 2026-11-12'). Close call: there is no top-risks block in the opening, the rollback gap is not a row in the Section 5 table, and the end of support is not framed as a risk until R5."
+        },
+        {
+          "text": "Figures: the report states that auth-service has 6 dependents and accounts for 11 of the 36 incident rows (11 of 35 is also acceptable if the merged 11 Jul pair is disclosed)",
+          "passed": true,
+          "evidence": "3.1 table row (line 64): auth-service, direct dependents 6, Q3 incidents '11 (380)'; line 76: '6 of the other 8 services call it directly'; line 84: 'It has 11 of the 36 incident rows (31%) and 380 of the 932 logged minutes (41%) ... The 2026-07-11 SEV1 is one outage logged twice, so Q3 had 35 distinct events, not 36'. Recomputed from the CSVs: 6 dependents, 11 rows, 380 minutes, 36 rows, 932 minutes. All correct and the merge is disclosed."
+        },
+        {
+          "text": "Audit data kept: the 36 incident rows and the 9-service inventory are preserved for audit (archive part or linked files), as the user asked",
+          "passed": true,
+          "evidence": "outputs/evidence/source/ holds incidents-q3.csv (36 data rows), services.csv (9 rows) and upgrade-notes.md; SHA-256 of each copy is identical to the fixture file, and SHA256SUMS.txt lists them. They are linked from the report header (line 6) and Appendix A.1 (lines 206-220). Derived CSVs and evidence/analysis.py sit beside them; I ran analysis.py in a scratch copy: source checksums OK and every derived file regenerated byte-identical."
+        },
+        {
+          "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+          "passed": true,
+          "evidence": "Recall 5/6 = 83%. Recovered: K1, K2, K3, K4, K5. Missed: auth-service accounts for about a third of the Q3 incidents (11 of 36 records, mostly token-validation timeouts).. K6 (11 of 36 Q3 incidents) is an evidence-level detail; both configurations missed it."
+        }
+      ],
+      "notes": [
+        "Extended-support terms: assumed a flat $18,000 with a 3-month term from 2026-11-12; this decides whether Option C is cheaper than B and whether January needs $18,000 or $36,000.",
+        "Freeze rules: assumed 'P1' means SEV1-class and flagged whether a rollback is exempt for CAB.",
+        "Which auth-service version the seven staging passes ran against; if it was v10 with the shim, a re-run on v8 is needed (Gate 1, described as the biggest hole).",
+        "Capacity: only the Data team's capacity is stated; Platform and Integration slots and whether 'one week' includes production rollout are unknown.",
+        "Data currency: the inventory and the incident log carry no as-of date (log ends 2026-09-28); staging results of 2026-10-09 to 10-11 assumed to still hold.",
+        "Approximate figures: the 41% share and the 'about two incidents' estimate use rows as logged and a 92-day quarter; they show scale only.",
+        "Rendering was checked with a local CommonMark engine, not in the repo host; the checksum check can fail after a git line-ending conversion.",
+        "Confirm the three assumptions listed in the final reply: flat $18,000 for a 3-month term, 'P1' = SEV1-class, and the wave dates and 2026-12-15 checkpoint, which are the executor's proposals.",
+        "The reading of depends_on as 'caller depends on callee', the pairing of auth-service and user-store, the two gates and the slow-dependency check before gateway are the executor's proposals, not the teams' positions.",
+        "The decision record and evidence structure were added because of the audit-trail request and are easy to drop; there is no author line (git history carries it).",
+        "None; no skill was used. Chose plain Markdown with a PNG figure and Graphviz source so the report renders in VS Code, GitHub and Azure DevOps without Mermaid."
+      ]
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.41,
+        "passed": 9,
+        "failed": 13,
+        "total": 22,
+        "time_seconds": 2019.4,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input or archive material sits last in its own labelled zone; nothing for people follows machine content",
+          "passed": true,
+          "evidence": "Two zones whose headings name their audience, human first and machine last. L11 '## Part A: Status and decisions (for Dana)' opens the human zone (A1 bottom line, A2 asks table, A3 dates, A4 Q1/Q2 detail; no logs, listings or long code). L75 '## Part B: Continuing the work (for the AI agent)' is the last H2 and holds all agent material (B1 rules, B2 commands, B3 task cards, B4 dead ends, B5 gaps, B6 logs). The L6 'Who reads what' pointer line was not what I credited; the two headings were. Close call: there is no separate archive zone, Part A sends Dana into Part B for the live status table (B3) and the Decision log (B6), and mechanical.json flags missing <!-- zone: --> markers (A1 Major). The assertion, however, asks for a heading/banner naming the audience, which is present."
+        },
+        {
+          "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+          "passed": false,
+          "evidence": "mechanical.json: details_blocks = 0. Part B (L75-L297, about 3,300 words: command block, tables, eight task cards, logs) is fully expanded inline; there is no <details>/<summary> anywhere. No opening line names a bin ('AI input' or 'archive') and what it supports (L77 opens 'You are picking this up from Alex...'). Nothing long sits behind a pointer in a sibling file: outputs holds only report.md, user_notes.md (not referenced from report.md) and assets/."
+        },
+        {
+          "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+          "passed": false,
+          "evidence": "mechanical.json: internal_links = 0 and a B1 Major ('only 0 in-document link(s) in the 60 lines after the title'). L6-L7 are plain-text lines: 'Who reads what: Dana reads Part A ...; the AI coding agent reads Part A for context, then works from Part B' and 'Contents: Part A: A1 bottom line, A2 what is needed, ...'. They list section names only: no links, nothing saying what the reader gets from each section, and the stop point is only implied."
+        },
+        {
+          "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive",
+          "passed": false,
+          "evidence": "Not clearly met on any of the three clauses. (1) The system's mental model ('What this is: ... 14 legacy cron jobs to JobRunner, the new job platform: YAML definitions in jobs/, executed by workers in a runner pool', L107) arrives after Part A (L11-L74) and after the B1 ground rules (L79-L103); Part A opens with status. (2) Terms are used before they are defined: 'JobRunner' (L1, L62) is first explained at L107; 'cutover' (L4, L5, L17, A2, A3) is first defined, as an [Assumption], at L220; B1 leans on forward references ('the dead ends in B4', 'Decision log, B6'). (3) There is no archive zone; the dated measurements table and the Update log sit inside the AI zone. In its favour: the work-log chronology was not copied; the document is organised by status, ask and task."
+        },
+        {
+          "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+          "passed": false,
+          "evidence": "Only two H2s exist: 'Part A: Status and decisions (for Dana)' and 'Part B: Continuing the work (for the AI agent)'. The human zone's single H2 is a topic label. Its H3s ('A1. Bottom line', 'A2. What is needed from Dana', 'A3. Key dates', 'A4. Detail behind the two decisions') and H4s ('Q1: XLS above 1,048,576 rows', 'Q2: pool size') are labels too; none carries a conclusion or the ask. Read alone they give a table of contents, not the argument."
+        },
+        {
+          "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the conclusion itself, not what the document covers",
+          "passed": false,
+          "evidence": "The conclusion is not straight after the title and one metadata line. Before 'A1. Bottom line' (L13) come five header bullets (L3-L7: status date, leave dates, cutover target, 'Who reads what', 'Contents', the last two describing what the document covers), a 'Convention' blockquote (L9) and the Part A heading (L11): about 184 words by my count of L1-L10. The bottom line itself opens with a description ('Where it stands. Built: the export job, a streaming CSV writer ...', L15); the conclusion ('The 2026-11-10 cutover is at risk if Q1 to Q4 are not settled by Fri 2026-10-30', L17) is the third bullet and there is no verdict line. The content is conclusion-bearing and sits within the first 20 lines, but the placement test is not met. Mechanical C1 did not fire because check_doc.py treats the L9 blockquote as the first panel element (only 5 text lines before it)."
+        },
+        {
+          "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words), one line per decision and per risk, and verdict, decisions and top risks fit the first screen",
+          "passed": false,
+          "evidence": "mechanical.json: panel_words = 677 against a budget of about 300 (C2 Major at L11: 'the first section runs to about 677 words'). There is no short panel: the human zone is a run of sections (A1 about 208 words of bullets; A2 table plus three prose paragraphs at L37-L41; A3; A4 detail). Decision rows are multi-sentence rather than one line (Q1 L29 has three sentences, Q5 L33 four), and there is no per-risk line. The bottom line, the asks table and the single risk do start inside the first 60 lines (L15-L19, L27-L35), but not compactly."
+        },
+        {
+          "text": "C3 Verdict, decisions and risks are complete and loud in the panel: the verdict has a glyph, confidence and basis; each decision has who, what, by when and a recommendation; at most 5 ranked risks, each with severity and consequence",
+          "passed": false,
+          "evidence": "No verdict glyph and no confidence anywhere (a grep for confidence/high/medium/severity/consequence and status glyphs finds only 'low priority' for T11). The only verdict-like statement is the L17 'Risk' bullet: the cutover is 'at risk if Q1 to Q4 are not settled by Fri 2026-10-30 (Alex's estimate ...)'; it gives a basis but no confidence and no consequence. The A2 decisions (L29-L35) carry what and by when ('who' only through the table heading), but 'Alex's view', the recommendation column, is '-' for Q3, Q4, Q5 and Q7. Only one risk is stated; none is ranked or given a severity."
+        },
+        {
+          "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+          "passed": false,
+          "evidence": "Most of the panel is grounded: the 3/1/3/4 status counts match tasks.md, Q1-Q6 map one-to-one to open-questions.md items 1-6, and the 30 Oct risk comes from item 6 (the Q1-Q4 reading is flagged at L37). But (a) Q7 ('Confirm who the agent escalates to ...', L35) is a decision block with no grounding in the three input files; the document itself says 'Q7 is not in Alex's notes' (L37), and its 'By when', Mon 2026-10-19, appears in no source. (b) Empty slots are not omitted: 'Alex's view' is '-' for Q3, Q4, Q5 and Q7 (L31, L32, L33, L35) and Q5's date reads 'No date'. The additions are disclosed, but the assertion is literal about ungrounded decision blocks and empty slots."
+        },
+        {
+          "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived, merged or de-duplicated numbers say so",
+          "passed": true,
+          "evidence": "Spot-checked six panel numbers: 3 done / 1 in progress / 3 blocked / 4 todo of 11 (tasks.md: T1-T3 done, T7 in progress, T4-T6 blocked, T8-T11 todo); 20 CSV exports on staging (work log 10-13); Acme 4.2M rows and the 1,048,576-row cap (10-06, 10-09); about +1,200 USD/month and the 15-minute SLA (10-09); the 2026-10-30 risk date (open-questions item 6). Derived dates are weekday arithmetic, which L9 says ('calendar arithmetic on them'), and I verified them (7 Nov Saturday, 30 Oct Friday, 10 Nov Tuesday, DBA Tue/Thu dates correct). The status tally is a plain count of the task table and is checkable in the figure and B3, not a merged number. Minor: '5 files for Acme' (L63) is derived and unlabelled, but sits in A4, outside the panel."
+        },
+        {
+          "text": "D1 Diagram drawn: the eleven related tasks T1-T11 and their dependencies are shown in at least one diagram",
+          "passed": true,
+          "evidence": "A dependency diagram of the task web is drawn: assets/task-status.png (L21) has 9 nodes and 10 edges: a 'T1 to T3' DONE node, T4, T5, T6 (BLOCKED), T7 (IN PROGRESS), T8, T9, T10 (TODO) and T11 (isolated, low priority), with arrows T1-T3 -> T4..T7 -> T9 -> T10 and T8 -> T10, which matches the Depends-on column of tasks.md at that level. Close call: T1-T3 are collapsed into one node, so this is a coarsened version of the eleven-task web; that coverage defect is judged under D2."
+        },
+        {
+          "text": "D2 Coverage and truth: every one of the eleven tasks appears in at least one diagram, every drawn dependency edge exists in tasks.md, and inferred edges are dashed and captioned",
+          "passed": false,
+          "evidence": "Not every task appears on its own. The PNG and assets/task-status.dot (node 'built') collapse T1, T2 and T3 into one 'T1 to T3' node: T2 never appears as a task ID or node, and the T1->T2 and T1->T3 dependencies of tasks.md are not drawn. The single node's four outgoing edges to T4-T7 blur tasks.md (T4 depends on T3 only; T5, T6 and T7 depend on T2 only), and the grouping is not captioned as a simplification (caption L23 only says snapshot and source). The other drawn edges (T4-T7 -> T9, T9 -> T10, T8 -> T10) exist in tasks.md and no edge is invented; there are no inferred edges, so none needed dashing. With the burden on the assertion ('every one of the eleven tasks appears'), the merged node does not meet it."
+        },
+        {
+          "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+          "passed": true,
+          "evidence": "L21 embeds ![...](assets/task-status.png); the file exists (1573 x 471 px, inside the 500-2600 range) and is the first and only diagram; there is no Mermaid block (mechanical.json diagram_blocks = 0). I viewed it downscaled to 800 px wide: the title, the four-item legend and the node labels (for example T4 'BLOCKED: DBA window (Q4)', T9 'TODO: needs T4 to T7') are readable though small; no overlapping text, no edge crossing a label, nothing cut off, no empty glyph boxes (odd letter-spacing such as 'Decom mission' in the PNG does not hinder reading)."
+        },
+        {
+          "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+          "passed": false,
+          "evidence": "Partly met, so not met. Present: long informative alt text (L21); an in-image colour legend (done / in progress / blocked on a person / not started); the source assets/task-status.dot beside the PNG, with a regenerate command; the Depends-on column of the B3 table (L152-L164) is a text equivalent of the edge list, though it sits in Part B, not in an archive. Missing: the visible caption (L23, 'Snapshot of 2026-10-17, drawn from assets/task-status.dot. The table in B3 is the live status.') says neither how to read the diagram nor what it shows; edges are unlabelled arrows and no visible text says what an arrow means (only the alt text says 'must finish before'). The document has no archive for the edge list."
+        },
+        {
+          "text": "E1 E2 Honesty: every judgment has a confidence level and its basis; content not in the inputs (assumptions, suggestions, inferences) is labelled as such; unknowns are listed",
+          "passed": false,
+          "evidence": "E2 is largely met: the Convention (L9) defines [Assumption] and [Suggestion] and they are used throughout (for example L19, L67, L73, L81, L103, L147, L170-L174, L220, L249); unknowns are listed in B5 'Not in the notes' (L264-L277, ten rows) and in 'Not measured' / 'Not recorded' notes (L72, L248). Gaps: some additions are untagged (L181 T4 'Write the pre-checks and post-checks', L199 T6 'If Dana keeps 3 workers ... close T6', L205, L221 runbook). E1 is not met: no judgment carries a confidence level (no 'confidence', 'high', 'medium' or 'low' anywhere). The main judgment, cutover 'at risk if Q1 to Q4 are not settled by Fri 2026-10-30' (L17), cites a basis (Alex's estimate) but no confidence; 'People, not code' (L16) has neither."
+        },
+        {
+          "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (verdict, decisions, top risks, the file path, where to start) and does not paste the document",
+          "passed": false,
+          "evidence": "final_reply.md describes the document's structure instead of giving its panel in miniature, though it does not paste the document. Missing: any verdict or status (no '3 of 11 done, 3 blocked', no 'cutover at risk'), the decisions themselves (only 'a table of the seven things she needs to decide or unblock (each with a deadline)' with none named), and the top risk. Present: the outputs folder path and file list. Where to start is only implied ('Part A is for Dana'). The rest of the reply asks the user to check the date arithmetic, the reading of the 30 Oct deadline and the Q7 escalation assumption."
+        },
+        {
+          "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+          "passed": false,
+          "evidence": "mechanical.json gate.passed = false: 0 Blockers, 4 Majors (A1 no <!-- zone: --> markers; B5 0 in-document links, at least 5 expected; B1 0 links in the 60 lines after the title; C2 first section about 677 words vs 300) and 2 Minors (F2 human zone about 4,229 words; A2 shell commands in the human zone at L119). Only report.md was scanned (there are no report.*.md siblings; user_notes.md is not one). Four Majors already exceed the limit of two."
+        },
+        {
+          "text": "Dana's view: the panel says where things stand (how many of the 11 tasks are done, blocked and open) and lists the decisions she must make (XLS above 1M rows, pool size and its cost, DBA window, email template, owner of the 3 cron jobs), each with an option or a recommendation",
+          "passed": true,
+          "evidence": "L15 gives the position: '3 of 11 tasks are done, 1 is in progress, 3 are blocked and 4 have not started' (matches tasks.md). The A2 table (L27-L35, inside the first 60 lines) lists all five required decisions, each with an option or a recommended action: Q1 XLS above 1,048,576 rows, '(a) a ZIP of several XLS files, or (b) CSV only', Alex prefers (a); Q2 pool, '6 workers instead of 3 (about +1,200 USD/month)'; Q3 email template, 'Chase Marketing's approval of the wording and logo'; Q4 DBA window, 'Arrange a DBA window ... (ticket DBA-5521)' with the Tue/Thu windows dated in A3; Q5 cron owners, 'Find the owners of 3 legacy cron jobs' (export_weekly_xls, export_audit, export_adhoc), 'mapped or retired'. Close call on Q3-Q5, whose 'Alex's view' cell is '-': the ask itself is the recommended action. It also adds Q6 (cutover date) and Q7 (escalation contact)."
+        },
+        {
+          "text": "Cutover risk: states that the 10 Nov cutover depends on tasks T4 to T7 and slips if the decisions land after about 30 Oct",
+          "passed": true,
+          "evidence": "L17: 'The 2026-11-10 cutover is at risk if Q1 to Q4 are not settled by Fri 2026-10-30', backed by L16 'The production rollout cannot start until all four are done' (the four are T5, T6, T7 and T4) and by the figure, whose T9 node reads 'TODO: needs T4 to T7' (alt text L21: 'all four must finish before T9 (rollout)'). This matches open-questions item 6. The document flags its reading of 'the decisions' as Q1 to Q4 (L37) and of 'cutover' as T9 finished (L220). Note T4 to T7 appear by task ID in the figure rather than in the bullet text."
+        },
+        {
+          "text": "Agent-ready: the AI-input part holds exact commands and paths from the log (for example pytest tests/exports -q, the staging deploy command, jobs/export-dataset.yaml) and an ordered next-steps list that respects the task dependencies",
+          "passed": true,
+          "evidence": "The B2 command block (L119-L126) holds exact commands from the log: 'docker compose up -d postgres', 'python -m exports.cli run --dataset demo --format csv --rows 100000', 'pytest tests/exports -q' (L123), './scripts/deploy.ps1 -Env staging -Service exports-runner' (L124, repo root, needs VPN) and 'kubectl get pods -n exports'. The 'Where things are' table (L130-L141) gives repo-relative paths: jobs/export-dataset.yaml, src/exports/streaming_csv.py, src/exports/xls_writer.py, migrations/0042_export_runs.sql, templates/export_ready.html, tests/exports/, legacy/crontab.txt, docs/cron-mapping.md. 'Order of work (steps 1 to 5 need no decision)' (L166-L175) is ordered by dependency: first-session checklist, T8 (no dependencies), prep work, T11 last, then T5/T6/T7/T4 only once their decision is logged, and step 8 'Do not start blocked work'. T9 'starts only when T4, T5, T6 and T7 are done' and T10 needs T8 and T9 (cards L216-L228); T9/T10 are not in the numbered list but their cards state the prerequisites, and every card ends with 'Done when'."
+        },
+        {
+          "text": "Guardrails and protocol: the AI-input part says what not to do (no in-memory or OFFSET retries, no migration 0042 in production outside the DBA window, no copying secrets) and what to do while decisions are open and where answers are recorded",
+          "passed": true,
+          "evidence": "B1 (L79-L103): 'Never: Copy, print, log or commit anything from the vault path kv://nimbus/exports/prod/*' (L93); 'Retry the dead ends in B4' (L94), where B4 lists 'Load all rows into memory ... OOM-killed' and 'LIMIT/OFFSET paging' (L261-L262); production migration 0042 needs a recorded human go-ahead plus a DBA window (L85; T4 card L180: 'DBA windows are Tue and Thu, 22:00 to 23:00 UTC ... You cannot do this step yourself'). While decisions are open: 'Treat Q1 to Q4 as answered before the Decision log says so' (L95), 'Do not implement anything before Q1 is in the Decision log' (L187), keep working on unblocked items (L77, L166-L175), say so when access is missing, escalate with a 'NEEDS DANA:' Update-log row (L100), and 'When everything unblocked is done, log it and stop. Do not start blocked work.' (L175). Answers are recorded in the Decision log (A2 L39 'How to answer'; B6 L281: 'A decision counts only once it is written here')."
+        },
+        {
+          "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+          "passed": true,
+          "evidence": "Recall 6/6 = 100%. Recovered: K1, K2, K3, K4, K5, K6. Missed: none. K6 is borderline: credited from 'T8 can start now' plus 'who approves production steps'."
+        }
+      ],
+      "notes": [
+        "Leave dates: the work log says leave runs 2026-10-17 to 2026-11-06 and the user said back 7 Nov, a Saturday, so the first working day was written as Mon 2026-11-09.",
+        "'If the decisions slip past 2026-10-30' was read as Q1 to Q4 (the four things T9 waits for); stated as an assumption under the A2 table.",
+        "'Cutover' was assumed to mean T9 finished, with T10 later and undated.",
+        "Who decides Q2 (budget) and who the agent escalates to were assumed to be Dana; production changes were assumed to need a human go-ahead.",
+        "Numbers that do not line up: 5M rows in 6 min on one worker (10-05) vs 4.2M rows in 9.5 min on three (10-09); the 21-minute run lacks dataset sizes; '212 pass, 1 xfail' on 10-05 refers to an xfail added on 10-08. All flagged, none resolved.",
+        "Things the notes imply but do not say: whether the 11 mapped cron jobs exist as separate YAML definitions, how legacy cron and JobRunner avoid double runs, which branch holds the work and whether it is pushed, and what CET means across the 2026-10-25 clock change.",
+        "Dates (first working day Mon 2026-11-09), the Q1-Q4 reading of the 30 Oct deadline, and Dana as escalation contact (Q7) should be confirmed before the document goes to Dana.",
+        "Executor extras tagged [Suggestion] (staging 6-worker test, XLS timing spike, observability, per-stage checks, a 30 Oct status note) can be deleted by the user.",
+        "Length of about 4,600 words may be trimmed; the executor kept Part B detailed because the agent cannot ask the user.",
+        "Rendered Markdown to HTML and viewed it in headless Chrome to check tables, figure and code block; could not check GitHub or an Azure DevOps wiki.",
+        "A browser-tool call wrote two scratch files into the starting repository's .playwright-mcp folder (deleted; the folder is absent when I looked), and a temporary preview server on 127.0.0.1:8765 was stopped."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.57,
+        "passed": 12,
+        "failed": 9,
+        "total": 21,
+        "time_seconds": 2650.8,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input, archive or reference material sits last in its own labelled zone; nothing for people follows machine content",
+          "passed": false,
+          "evidence": "No zone heading, banner or marker anywhere. After the title (line 1), line 3 is a what-this-is paragraph and line 5 is an 'Audience:' bullet inside the header metadata, which the assertion says does not count. mechanical.json has zones: [] and flags A1 ('no <!-- zone:... --> markers'). Reference material is not in a labelled zone: '## Reference: settings' (line 235, a 20-row table) is followed by the people-facing '## Assumptions and open questions' (line 264), so content for people comes after the reference block."
+        },
+        {
+          "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+          "passed": false,
+          "evidence": "mechanical.json stats show details_blocks: 0 and the file contains no <details> tag. There is no AI-input or archive block and no sibling archive file (outputs holds report.md, diagrams/ and the executor's user_notes.md, which report.md never points to). Raw/reference material sits inline in the human body: the 20-row settings table (lines 235-260, flagged A2 Major at line 239) and the 11-item open-questions list (lines 264-286)."
+        },
+        {
+          "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+          "passed": false,
+          "evidence": "The first 60 lines hold 12 section links (line 3, line 8 and the Contents list at lines 12-21), but the 10 Contents entries are bare titles such as '- [Gotchas](#gotchas)' with no statement of what the reader gets. Only line 3 annotates one link ('The week-one plan is in [Your first week]'). Line 3 says 'Read the first three sections on your first day (about 15 minutes) and keep the rest as a reference', a day-one stop point, but nothing says who can stop where or what each link delivers."
+        },
+        {
+          "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive",
+          "passed": true,
+          "evidence": "Close call, passes. The mental model is the first content section: '## The short version' (line 23) gives the flow 'Upload -> Validate -> Transform and publish' (line 27) plus five rules. '## Vocabulary' (line 37, table lines 43-48) defines the key terms before '## How a file moves through the platform' (line 58), the components (line 124), failure handling (line 142) and gotchas (line 188). Overall order is flow, components, failures, local run, gotchas, first week, reference, open questions, and the human zone contains no discovery chronology. Caveat: the opener uses 'Version', 'Catalog' and 'Policy Engine' (lines 27, 31, 35) before Vocabulary, though each is explained in context (rule 3 defines Version)."
+        },
+        {
+          "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+          "passed": true,
+          "evidence": "Close call, passes. Read alone, the ten H2s give a usable outline: The short version / Vocabulary / How a file moves through the platform / The components / When things go wrong / Running it locally / Gotchas / Your first week / Reference: settings / Assumptions and open questions. There are no question or decision headings that lack an answer. Caveat: they are topic labels rather than claims, so they give the outline but not the argument."
+        },
+        {
+          "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the mental model itself, not what the document covers",
+          "passed": false,
+          "evidence": "Lines 3-21 (a what-the-guide-is paragraph, four Audience/Scope/Based on/Markers bullets and a 10-link Contents list) come before the mental model, which starts at line 23. mechanical.json flags C1: '25 lines of text come before the first panel element'. Line 3 opens with what the document covers ('A guide for engineers joining the ingestion team...'); the model ('three stages joined by a message queue', line 27) only appears after the header block."
+        },
+        {
+          "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words), and the mental model, the few things that matter and the reading path fit the first screen or two",
+          "passed": true,
+          "evidence": "mechanical.json panel_words is 239 (budget 300; it counts the prose of the first H2, 'The short version'). The mental model (lines 25-27), the five rules (lines 29-35) and the reading aids (line 3 and the Contents, lines 10-21) all sit within the first 36 lines, i.e. within a screen or two. This passes on compactness and fit only; the panel is not first (see C1) and the reading path is weak (see B1)."
+        },
+        {
+          "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+          "passed": true,
+          "evidence": "The document has no verdict, decision or risk block and no empty template slots. Claims trace to architecture-notes.md and onboarding-checklist.md, and gaps are labelled (Assumption callouts at lines 110, 172, 217, 228, 262). The only ranking, 'Confirm first (the notes conflict or the numbers look risky)' (line 268), is traceable: each item cites the notes text it rests on (item 3 derives 6 min/GB x 5 GB = 30 min = TRANSFORM_TIMEOUT_S 1800 s and says the notes do not state linear scaling)."
+        },
+        {
+          "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived or inferred numbers say so",
+          "passed": true,
+          "evidence": "Panel numbers trace to the notes: 'up to 5 GB' (line 25) = 'Maximum: 5 GB'; 'publish within 15 minutes for files up to 1 GB' (line 25) = 'Target: published within 15 minutes for files up to 1 GB'; 'October 2026' (line 7) = 'true as of October 2026'. 'Three stages' and 'Five rules' are the guide's own counts of its structure. Caveat: the 'about 15 minutes' reading time in line 3 is an unsourced estimate marked only by 'about', and it sits in the header rather than the panel."
+        },
+        {
+          "text": "D1 Diagram drawn: the eleven related platform components (Uploader API, Message Queue, Validation Worker, Schema Registry, Quarantine Store, Transform Worker, Raw Zone, Curated Zone, Catalog, Policy Engine, Notifier) are shown in at least one diagram",
+          "passed": true,
+          "evidence": "Figure 1 (diagrams/pipeline.png, embedded at line 62) shows all eleven: Uploader API, Message Queue (drawn twice for validate and transform, footnoted as one queue), Validation Worker, Schema Registry, Quarantine Store, Transform Worker, Raw Zone, Curated Zone, Catalog, Policy Engine and Notifier. Viewed directly in the PNG."
+        },
+        {
+          "text": "D2 Coverage and truth: every one of the eleven components appears in at least one diagram (a single diagram or an overview plus zoomed views, the overview's caption saying what it leaves out), every drawn edge exists in the notes, and inferred edges are dashed and captioned",
+          "passed": true,
+          "evidence": "All eleven components appear in Figure 1. I checked the 18 drawn edges against architecture-notes.md and each exists, e.g. Uploader API -> Policy Engine 'may upload?', Catalog -> Policy Engine 'who can see a dataset', Validation Worker -> Schema Registry 'get contract', Validation Worker -> Quarantine Store 'fail: copy file', Transform Worker -> Notifier 'on publish', Raw Zone -> both workers 'read'. No inferred edge is drawn, so none needs dashing; the legend says dashes mean 'call to a supporting service'. What the single diagram leaves out is stated in its in-image footnote ('The Policy Engine is also called by the Curated Zone, for row-level access rules')."
+        },
+        {
+          "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+          "passed": false,
+          "evidence": "D3 holds: Figures 1 and 2 are embedded PNGs that exist (lines 62 and 99; diagrams/pipeline.png and version-lifecycle.png) and no Mermaid is used. D4 fails its size bound: pipeline.png, the diagram seen first, is 2760 px wide, over the rubric's 500-2600 px limit, and mechanical.json flags D4 Major at line 62. I viewed an 800 px downscale: node titles read (about 12 px), with no overlap or empty glyph boxes, but sub-labels, edge labels and the footnote render at about 8-10 px (SVG fonts 14-17 px at 0.58 scale). Legible with effort and borderline, but it fails the rule's width bound. version-lifecycle.png (2480 px) is within bounds."
+        },
+        {
+          "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+          "passed": false,
+          "evidence": "Present: descriptive alt text on both images (lines 62, 99), an in-image legend, verbs on edges ('may upload?', 'get contract', 'stream file'), and sources beside the images (pipeline.svg, version-lifecycle.svg, build_diagrams.py). Missing: the captions say how to read (Figure 1: solid, dashed, red) but give no takeaway ('The platform at a glance'; Figure 2: 'Open this figure side by side with the Catalog UI...'), and there is no edge list or text equivalent in an archive because the document has no archive. The closest equivalent is the 'Who talks to it' column of the Components table, which is in the human zone."
+        },
+        {
+          "text": "E1 E2 Honesty: content not in the inputs (assumptions, suggestions, inferences) is labelled as such; ambiguities in the notes are flagged rather than silently resolved; unknowns are listed",
+          "passed": true,
+          "evidence": "Close call, passes. Markers are defined at line 8 and used: Assumption callouts (lines 110, 172, 217, 228, 262) and Check callouts for the notes' ambiguities: '3 attempts' vs 'retried 3 times' vs three delays (line 156), POLICY_MODE strict default vs allow-all locally (line 184), 'CET' summer-time ambiguity (line 215). Unknowns are listed (items 7-11, lines 282-286), plus 'The notes set no target for files above 1 GB' (line 122) and 'The notes do not include the smoke-test command' (line 182). Caveat: a few additions are unlabelled, notably the 'By Friday you should be able to' goals (lines 199-204) and 'Do this first' (line 208)."
+        },
+        {
+          "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (the mental model, the few things that matter, the file path, where to start) and does not paste the document",
+          "passed": false,
+          "evidence": "final_reply.md gives the file path and a start point ('The first three sections take about 15 minutes to read; the rest is reference') and does not paste the document. It has no mental model: 'It covers upload to publish for an engineer new to the team, with a week-one checklist and starter tickets' is scope, and nothing says the Catalog is the source of truth, Versions are immutable or the flow is Upload -> Validate -> Transform. Its 'few things' are three open questions for Sam. It also says all three are 'marked Check in the guide', but only two inline Check callouts exist (lines 156, 184); the 5 GB item appears only in the open-questions list (line 272)."
+        },
+        {
+          "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+          "passed": false,
+          "evidence": "mechanical.json gate: passed false, 0 Blockers, 4 Majors (limit is 2), 5 Minors. Majors: A1 (no zone markers); C1 ('25 lines of text come before the first panel element'); D4 ('pipeline.png is 2760 px wide'); A2 ('20-row table in the human zone', line 239). Only report.md is covered (no report.*.md siblings exist)."
+        },
+        {
+          "text": "Mental model first: the first screen or two has a diagram showing the main flow (at least the eight core components) and calls out that the Catalog, not the queue, is the source of truth for status",
+          "passed": false,
+          "evidence": "The first image (Figure 1) is at line 62, after the header, Contents, short version, Vocabulary table and callout, so the first 60 lines and roughly the first two screens of rendered content contain no diagram. The Catalog call-out is present early (line 31: 'The Catalog is the source of truth for status, not the queue'), but the diagram half of the expectation is not met."
+        },
+        {
+          "text": "Concepts before flows: Dataset, Version, Schema contract, Quarantine, Lineage record and Tenant are defined (glossary or definition on first use) before the step-by-step flow that uses them",
+          "passed": true,
+          "evidence": "'## Vocabulary' (lines 37-48) defines all six in the notes' own terms: Tenant, Dataset ('Example: acme/orders'), Version ('One upload of a dataset. Immutable'), Schema contract, Quarantine and Lineage record. It precedes the step-by-step flow ('## How a file moves through the platform' at line 58; Stages 1-3 at lines 66-95). A 'Version means three different things' callout (lines 50-56) follows."
+        },
+        {
+          "text": "Week-one use: includes the six gotchas and what to do in week one (runbooks, starter tickets INGEST-310 and INGEST-322, the weekly sync)",
+          "passed": true,
+          "evidence": "Six Gotchas at lines 190-195 match the notes: a Version cannot be fixed; a breaking schema change needs a new dataset major version; timestamps are UTC; local runs are allow-all so run the smoke test with POLICY_MODE=strict; the Notifier is fire-and-forget; quarantine 30 days vs Raw Zone 1 year. Week one (lines 197-233): checklist with the runbooks replay-dlq and quarantine-release (line 211), starter tickets INGEST-310 and INGEST-322 (lines 214, 232-233), and the weekly ingestion sync (Wednesdays 10:00 CET) plus the Friday incident review (line 215)."
+        },
+        {
+          "text": "Figures: retry behaviour (3 attempts, backoff 30 s, 2 min, 10 min, then the dead-letter queue) and the 15-minute publish target for files up to 1 GB are right, and the notes' ambiguity between attempts and retries is flagged or handled without silently contradicting the notes",
+          "passed": true,
+          "evidence": "Line 154: 'retried with backoff delays of 30 seconds, 2 minutes and 10 minutes (QUEUE_BACKOFF_S), up to QUEUE_MAX_ATTEMPTS = 3, and then goes to the DLQ', matching the notes. The 15-minute target for files up to 1 GB is right at lines 25 and 120. The attempts-versus-retries ambiguity is flagged in the Check callout at line 156 ('Three attempts have only two gaps between them, so it is unclear whether the first delivery counts towards the three') and in open question 1 (line 270) rather than silently resolved."
+        },
+        {
+          "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+          "passed": true,
+          "evidence": "Recall 6/6 = 100%. Recovered: K1, K2, K3, K4, K5, K6. Missed: none. K1 is borderline: asynchrony is only implied by 'stages joined by a message queue'."
+        }
+      ],
+      "notes": [
+        "Notes say both '3 attempts' and 'retried 3 times' while listing three backoff delays",
+        "POLICY_MODE default is strict in the settings table but the local stack is described as allow-all; assumed the compose setup overrides it",
+        "A 5 GB file at the 6 min/GB transform p95 would reach the 1,800 s transform timeout",
+        "Repo contents inferred from names; a Version is assumed to keep its last status while its message is retried or dead-lettered; cache-TTL reading; settings grouped by area by the executor",
+        "'CET' could mean local time or fixed UTC+1; incident review has no stated time",
+        "The 15-minute reading time is an unmeasured estimate",
+        "Heading anchors are GitHub-style; Azure DevOps wiki slugs may differ",
+        "File uses CRLF line endings",
+        "Figure 1 is dense and its text is small",
+        "Rename report.md for the wiki and keep diagrams/ beside it (or fix the two image paths)",
+        "The 'three kinds of version' callout is the executor's synthesis",
+        "Tried Graphviz first, but shared stores (Catalog, Raw Zone) caused crossing lines, so the figures were hand-laid-out as SVG in three bands and rasterised with headless Edge or Chrome",
+        "No day-by-day schedule beyond the two fixed meetings; the suggested week-one pacing is labelled as a suggestion"
+      ]
+    },
+    {
+      "eval_id": 4,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.52,
+        "passed": 12,
+        "failed": 11,
+        "total": 23,
+        "time_seconds": 2074.2,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "A1 Zones marked and ordered: the document opens with a human zone whose heading or banner names its audience (a pointer line in the header does not count), and any AI-input or archive material sits last in its own labelled zone; nothing for people follows machine content",
+          "passed": false,
+          "evidence": "No zone markers at all (mechanical.json stats.zones = [] and Major A1 'no <!-- zone:... --> markers'). The document does not open with a human zone whose heading or banner names its audience: line 1 is the title, lines 3-10 are a metadata table, and its row ‘读者 | 研发团队全体；技术负责人张伟据此决定改进项的先后’ (line 8) is exactly the header pointer line the expectation says does not count; the first heading is ‘## 1. 摘要与待决事项’ (line 14). The raw chat does sit last (Appendix C, line 237) and nothing for people follows it, but under a plain ‘附录 C’ heading, not in a labelled archive or AI-input zone."
+        },
+        {
+          "text": "A3 Machine and archive blocks are collapsed in details blocks and plain-headed, each opening with a line that names its bin (AI input or archive) and what it supports; long material sits in a sibling file behind a pointer",
+          "passed": false,
+          "evidence": "stats.details_blocks = 0, so nothing is collapsed. The only raw/archive material, the chat log, is an open 28-line fenced block (lines 241-270) under ‘附录 C 原始群聊记录’ (line 237), and Appendices A and B (lines 208-235) are open tables. The Appendix C lead-in (line 239: ‘以下为故障群聊记录原文，共 28 条，未做任何修改…’) does not name a bin (archive or AI input) or say which claim it supports, and the log is not in a sibling file behind a one-line pointer."
+        },
+        {
+          "text": "B1 Reading path: within 60 lines of the title there are at least 3 links to sections, each saying what the reader gets, and a line saying who can stop where",
+          "passed": false,
+          "evidence": "Lines 1-60 hold only scattered inline links: line 9 (→ 附录 C, inside the metadata table), line 30 (→ 第 6 节, ‘依据和取舍见’), lines 43 and 50 (→ 附录 B). There is no reading-path block telling the reader what each section gives them, and no line saying who can stop where (a search for such wording finds nothing; the only audience text is the ‘读者’ metadata row on line 8). check_doc.py's link-count test passes (no B1 finding), but the judged part of the rule is not met."
+        },
+        {
+          "text": "B2 Order follows understanding: the mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive (or is a compact timeline in the human zone with the raw chat log in the archive)",
+          "passed": false,
+          "evidence": "The structure is Summary → Impact → Timeline → Cause, i.e. chronology first. A 23-row, discovery-order timeline table (§3.2, lines 67-93) sits in the main body before the root-cause section (§4, line 95) and before the propagation diagram that is the real mental model (§4.1, lines 99-108); mechanical.json flags it as A2 ‘23-row table in the human zone’. Only §3.1 (5-row phase table) is compact. Terms are mostly defined before use (A1-A6 glossed in the decision box, † defined on line 50), but ‘A7’ is used in the §4.2 table (line 115) before it is explained in §6.4 (line 191). The §1 summary gives a short causal story, which does not satisfy the ‘chronology in the archive or compact’ clause."
+        },
+        {
+          "text": "B3 The H2 headings of the human zone, read alone, give the outline or the argument; question and decision headings carry their answer or ask",
+          "passed": false,
+          "evidence": "The H2s are bare topic labels: ‘1. 摘要与待决事项’, ‘2. 影响’, ‘3. 时间线’, ‘4. 根因与促成因素’, ‘5. 做得好的与靠运气的’, ‘6. 改进项与优先级建议’, ‘7. 待确认事项’, then three ‘附录’ headings. Read alone they give a generic postmortem table of contents, not the argument (no cause, no 105-minute / ~3,800-order impact, no 17-vs-10 person-day squeeze). The two decision-type headings (‘摘要与待决事项’, ‘改进项与优先级建议’) do not carry their ask or answer, e.g. the recommended plan."
+        },
+        {
+          "text": "C1 Conclusion first: the glance panel opens the document straight after the title and one metadata line, and its bottom line states the conclusion itself, not what the document covers",
+          "passed": true,
+          "evidence": "After the title and a compact metadata table (lines 3-10, plus a one-line no-blame note on line 12) the document goes straight into ‘## 1. 摘要与待决事项’ (line 14). It opens with the finding, not a description of the document: CFG-2231 changed the order-service pool limit 200 → 20, ‘本意只针对测试环境，却落在了全局默认值上’, pushed at 14:02 with no canary (line 16); then impact (line 18), why it took so long (line 20) and a decision box for 张伟 with a recommendation (lines 22-30). check_doc.py raised no C1 finding. Close call: there is no labelled one-line bottom-line or verdict element; the opening causal paragraph carries the conclusion."
+        },
+        {
+          "text": "C2 Compact panel: about 300 words of prose or fewer (tables and picture excluded; mechanical.json gives panel_words, where one Chinese character counts as 0.6 words), one line per decision and per risk, and verdict, decisions and top risks fit the first screen",
+          "passed": false,
+          "evidence": "mechanical.json stats.panel_words = 359 and Major C2 (line 14: the first section runs to about 359 words, budget 300). The decision is three multi-clause bullets (lines 26-28), not one line, and the panel lists no risks at all, so ‘one line per decision and per risk’ and ‘top risks fit the first screen’ are not met. The decision box itself does sit on the first screen (lines 22-30)."
+        },
+        {
+          "text": "C3 Verdict, decisions and risks are complete and loud in the panel: the verdict has a glyph, confidence and basis; each decision has who, what, by when and a recommendation; at most 5 ranked risks, each with severity and consequence",
+          "passed": false,
+          "evidence": "The panel (lines 14-32) has no verdict line with a glyph, confidence level and basis. The decision (lines 22-30) gives who (张伟), what (which improvement items first) and a recommendation (方案一) but no ‘by when’ (only ‘下个迭代’ in the title). There is no ranked risk list with severity and consequence in the panel at all; the cost of deferring A2 appears only deep in §6.3 point 4 (line 185)."
+        },
+        {
+          "text": "C4 Nothing invented: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, empty slots are omitted",
+          "passed": true,
+          "evidence": "Every decision element is grounded: the options are built only from timeline.md's six items and the ~10 person-day budget (3+8+0.5+0.5+4+1 = 17; option 1 = 9; option 2 = 10, all re-computed and correct); the ranking rationale is stated (line 28, the cumulative table at lines 150-157, lines 180-185); the extra item A7 is labelled ‘候选’ with ‘没有负责人和估算’ (line 191) and rests on 李娜's chat line at 15:03; effect statements are labelled estimates (line 159). No verdict or risk block is fabricated and there are no empty slots. (The unlabelled no-blame sentence on line 12 is an addition but not a verdict, decision or risk.)"
+        },
+        {
+          "text": "C5 Numbers in the panel trace to the sources (spot-check at least three); derived, merged or de-duplicated numbers say so",
+          "passed": true,
+          "evidence": "Spot-checks against timeline.md all match: 105 min (14:02-15:47), ~3,800 failed orders, ~1,200 users, availability 99.97% → 99.93% vs the 99.95% SLO, six items = 17 person-days, ~10 available (panel lines 16-28, ‘约’ preserved). Derived figures are signalled as sums or differences (‘合计 17 人天’, ‘缺 7 人天’, ‘共 9 人天，余 1 人天’, ‘合计只要 2 人天’). The 38 and 37 minute phase lengths are the writer's own intervals (14:20-14:58, 15:10-15:47); they are shown with their time ranges in §3.1 (lines 58-65) but are not flagged as derived inside the panel itself (minor weakness). The timeline's unreliable ‘约 40 分钟’ CPU duration is deliberately left out of the panel and reconciled in Appendix B."
+        },
+        {
+          "text": "D1 Diagram drawn: the eight related services (gateway, order-service, payment-service, inventory-service, user-service, notification-service, config-center, cache) and their call and push relationships are shown in at least one diagram",
+          "passed": true,
+          "evidence": "figures/fig2-propagation.png (embedded at line 101) draws all eight services (配置中心, 网关, 订单服务, 支付服务, 通知服务, 用户服务, 库存服务, 缓存) with the call edges (grey), the config-center push edges to gateway / order / payment (blue) and the inferred retry edge (red dashed)."
+        },
+        {
+          "text": "D2 Coverage and truth: every one of the eight services appears in at least one diagram, every drawn edge exists in services.csv, and inferred edges are dashed and captioned",
+          "passed": true,
+          "evidence": "All eight services appear as nodes. Every solid edge matches a calls entry in services.csv: config-center→gateway/order/payment, gateway→order/user, order→payment/inventory/user, payment→notification, inventory→cache, user→cache (11 edges; checked in the image and in make_figures.py). The only edge not in services.csv, payment→order ‘重试风暴 *’, is red dashed, starred, explained in the in-image legend (‘重试（* 服务清单未列出此方向）’), in the caption on line 103 and in §7 item 5."
+        },
+        {
+          "text": "D3 D4 Image-first and legible: the diagram a human sees first is an embedded image file that exists (PNG or SVG), not only a Mermaid or other code block, and viewing it at about 800 px wide shows legible labels, no overlap and no empty glyph boxes",
+          "passed": true,
+          "evidence": "All three figures are embedded PNGs that exist (fig1 1980x800, fig2 2200x1420, fig3 1910x666 px, inside 500-2600 px; no B4/D4 finding; diagram_blocks = 0). The first image (fig1, line 54) and the service diagram (fig2, line 101) are both images, no Mermaid. Viewed at 800 px width (downscaled copies): node names, sub-labels, annotations, the legend and the arrow label stay readable, nothing overlaps, and every Chinese glyph renders with no empty boxes."
+        },
+        {
+          "text": "D5 D6 Explained and reproducible: alt text, a caption saying how to read the diagram and its takeaway, a legend where colour carries meaning, the relation stated (verbs on edges, or once when all edges are alike), the diagram source file beside each image, and an edge list or equivalent in the archive",
+          "passed": false,
+          "evidence": "Present: alt text on all three images (lines 54, 101, 144); in-image legends for colour and line meaning (fig2: 直接故障 / 被牵连 / 变更来源 / 资料未提及受影响; 调用关系 / 配置推送 / 重试), which also states the relation types once; figures/make_figures.py sits in the same folder and regenerates all three; Appendix A (lines 208-221) lists each service's call targets. Not met: a caption giving how to read the diagram and its takeaway. The fig1 (line 56) and fig3 (line 146) captions are bare titles with the message only in alt text, and fig2's caption (line 103) explains only the dashed edge and provenance, the takeaway living in the numbered list below. The edge list is not in a labelled archive (the retry edge is not listed as an edge there), and check_doc.py reports D6 ‘no source file beside’ for each PNG (same-stem rule). With no partial credit this fails."
+        },
+        {
+          "text": "E1 E2 Honesty: every judgment has a confidence level and its basis; content not in the inputs (assumptions, suggestions, inferences) is labelled as such; unknowns are listed",
+          "passed": false,
+          "evidence": "Only part met. Labelling and unknowns are good: ‘假设“10 人天”是团队合计’ (line 141), ‘（推断，未验证）’ (line 127), ‘均为…估算，不是实测’ (line 159), ‘A7（候选）’ (line 191), † marks plus the Appendix B reconciliation, and §7 lists 7 unknowns with owners (lines 194-206). But no judgment carries a confidence level (no 把握 / 置信 / high-medium-low anywhere): the root cause, the recommendation of 方案一 (lines 26-28, 180-185) and the ‘做得好 / 靠运气’ judgments (lines 126-134) give a basis but no stated confidence. The panel also presents the writer's inference as fact (‘定位慢，是因为排查先后走了“数据库”和“有没有发布”两条路’, line 20), and the no-blame line (line 12) is an unlabelled addition, admitted only in user_notes.md."
+        },
+        {
+          "text": "F3 Chat reply: the executor's final reply (final_reply.md) is the glance panel in miniature (verdict, decisions, top risks, the file path, where to start) and does not paste the document",
+          "passed": false,
+          "evidence": "final_reply.md is short, does not paste the report, gives the full output path, a recommendation (‘我建议先做 A4、A3、A6、A1、A5（9 人天），把 A2 灰度推送（8 人天）放到后续迭代’, plus the alternative) and where to start (‘报告开头就是摘要和给张伟的决策框’, trade-offs in §6). But there is no verdict: it never states the root cause (CFG-2231) or the impact (105 min, ~3,800 orders, SLO miss). The ‘top risks’ slot is filled by four report-reliability caveats (‘发出前请留意’: source conflicts, A7, A3 benefit, 7 open items) with no severity or consequence, followed by notes about browser scratch files. It reads as a hand-off note, not the panel in miniature."
+        },
+        {
+          "text": "F4 Language: the document, its headings, labels and diagram text are in Chinese, the language of the request, and no glyph shows as an empty box (look at the diagram image)",
+          "passed": true,
+          "evidence": "report.md, every heading, table label, caption and the figure text are in Chinese; only identifiers (CFG-2231, P99, CPU, 5xx, CODEOWNERS, service ids such as order-service) stay Latin, as in the sources. All three PNGs (viewed full size and at 800 px) show no empty glyph boxes; make_figures.py sets Microsoft YaHei."
+        },
+        {
+          "text": "Automatic checks: check_doc.py on report.md and every sibling Markdown file reports no Blocker and at most two Majors in total",
+          "passed": false,
+          "evidence": "mechanical.json gate: 0 Blockers, 4 Majors, 6 Minors, passed = false. Majors: A1 (no zone markers), C2 (panel 359 words > 300, line 14), A2 (23-row table, line 69), A2 (28-line code block, line 241). mechanical.json covers only report.md (no report.*.md siblings), and 4 Majors already exceeds the allowance of 2."
+        },
+        {
+          "text": "Root cause and factors right: CFG-2231 changed the order-service connection pool limit from 200 to 20 (meant for test only, applied to the global default); the config centre had no value-range validation; the push had no canary; the 5 s latency alert threshold was too lax; the runbook lacked a check of recent config changes; payment retries without backoff amplified the failure",
+          "passed": true,
+          "evidence": "§1 (line 16) and §3.2 (line 71): CFG-2231, merged 13:58, changed the order-service pool limit 200 → 20, ‘本意只改测试环境，却改到了全局默认值’. §4 and the §4.2 table (lines 97, 114-119) give: no value-range validation (plus no per-environment defaults, from the chat), push without canary (‘配置推送没有灰度’), 5 s alert threshold too lax (‘偏松’), runbook missing the ‘先查最近的配置变更’ step, and payment retries without backoff causing a retry storm (CPU 90%) that spreads the failure from order to payment (line 165). All consistent with timeline.md and the chat."
+        },
+        {
+          "text": "Impact right: 105 minutes (14:02 to 15:47), about 3,800 failed orders, about 1,200 affected users, availability down from 99.97% to 99.93% against a 99.95% SLO",
+          "passed": true,
+          "evidence": "Line 18 and the §2 table (lines 36-44): ‘持续 105 分钟’ (14:02–15:47), ‘失败订单约 3,800 笔，受影响用户约 1,200 人’, ‘当月可用性从 99.97% 降到 99.93%，低于 99.95% 的 SLO’. All match timeline.md."
+        },
+        {
+          "text": "Decision for the tech lead: the panel asks Zhang Wei to prioritise the six follow-ups A1-A6, notes that they total about 17 person-days against about 10 available, and recommends which to do first",
+          "passed": true,
+          "evidence": "Lines 22-30: the boxed ‘需要张伟决定：下个迭代先做哪些改进项’ states the 6 items total 17 person-days against about 10 available (‘缺 7 人天’), recommends doing A4, A3, A6, A1, A5 first (9 person-days, 1 spare) with A2 (8 person-days) deferred, names an alternative (A2, A3, A4, A6 = 10) and gives the rationale. All six items A1-A6 appear in the panel by code and name."
+        },
+        {
+          "text": "Raw chat log preserved: the chat excerpt is kept in the archive part or a linked file, not in the human zone, as the user asked",
+          "passed": true,
+          "evidence": "Appendix C (heading line 237, fenced block lines 241-270) keeps all 28 chat lines; a line-by-line comparison with chat-log.txt is identical. It is the last section after all analysis, outside the §1-7 reading flow, and is linked from the metadata table (line 9). Caveat: it is an open, uncollapsed 28-line block in an unlabelled appendix (no sibling file, no details block), which A2/A3 treat as a defect; it is credited here only on ‘kept for reference, not in the main body’."
+        },
+        {
+          "text": "Cold reader: a fresh reader who sees only the first 60 lines and the images in them recovers at least 80% of the key facts (cold-reader test, scored separately)",
+          "passed": true,
+          "evidence": "Recall 5/6 = 83%. Recovered: K1, K2, K3, K4, K5. Missed: How the services relate: gateway calls order and user; order calls payment, inventory and user; config-center pushes config to gateway, order and payment.. Only the config-center push targets were stated; the call relations among services were not visible in the first 60 lines."
+        }
+      ],
+      "notes": [
+        "Whether ‘about 10 person-days’ is a team total or per person: assumed team total (§6.1), so option 1's parallel plan depends on 周杰 and 赵敏 each having 3-4 days; the 17 person-days were not re-estimated.",
+        "How the timeline and chat were reconciled (chat wins for who/when, timeline for monitoring data): DB detour ~25 min vs 8 min, payment CPU ~40 min vs ~69 min, 赵敏 14:58 vs 王磊 14:52 thread dump, first response 14:12 vs 14:20; all logged in Appendix B.",
+        "The payment→order retry direction is not in services.csv; drawn as a dashed starred edge and listed as an open question.",
+        "Unknown whether the push also changed the payment service's and gateway's own pool limits, whether CFG-2231 was reviewed, and whether 20 is a legitimate test value (the basis for candidate A7).",
+        "The alert text ‘P99 > 5s, sustained 5 min’ implies a 5-minute window, so A3 (threshold only) may save just 1-2 minutes; this is the executor's own inference.",
+        "The SLO arithmetic (0.04 pp = 80% of the monthly budget) is derived by the executor and the availability basis (request vs time) is not stated; assumed request-based.",
+        "Author, date and addressee are unknown: no author field, report date 2026-10-17.",
+        "Rendering was never checked in a real Markdown viewer (browser preview failed); only structural checks with markdown-it and viewing each PNG.",
+        "The added line ‘本复盘只讨论流程与系统，不追究个人’ is not from the sources; the executor says to remove it if it is not the team's norm.",
+        "Candidate A7 (distinguish per-environment defaults) has no owner or estimate and needs 周杰 and 李娜 to assess.",
+        "王磊 should confirm the full latency-alert rule (threshold and window).",
+        "张伟 should confirm what ‘10 person-days’ means before the plan is committed.",
+        "Browser preview failed (file:// blocked, screenshots only saveable inside the repo); fell back to markdown-it structural checks and viewing the PNGs directly.",
+        "The browser tool left two scratch files in a git repo's .playwright-mcp folder; the executor reports deleting them (not verifiable from the outputs).",
+        "Port 8765 was already used by another process; the executor used a different port and stopped its own server."
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.9775,
+        "stddev": 0.0263,
+        "min": 0.95,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 1939.8,
+        "stddev": 336.5593,
+        "min": 1684.0,
+        "max": 2435.4
+      },
+      "tokens": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.4875,
+        "stddev": 0.0714,
+        "min": 0.41,
+        "max": 0.57
+      },
+      "time_seconds": {
+        "mean": 2179.125,
+        "stddev": 317.2055,
+        "min": 1972.1,
+        "max": 2650.8
+      },
+      "tokens": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.49",
+      "time_seconds": "-239.3",
+      "tokens": "+0"
+    }
+  },
+  "notes": [
+    "Headline (cold-reader assertion included): with the skill the four runs pass 22/22, 22/22, 20/21 and 22/23; the baselines pass 10/22, 9/22, 12/21 and 12/23. The automatic gate (no Blocker, at most two Majors) is passed by every with-skill run (0 Blockers, 0 Majors) and failed by every baseline (4-5 Majors).",
+    "Where the skill adds value: audience zones (A1, A3), the reading path (B1), headings that carry the argument (B3), a conclusion-first panel (C1), a compact panel (C2), complete verdict/decisions/risks (C3), diagram explanation and sources (D5/D6), honesty labels (E1/E2), a chat reply that is the panel in miniature (F3) and the automatic gate. Every one of these fails in at least three of the four baselines.",
+    "Cold reader (first 60 lines only, six source-derived facts per eval): with-skill 22 of 24 facts, baseline 22 of 24. Recall is the same because the baselines also opened with a conclusion when asked for a decision report. The skill's measurable value is therefore structure and consistency, not first-screen recall. The test stays a regression check, not a differentiator.",
+    "Non-discriminating assertions: C4 (nothing invented), C5 (numbers trace to the sources), D1/D2 (a diagram exists and is truthful) and the content checks pass in both configurations. Layout rules did not cost any factual accuracy.",
+    "Skill misses: eval 3, Figure 1 shows seven of the eleven components (the Raw Zone is missing) so 'mental model first' fails, and the assertion itself never names the eight core components; eval 4, A3 fails because a 28-line chat log and a 93-line machine zone stayed inline although the skill sets a threshold of about 25 lines (borderline, and the user asked for the log in the report).",
+    "Assertion and skill wording problems found by the graders: A1 'names its audience' versus the skeleton's own heading 'START HERE - at a glance' (no reader named); A3 does not say whether a one-line pointer block counts as collapsed; B2 does not say whether the glance panel is exempt from 'terms before first use'; C3 demands a 'by when' while C4 forbids inventing one; F3 does not define an acceptable file-path format.",
+    "Tooling bug found: check_doc.py counted a literal details tag inside inline code as an unbalanced block (false Blocker B4 on a notes file). Missing assertions: body-level factual accuracy (three small slips in eval 1, e.g. 'seven of the other eight'), date and weekday sanity, flagging conflicts between inputs, and a handoff panel that says what the continuing agent may do alone (the with-skill handoff missed that cold-reader fact).",
+    "Time and tokens are not measurable here: the harness reports no token counts, so tokens are shown as 0 and time is estimated from file timestamps (it includes idle waits)."
+  ]
+}

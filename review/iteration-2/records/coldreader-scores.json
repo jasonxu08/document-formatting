@@ -1,0 +1,32 @@
+{
+  "eval-1-upgrade-risk-report/with_skill/run-1": {
+    "recovered": ["K1", "K2", "K3", "K4", "K5"], "missed": ["K6"], "total": 6,
+    "note": "K6 (11 of 36 Q3 incidents) is an evidence-level detail; both configurations missed it."
+  },
+  "eval-1-upgrade-risk-report/without_skill/run-1": {
+    "recovered": ["K1", "K2", "K3", "K4", "K5"], "missed": ["K6"], "total": 6,
+    "note": "K6 (11 of 36 Q3 incidents) is an evidence-level detail; both configurations missed it."
+  },
+  "eval-2-dual-audience-handoff/with_skill/run-1": {
+    "recovered": ["K1", "K2", "K3", "K4", "K5"], "missed": ["K6"], "total": 6,
+    "note": "The panel says the agent investigates the unmapped cron jobs first, but not what the agent may do alone or that it must not touch production."
+  },
+  "eval-2-dual-audience-handoff/without_skill/run-1": {
+    "recovered": ["K1", "K2", "K3", "K4", "K5", "K6"], "missed": [], "total": 6,
+    "note": "K6 is borderline: credited from 'T8 can start now' plus 'who approves production steps'."
+  },
+  "eval-3-ingestion-explainer/with_skill/run-1": {
+    "recovered": ["K1", "K2", "K3", "K4", "K5", "K6"], "missed": [], "total": 6
+  },
+  "eval-3-ingestion-explainer/without_skill/run-1": {
+    "recovered": ["K1", "K2", "K3", "K4", "K5", "K6"], "missed": [], "total": 6,
+    "note": "K1 is borderline: asynchrony is only implied by 'stages joined by a message queue'."
+  },
+  "eval-4-postmortem-zh/with_skill/run-1": {
+    "recovered": ["K1", "K2", "K3", "K4", "K5", "K6"], "missed": [], "total": 6
+  },
+  "eval-4-postmortem-zh/without_skill/run-1": {
+    "recovered": ["K1", "K2", "K3", "K4", "K5"], "missed": ["K6"], "total": 6,
+    "note": "Only the config-center push targets were stated; the call relations among services were not visible in the first 60 lines."
+  }
+}

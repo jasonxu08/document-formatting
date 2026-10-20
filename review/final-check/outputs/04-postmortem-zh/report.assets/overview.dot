@@ -1,0 +1,39 @@
+// 订单故障复盘 - 系统图。节点和实线边来自 services.csv；
+// 配置中心的边在服务清单中列为 calls，时间线 14:02 记为"推送"；
+// 支付服务 -> 订单服务 的重试边只来自群聊(14:22)和时间线(影响、A5)，服务清单没有，所以画成虚线。
+// 渲染：dot -Tpng -Gdpi=150 overview.dot -o overview.png
+digraph overview {
+  rankdir=TB; pad=0.3; nodesep=0.5; ranksep=0.7; bgcolor="white";
+  graph [fontname="Microsoft YaHei"];
+  node [shape=box, style="rounded,filled", fillcolor="#F2F4F7", color="#98A2B3",
+        fontname="Microsoft YaHei", fontsize=13, margin="0.18,0.10"];
+  edge [color="#98A2B3", fontname="Microsoft YaHei", fontsize=11, arrowsize=0.8];
+
+  "config-center" [label="配置中心\nconfig-center\n误改的值从这里推出", fillcolor="#FEF0C7", color="#B54708", penwidth=2];
+  "gateway" [label="网关\ngateway\n订单接口 5xx 上升", fillcolor="#FDE7D3", color="#DC6803"];
+  "order-service" [label="订单服务\norder-service\n连接池上限 200→20\n请求排队，P99 变慢", fillcolor="#FEE4E2", color="#D92D20", penwidth=2.5];
+  "payment-service" [label="支付服务\npayment-service\n重试风暴，CPU 90%+", fillcolor="#FDE7D3", color="#DC6803"];
+  "user-service" [label="用户服务\nuser-service"];
+  "inventory-service" [label="库存服务\ninventory-service"];
+  "notification-service" [label="通知服务\nnotification-service"];
+  "cache" [label="缓存\ncache"];
+
+  { rank=same; "config-center"; "gateway"; }
+  { rank=same; "payment-service"; "inventory-service"; "user-service"; }
+  { rank=same; "notification-service"; "cache"; }
+
+  "gateway" -> "order-service";
+  "gateway" -> "user-service";
+  "order-service" -> "payment-service";
+  "order-service" -> "inventory-service";
+  "order-service" -> "user-service";
+  "payment-service" -> "notification-service";
+  "inventory-service" -> "cache";
+  "user-service" -> "cache";
+
+  "config-center" -> "gateway"         [label="   推送配置", color="#B54708", fontcolor="#B54708", penwidth=1.6];
+  "config-center" -> "order-service"   [label="   推送配置", color="#B54708", fontcolor="#B54708", penwidth=1.6];
+  "config-center" -> "payment-service" [label="   推送配置", color="#B54708", fontcolor="#B54708", penwidth=1.6];
+
+  "payment-service" -> "order-service" [label="重试", color="#D92D20", fontcolor="#D92D20", style=dashed, penwidth=2, constraint=false];
+}

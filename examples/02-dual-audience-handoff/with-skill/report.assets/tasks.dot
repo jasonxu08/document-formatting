@@ -1,0 +1,50 @@
+// Task dependency map for report.md. Status as of 2026-10-15.
+// Every edge comes from the "Depends on" column of Alex's task list; arrows read "must finish before" (prerequisite above, dependent below).
+// Re-render: dot -Tpng -Gdpi=150 report.assets/tasks.dot -o report.assets/tasks.png   (run from the folder that holds report.md)
+// To change a status: edit the node's fillcolor, color and status line (green = done, red = blocked, amber = waiting, grey = to do).
+digraph tasks {
+  rankdir=TB; pad=0.3; nodesep=0.28; ranksep=0.5; bgcolor="white";
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=15, margin="0.14,0.09", penwidth=1.5];
+  edge [color="#667085", arrowsize=0.8, penwidth=1.4];
+
+  T1  [label=<<B>T1</B> Job definition<BR/>done>,
+       fillcolor="#E7F3EC", color="#4C9F70"];
+  T2  [label=<<B>T2</B> Streaming CSV writer<BR/>done>,
+       fillcolor="#E7F3EC", color="#4C9F70"];
+  T3  [label=<<B>T3</B> Idempotency key and<BR/>export_runs on staging<BR/>done>,
+       fillcolor="#E7F3EC", color="#4C9F70"];
+
+  T4  [label=<<B>T4</B> Migration 0042<BR/>in production<BR/><FONT COLOR="#B42318">blocked: DBA window<BR/>(Q4)</FONT>>,
+       fillcolor="#FEE4E2", color="#D92D20", penwidth=2.4];
+  T5  [label=<<B>T5</B> XLS above<BR/>1M rows<BR/><FONT COLOR="#B42318">blocked: product<BR/>decision (Q1)</FONT>>,
+       fillcolor="#FEE4E2", color="#D92D20", penwidth=2.4];
+  T6  [label=<<B>T6</B> Pool from 3<BR/>to 6 workers<BR/><FONT COLOR="#B42318">blocked: budget<BR/>decision (Q2)</FONT>>,
+       fillcolor="#FEE4E2", color="#D92D20", penwidth=2.4];
+  T7  [label=<<B>T7</B> Email template<BR/><FONT COLOR="#B54708">waiting: Marketing<BR/>approval (Q3)</FONT>>,
+       fillcolor="#FEF0C7", color="#DC6803", penwidth=2.4];
+
+  T8  [label=<<B>T8</B> Map 3 unmapped<BR/>cron jobs<BR/>to do: owner<BR/>unknown (Q5)>,
+       fillcolor="#F2F4F7", color="#98A2B3"];
+  T9  [label=<<B>T9</B> Per-tenant rollout<BR/>internal, Acme, all<BR/>to do: needs T4 to T7>,
+       fillcolor="#F2F4F7", color="#101828", penwidth=3.2];
+  T10 [label=<<B>T10</B> Decommission<BR/>legacy cron<BR/>to do>,
+       fillcolor="#F2F4F7", color="#98A2B3"];
+  T11 [label=<<B>T11</B> Fix flaky<BR/>cancel test<BR/>to do, low priority>,
+       fillcolor="#FFFFFF", color="#98A2B3", style="rounded,filled,dashed"];
+
+  T1 -> T2;
+  T1 -> T3;
+  T3 -> T4;
+  T2 -> T5;
+  T2 -> T6;
+  T2 -> T7;
+  T4 -> T9;
+  T5 -> T9;
+  T6 -> T9;
+  T7 -> T9;
+  T8 -> T10;
+  T9 -> T10;
+
+  { rank=same; T9; T8; }
+  { rank=same; T1; T11; }
+}

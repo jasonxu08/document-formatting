@@ -1,0 +1,65 @@
+{
+  "files": {
+    "report.md": {
+      "file": "<workspace>\\iteration-2\\eval-1-upgrade-risk-report\\without_skill\\run-1\\outputs\\report.md",
+      "stats": {
+        "lines": 264,
+        "headings": 22,
+        "internal_links": 0,
+        "images": 1,
+        "diagram_blocks": 0,
+        "details_blocks": 0,
+        "zones": [],
+        "panel_words": 495,
+        "human_zone_words": 4126
+      },
+      "gate": {
+        "blockers": 0,
+        "majors": 5,
+        "minors": 1
+      },
+      "blockers": [],
+      "majors": [
+        {
+          "rule": "A1",
+          "line": 0,
+          "message": "no <!-- zone:... --> markers; human-read and machine/archive content are not marked (for a large document with raw material this is a Blocker)"
+        },
+        {
+          "rule": "B5",
+          "line": 0,
+          "message": "a large document needs navigation: 0 in-document link(s), expected at least 5"
+        },
+        {
+          "rule": "B1",
+          "line": 1,
+          "message": "only 0 in-document link(s) in the 60 lines after the title; give a 'Read next' path with at least 3"
+        },
+        {
+          "rule": "C1",
+          "line": 1,
+          "message": "21 lines of text come before the first panel element; the conclusion should open the document, ahead of background, provenance or reading guides"
+        },
+        {
+          "rule": "C2",
+          "line": 9,
+          "message": "the first section runs to about 495 words (budget 300, tables and picture excluded); keep the panel short and link to detail"
+        }
+      ],
+      "minors": [
+        {
+          "rule": "F2",
+          "line": 1,
+          "message": "the human zone runs to about 4126 words (advice: 2500); check that detail only some readers need has moved to the archive"
+        }
+      ]
+    }
+  },
+  "gate": {
+    "blockers": 0,
+    "majors": 5,
+    "minors": 1,
+    "passed": false
+  },
+  "note": "Blocker/Major/Minor findings of scripts/check_doc.py; passed = no Blocker and at most 2 Majors."
+}

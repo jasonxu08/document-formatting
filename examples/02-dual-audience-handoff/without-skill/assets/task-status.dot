@@ -1,0 +1,75 @@
+// Source of assets/task-status.png (Graphviz).
+// Regenerate: dot -Tpng -Gdpi=110 task-status.dot -o task-status.png
+// Snapshot of 2026-10-17. The task table in report.md (B3) is the live status.
+digraph exports_migration {
+  rankdir=LR;
+  graph [fontname="Segoe UI", fontsize=14, labelloc=t, labeljust=l, pad=0.2,
+         nodesep=0.22, ranksep=0.55,
+         label=<
+    <TABLE BORDER="0" CELLSPACING="5" CELLPADDING="4">
+      <TR><TD COLSPAN="4" ALIGN="LEFT"><B>Exports migration: task status on 2026-10-17</B>   (cutover target Tue 2026-11-10)</TD></TR>
+      <TR>
+        <TD BGCOLOR="#dff0d8" BORDER="1" COLOR="#2e7d32">done</TD>
+        <TD BGCOLOR="#fff4ce" BORDER="1" COLOR="#b7791f">in progress</TD>
+        <TD BGCOLOR="#fbe0dd" BORDER="1" COLOR="#c62828">blocked on a person</TD>
+        <TD BGCOLOR="#e8eef8" BORDER="1" COLOR="#46618f">not started</TD>
+      </TR>
+    </TABLE>>];
+  node  [shape=box, style="rounded,filled", fontname="Segoe UI", fontsize=13,
+         margin="0.14,0.08", penwidth=1.8];
+  edge  [color="#4a4a4a", arrowsize=0.85, penwidth=1.5];
+
+  // Built and tested on staging
+  built [fillcolor="#dff0d8", color="#2e7d32", label=<
+    <B>T1 to T3</B><BR ALIGN="LEFT"/>
+    Job definition, CSV writer,<BR ALIGN="LEFT"/>
+    idempotency + migration 0042<BR ALIGN="LEFT"/>
+    <FONT COLOR="#1b5e20"><B>DONE</B>; migration on staging only</FONT><BR ALIGN="LEFT"/>>];
+
+  // Waiting on people
+  T4 [fillcolor="#fbe0dd", color="#c62828", label=<
+    <B>T4</B>  Migration 0042 in production<BR ALIGN="LEFT"/>
+    <FONT COLOR="#b71c1c"><B>BLOCKED</B>: DBA window (Q4)</FONT><BR ALIGN="LEFT"/>>];
+  T5 [fillcolor="#fbe0dd", color="#c62828", label=<
+    <B>T5</B>  XLS above 1M rows<BR ALIGN="LEFT"/>
+    <FONT COLOR="#b71c1c"><B>BLOCKED</B>: product decision (Q1)</FONT><BR ALIGN="LEFT"/>>];
+  T6 [fillcolor="#fbe0dd", color="#c62828", label=<
+    <B>T6</B>  Pool: 3 to 6 workers<BR ALIGN="LEFT"/>
+    <FONT COLOR="#b71c1c"><B>BLOCKED</B>: budget decision (Q2)</FONT><BR ALIGN="LEFT"/>>];
+  T7 [fillcolor="#fff4ce", color="#b7791f", label=<
+    <B>T7</B>  Notification email<BR ALIGN="LEFT"/>
+    <FONT COLOR="#8a5a00"><B>IN PROGRESS</B>: Marketing approval (Q3)</FONT><BR ALIGN="LEFT"/>>];
+
+  // Rollout and switch-off
+  T9 [fillcolor="#e8eef8", color="#46618f", label=<
+    <B>T9</B>  Per-tenant rollout<BR ALIGN="LEFT"/>
+    internal, then Acme, then all<BR ALIGN="LEFT"/>
+    <FONT COLOR="#2b4c7e"><B>TODO</B>: needs T4 to T7</FONT><BR ALIGN="LEFT"/>>];
+  T10 [fillcolor="#e8eef8", color="#46618f", label=<
+    <B>T10</B>  Decommission<BR ALIGN="LEFT"/>
+    legacy cron<BR ALIGN="LEFT"/>
+    <FONT COLOR="#2b4c7e"><B>TODO</B>: needs T8 and T9</FONT><BR ALIGN="LEFT"/>>];
+
+  // Can start now
+  T8 [fillcolor="#e8eef8", color="#46618f", label=<
+    <B>T8</B>  Map 3 unmapped cron jobs<BR ALIGN="LEFT"/>
+    <FONT COLOR="#2b4c7e"><B>TODO</B>: can start now (Q5)</FONT><BR ALIGN="LEFT"/>>];
+  T11 [fillcolor="#f1f1f1", color="#777777", label=<
+    <B>T11</B>  Fix flaky test<BR ALIGN="LEFT"/>
+    <FONT COLOR="#444444"><B>TODO</B>: low priority</FONT><BR ALIGN="LEFT"/>>];
+
+  built -> T4;
+  built -> T5;
+  built -> T6;
+  built -> T7;
+  T4 -> T9;
+  T5 -> T9;
+  T6 -> T9;
+  T7 -> T9;
+  T9 -> T10;
+  T8 -> T10;
+
+  built -> T11 [style=invis];
+  { rank=same; built; T11; }
+  { rank=same; T9; T8; }
+}

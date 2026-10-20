@@ -1,0 +1,898 @@
+diff --git a/a/SKILL.md b/b/SKILL.md
+index df2f53b..88a4964 100644
+--- a/a/SKILL.md
++++ b/b/SKILL.md
+@@ -28,7 +28,7 @@ Three overrides:
+ 
+ - **Required formats win.** If a template, schema or parser dictates the structure (an ADR template, OpenSpec artifacts, another skill's report format, CSV or JSON, API docs), keep its required parts and add the human layer around them: the glance block at the top if the format allows it, otherwise in a companion summary file or in your chat reply. Never break something a tool consumes.
+ - **Write in the reader's language** - the language the user is writing in, labels like "At a glance" included. The English in this file is for you.
+-- **Updating an existing document?** Keep its structure, and make sure its glance panel is still true after your edit. A stale summary is worse than none.
++- **Updating an existing document?** Keep its structure, and make sure its glance panel is still true after your edit. A stale summary is worse than none. A handoff or status document that agents will keep updating should say, in its AI-input block, which parts of the panel to refresh when the status changes.
+ 
+ ## Step 1 - Sort every piece of content by audience
+ 
+@@ -37,7 +37,7 @@ Do this before drafting; the layout follows from it.
+ | Bin | What belongs in it | Write it like this |
+ |---|---|---|
+ | 👤 **Human-read** | Conclusions, verdicts, decisions needed, risks, the mental model, key findings and why they matter, recommendations, next steps | Meaning first. Short paragraphs, terms explained, emphasis on what matters. |
+-| 🤖 **AI-input** | What a later agent needs to continue or verify the work: exact paths, commands, IDs, constraints, ordered task lists, parameters, schemas, machine-readable data | Complete and unambiguous rather than pretty. Absolute paths, copy-paste commands, no "this" or "it" without a referent. |
++| 🤖 **AI-input** | What a later agent needs to continue or verify the work: exact paths, commands, IDs, constraints, ordered task lists, parameters, schemas, machine-readable data | Complete and unambiguous rather than pretty. Paths that stay valid for the next agent (repo-relative with the root stated once; absolute only for things outside the repo), copy-paste commands, no "this" or "it" without a referent. |
+ | 🗄️ **Archive** | Evidence and provenance: raw logs, full tables, query results, tool output, long inventories, dead ends, method, sources, versions, diagram source | Faithful and searchable, not narrated. |
+ 
+ Two tests keep the bins honest:
+@@ -58,33 +58,39 @@ You should be able to fill these in before drafting. If you cannot, the investig
+ 
+ ## Step 3 - Use the two-zone layout
+ 
+-Start from `assets/skeleton.md` and fill it in. The shape:
++Start from `assets/skeleton.md`, fill it in and delete its hint comments and placeholders (the checker flags leftovers). The shape:
+ 
+ 1. **Title** - name the topic and, if it fits, the conclusion.
+ 2. **👤 Human zone** - the whole upper part. It opens with the glance panel, then the reading path, then numbered body sections (1, 2, 3...).
+-3. **🗄️ Machine and archive zone** - last, visually quiet, with lettered blocks (A, B, C...), each collapsed in `<details>` and each opening with a line that says what it is and which claim it supports. Numbers are the path people read; letters are places they look things up.
++3. **🗄️ Machine and archive zone** - last, visually quiet, with lettered blocks (A, B, C...), each collapsed in `<details>`. Each block opens with an italic line that names its bin (🤖 AI input or 🗄️ archive), says what it is and which claim it supports. Keep the block headings themselves plain words, because they are link targets. Numbers are the path people read; letters are places they look things up.
+ 
+ Make the split unmistakable to both audiences:
+ 
+ - For people: the two zone headings carry the 👤 and 🗄️ glyphs (they show up in outline and TOC panes as well) and a one-line instruction ("Start here", "Skip unless you need the raw evidence or are an agent continuing this work").
+ - For tools and other agents: invisible markers `<!-- zone:human -->`, `<!-- zone:ai-input -->` and `<!-- zone:archive -->` at the start of each zone or block, so a later agent can jump to what it needs.
+ 
+-If AI-input or archive material is long (more than about 60 lines in total, or any single block over about 25 lines), put it in a sibling file (`<name>.evidence.md`, `<name>.data.json`) and link it from the machine zone instead of inlining it.
++Long material goes in a sibling file (`<name>.evidence.md`, `<name>.data.json`), reached through a one-line block in the machine zone, when AI-input and archive content together pass about 60 lines or any single block passes about 25. The exception: if the user wants one self-sufficient document, or an agent will receive only this file, keep the AI-input inline (collapsed) and move only archive material out. Start each sibling Markdown file with its zone marker (`<!-- zone:archive -->` or `<!-- zone:ai-input -->`) and run the checker on it too; it then skips the human-zone rules.
+ 
+ ## The glance panel
+ 
+-It is the first thing in the human zone. Someone who reads only this, for under a minute, should understand at least 80% of the document. It fits on one screen and states conclusions, not topics: "This report covers the upgrade" tells the reader nothing, while "Upgrade 6 of 9 services before the freeze and defer `auth-service`" tells them nearly everything. Use text, a picture or both, whichever gets the topic across fastest; usually that is a one-line bottom line plus one diagram or table.
++It is the first thing in the human zone. Someone who reads only this, for under a minute, should understand at least 80% of the document. It states conclusions, not topics: "This report covers the upgrade" tells the reader nothing, while "Upgrade 6 of 9 services before the freeze and defer `auth-service`" tells them nearly everything. Use text, a picture or both, whichever gets the topic across fastest; usually that is a short bottom line plus one diagram or table.
++
++The first screen must carry the verdict, the decision and the top risks. The picture and the reading path may continue onto a second screen; a panel that needs more than two screens is carrying detail that belongs in a body section.
+ 
+ Contents, in this order. Drop an item that does not apply and never invent one to fill a slot.
+ 
+-1. **Verdict or status** - if you reached any judgment, say so first and loudly: a glyph and a word (🟢 go, 🟡 go with conditions, 🔴 stop, ⚪ not enough evidence), then the bottom line in one or two sentences, then confidence and what it rests on.
+-2. **Decision needed** - what, who, by when, your recommendation, and the cost of being wrong.
++1. **Verdict or status** - if you reached any judgment, say so first and loudly: a glyph and a word (🟢 go, 🟡 go with conditions, 🔴 stop, ⚪ not enough evidence), then the bottom line, then confidence and what it rests on.
++2. **Decisions needed** - one line each: who decides what by when, and your recommendation. If the cost of being wrong matters, say it once for the whole block.
+ 3. **Top risks** - at most five, ranked, severity glyph first, each with a one-line consequence and a link to where it is handled.
+-4. **Key facts** - three to five numbers or facts that carry the argument.
++4. **Key facts** - three to five numbers or facts that carry the argument; skip them when the verdict and risks already do.
+ 5. **One picture** - if a single diagram or compact table makes the topic click (system map, before and after, timeline, option matrix), put it here. When the picture is the fastest route to understanding, it may come right after the bottom line.
+ 6. **Read next** - the reading path (next section).
+ 
+-Anything that could change what the reader does belongs here, above the fold. What the panel must let the reader answer depends on the document:
++Keep every element short, because the panel is read in seconds: the title and the verdict line take one line each, the bottom line is at most two sentences (about 40 words), each decision and each risk is one line, and a table cell is a dozen words at most. Together the panel's prose stays near 300 words (tables and the picture do not count). Whatever does not fit is detail. It goes in a body section, and the panel links to it.
++
++If there is no judgment to give (an explainer, a reference page), skip the glyph and the decision block. Open with the mental model as one plain sentence, then let the picture and a short list of the 3-5 things that matter (each with the trap if it is missed) do the work. Do not invent a verdict, a decision or a risk to fill the template.
++
++Anything that could change what the reader does belongs in the panel, above the fold. What the panel must let the reader answer depends on the document:
+ 
+ | Document | The reader can answer in seconds |
+ |---|---|
+@@ -104,12 +110,12 @@ Good (states the answer; invented example): "🟡 Go with conditions - upgrade 6
+ People understand best when they get the frame before the details, one idea at a time, with a way back. So:
+ 
+ - **Order by understanding, not by discovery.** A good default: glance panel, then the mental model (a diagram plus the 3-5 terms that matter), then findings by importance, then options and recommendation, then next steps and open questions. "First I looked at..." chronology belongs in the archive.
+-- **Give a reading path.** End the panel with a numbered "Read next" list. Each line holds a link, what the reader gets and roughly how long it takes. Say who may stop where ("Only deciding? Stop here. Implementing? Continue to 3, then A").
+-- **Make headings carry the story.** "Retries cause most timeouts" beats "Timeout analysis". Reading only the headings should give the argument.
++- **Give a reading path.** End the panel with a "Read next" list in reading order (bullets, with the section number inside the link text so it matches the headings). Each line holds a link, what the reader gets and roughly how long it takes. Say who may stop where ("Only deciding? Stop here. Implementing? Continue to 3, then A").
++- **Make headings carry the story.** "Retries cause most timeouts" beats "Timeout analysis". Reading only the headings should give the argument. A numbered question or decision heading carries its answer or ask ("Q1 Allow XLS above 1M rows? Recommend: split"), not only its topic.
+ - **Signpost.** Open each section with one line on the question it answers, and close with `Next →` when the order is not obvious. Use one name per entity throughout; never rename something between sections.
+ - **Show relationships explicitly.** When A depends on B or contradicts C, say it with a link: "builds on [2 The dependency map](#2-the-dependency-map)". Link each claim in the panel to the section that supports it, and each evidence block back to the claim it supports.
+ - **Chunk.** Groups of three to five, sections about a screen long, tables for comparisons, lists for parallel items, short paragraphs for reasoning.
+-- **Define as you go.** Explain a term on first use, or in a short glossary right after the mental model. Never assume the reader shares the context you built up during the work.
++- **Concepts before flows.** Introduce the vocabulary before the first section that uses it: a short glossary right after the mental model, or a definition on first use. A flow or procedure that leans on undefined terms sends the reader back and forth. Never assume the reader shares the context you built up during the work.
+ - **Keep link targets boring.** Anchors break silently. For headings you link to, use plain words and digits (no emoji or punctuation), build the anchor GitHub-style (lowercase, spaces to hyphens, punctuation dropped) and verify with the checker below.
+ 
+ ## Draw the web
+@@ -122,8 +128,8 @@ People understand best when they get the frame before the details, one idea at a
+ 
+ 1. Write the nodes and edges (source, relation, target) first. Every node and edge must come from something you verified; show inferred edges dashed and say so in the caption.
+ 2. **Default to an embedded image** (a PNG rendered with Graphviz, or matplotlib for quantitative charts). The readers' usual viewers (VS Code preview, Azure DevOps repo and PR pages) do not reliably render Mermaid, and a diagram that shows up as code defeats its purpose. Keep the diagram source (DOT or Mermaid) beside the image so it can be edited. Use inline Mermaid only when you know the target renders it, or when no renderer is available; then say so in one line.
+-3. Keep each diagram small enough to read, about twelve nodes. A larger web becomes an overview plus zoomed views.
+-4. Give it one focal point (the hub, the broken link, the changed part), a legend if colours carry meaning, a verb on every edge, and a caption: what it shows, how to read it, the one takeaway.
++3. Keep each diagram legible at about 800 px wide. That is usually a dozen nodes, a few more when the layout is clean. If it cannot be made legible, split it into an overview (groups, or the main flow) plus zoomed views, make sure every entity appears in at least one of them, and say in the caption what the overview leaves out.
++4. Give it one focal point (the hub, the broken link, the changed part), a legend if colours carry meaning, a verb on the edges, and a caption: what it shows, how to read it, the one takeaway. When every edge means the same thing (a pure dependency graph), say so once in the legend or caption and label only the exceptions; twelve identical labels are noise.
+ 5. If you can view images, look at the rendered file and fix overlaps, unreadable labels and empty boxes where non-Latin text (Chinese, for example) lacks a font, before embedding. It must stay legible at about 800 px wide.
+ 6. Put the diagram where its entities are first introduced, and in the glance panel when it is the quickest route to understanding the topic.
+ 
+@@ -132,25 +138,36 @@ People understand best when they get the frame before the details, one idea at a
+ If everything shouts, nothing does. Spend loud formatting only on what changes the reader's action:
+ 
+ - **Verdict** - a blockquote whose first line is a heading-sized status line. One overall verdict per document.
+-- **Decision needed** - a blockquote headed with 🧭.
++- **Decisions needed** - a blockquote headed with 🧭, one line per decision.
+ - **Risks** - a table with the severity glyph in the first column so the eye can scan it (🔴 blocker, 🟠 high, 🟡 medium, 🟢 low).
+-- **Zone headings** - the 👤 and 🗄️ ones.
+-- Bold three to five facts in running text; never whole paragraphs.
++- **Zone headings** - the 👤 one is loud (uppercase "START HERE"); the 🗄️ one is deliberately quiet (sentence case, content collapsed), because people should be able to walk past it.
++- Bold three to five facts in running text. Labels such as "Bottom line:" and list lead-ins are structure and do not count against that; whole paragraphs are never bold.
+ 
+ Use plain blockquotes rather than `> [!NOTE]`-style alerts: GitHub renders those, but many previews and Azure DevOps show the raw tag. Do not use HTML colours or styles; they are stripped. Everything must still read well as plain text.
+ 
+ ## Deliver
+ 
+-- **File first.** Save the document where the repo's conventions say docs live; otherwise next to the work or where the user named. Put images in `<doc-stem>.assets/` beside it and link them relatively, with forward slashes and no spaces in file names.
+-- **The chat reply is the glance panel in miniature**: verdict, decision needed, the top two or three risks, the file path, and where to start reading. Do not paste the document into chat. The reader should be able to decide in thirty seconds and open the file only for more.
++- **File first.** Save the document where the repo's conventions say docs live; otherwise next to the work or where the user named. Put images in `<doc-stem>.assets/` beside it and link them relatively, with forward slashes and no spaces in file names. Name every sibling after the document (`<doc-stem>.evidence.md`) and keep all references relative, so the set can be moved or renamed together.
++- **No machine-local paths.** Your home directory, temp or session folders mean nothing to the next reader and can leak a username; use paths relative to the document or the repo. The checker flags them.
++- **The chat reply is the glance panel in miniature** (unless the caller asks for something else): verdict, decisions needed, the top two or three risks, the file path, and where to start reading. Do not paste the document into chat. The reader should be able to decide in thirty seconds and open the file only for more.
+ - **Chat-only output** that is long gets the same structure. Keep archive material out of the reply (offer to save it), and use a table or indented list instead of a diagram if the client cannot render images.
+ 
+ ## Before you deliver
+ 
++Review the document against `references/review-rubric.md`, the standard every large document is held to:
++
++1. Run `python scripts/check_doc.py <report.md>` on the main file and on each sibling file (path relative to this skill's directory). It covers every automatic rule and prints each finding with a rule id and a tier: Blocker, Major or Minor.
++2. Walk the Blocker and Major judgment rules in the rubric that apply to this document type.
++3. Deliver when no Blocker is left and at most two Majors remain; name those Majors, with the reason, in your reply.
++
++The rubric works equally well for reviewing a document someone else wrote: score it the same way and report the verdict and the failing rules.
++
++If you do nothing else, ask these seven questions:
++
+ 1. **Thirty-second test** - cover everything below the glance panel. Can a stranger state the conclusion, what is asked of them and the biggest risk?
+ 2. **Skim test** - do the headings alone tell the story?
+ 3. **Zone test** - nothing in the human zone that only a machine needs (raw logs, long listings, full JSON); nothing a person needs that lives only in the machine zone.
+ 4. **Diagram test** - more than five related entities, or a web? Then a diagram exists, with a caption, legible at about 800 px wide.
+ 5. **Honesty test** - judgments carry confidence, verified facts are told apart from inferences, and unknowns are listed rather than hidden.
+-6. **Link test** - run `python scripts/check_doc.py <report.md>` (path relative to this skill's directory). Fix every ERROR and read every WARN.
++6. **Link test** - the checker reports no Blocker: every link, anchor and image resolves.
+ 7. **Duplication test** - each fact appears in full once.
+diff --git a/a/assets/skeleton.md b/b/assets/skeleton.md
+index 4c87c60..aebce19 100644
+--- a/a/assets/skeleton.md
++++ b/b/assets/skeleton.md
+@@ -7,29 +7,34 @@
+ 
+ > ### {🟢 | 🟡 | 🔴 | ⚪} {Verdict or status in one line}
+ >
+-> **Bottom line:** {the answer in one or two sentences}
++> **Bottom line:** {the answer, two sentences at most}
+ >
+-> **Confidence:** {high | medium | low} - {what it rests on, and what would change it}
++> **Confidence:** {high | medium | low} - {what it rests on, in one line}
+ 
+-> ### 🧭 Decision needed
++> ### 🧭 Decisions needed
+ >
+-> **{Who}** decides **{what}** by **{when}**. **Recommendation:** {...}. If we get it wrong: {cost}.
++> - **{Who}** decides **{what}** by **{when}** - recommend: {...}
++> - **{Who}** decides **{what}** by **{when}** - recommend: {...}
++>
++> If we get it wrong: {the cost, once for the whole block}
+ 
+ | | Top risks (max 5) | Impact | Where it is handled |
+ |---|---|---|---|
+-| 🔴 | {risk} | {consequence} | [{section}](#{anchor}) |
++| 🔴 | {risk, a dozen words} | {consequence} | [{section}](#{anchor}) |
+ | 🟠 | {risk} | {consequence} | [{section}](#{anchor}) |
+ 
+ **Key facts:** {number or fact} · {number or fact} · {number or fact}
+ 
++<!-- No judgment to give (explainer, reference)? Replace the verdict and decision blocks with one plain mental-model sentence, and use the table for "the 3-5 things that matter | the trap if you miss it | where". -->
++
+ ![{One sentence: what the picture shows}]({doc-stem}.assets/{overview}.png)
+ 
+ *{How to read it. The one takeaway.}*
+ 
+ **Read next**
+ 
+-1. [{Section title}](#{anchor}) - {what you will get} · {n} min
+-2. [{Section title}](#{anchor}) - {what you will get} · {n} min
++- [{N} {Section title}](#{anchor}) - {what you will get} · {n} min
++- [{N} {Section title}](#{anchor}) - {what you will get} · {n} min
+ 
+ *{Who can stop where, e.g. "Only deciding? You can stop here. Implementing? Continue to 3, then A."}*
+ 
+@@ -48,30 +53,39 @@
+ ---
+ 
+ <!-- zone:ai-input -->
+-## 🗄️ MACHINE AND ARCHIVE ZONE - skip unless you need the evidence or are an agent continuing this work
++## 🗄️ Machine and archive zone - skip unless you need the evidence or are an agent continuing this work
+ 
+ *{One line: what is in here, who needs it, and which claims above it supports.}*
+ 
+-### A Handoff context for the next agent (AI input)
++### A Handoff context for the next agent
++
++*🤖 AI input - {what it lets the next agent do}. Paths are relative to {the repo root}.*
+ 
+ <details>
+ <summary>{What is inside - click to expand}</summary>
+ 
+-{Exact paths, commands, IDs, constraints, ordered next steps, definition of done. Complete and unambiguous.}
++{Exact paths, commands, IDs, constraints, ordered next steps, what not to do, definition of done. Complete and unambiguous.}
+ 
+ </details>
+ 
+ <!-- zone:archive -->
+-### B Evidence (archive)
++### B Evidence
++
++*🗄️ Archive - {what it is}; supports section {N}.*
+ 
+ <details>
+-<summary>{Raw output, full table or log excerpt - supports section 2}</summary>
++<summary>{Raw output, full table or log excerpt}</summary>
+ 
+ {...}
+ 
+ </details>
+ 
+-### C Diagram sources and edge list (archive)
++<!-- If this material is long, keep it in a sibling file and replace the details block with one line:
++Full evidence: [{doc-stem}.evidence.md]({doc-stem}.evidence.md) - {what is in it}. -->
++
++### C Diagram sources and edge list
++
++*🗄️ Archive - how the overview diagram was built, so it can be regenerated or checked.*
+ 
+ <details>
+ <summary>Source and edge list of the overview diagram</summary>
+diff --git a/a/references/diagrams.md b/b/references/diagrams.md
+index 5574f26..f36def0 100644
+--- a/a/references/diagrams.md
++++ b/b/references/diagrams.md
+@@ -44,9 +44,9 @@ digraph deps {
+         fontname="Arial", fontsize=13, margin="0.18,0.10"];
+   edge [color="#667085", fontname="Arial", fontsize=11, arrowsize=0.8];
+ 
+-  subgraph cluster_edge { label="Edge"; fontname="Arial"; color="#D0D5DD"; style="rounded";
++  subgraph cluster_edge { label="Edge"; labelloc=b; labeljust=l; fontname="Arial"; color="#D0D5DD"; style="rounded";
+     "gateway"; }
+-  subgraph cluster_core { label="Core services"; fontname="Arial"; color="#D0D5DD"; style="rounded";
++  subgraph cluster_core { label="Core services"; labelloc=b; labeljust=l; fontname="Arial"; color="#D0D5DD"; style="rounded";
+     "auth-service" [label="auth-service\n(6 dependents)", fillcolor="#FEE4E2", color="#D92D20", penwidth=2];
+     "catalog"; "share"; }
+ 
+@@ -62,10 +62,11 @@ Pitfalls that cost a retry:
+ 
+ - Quote node ids that contain hyphens, dots or spaces (`"auth-service"`). Unquoted, they are a syntax error.
+ - Do not combine `splines=ortho` with edge labels; Graphviz does not place labels on orthogonal edges well.
++- Put cluster titles at the bottom-left (`labelloc=b; labeljust=l`). At the top, edges run straight through them.
+ - Set `fontname` explicitly. The default serif font looks like a draft and may lack the glyphs you need.
+ - **Non-Latin labels (Chinese, Japanese, Korean...) render as empty boxes** with the default font or Arial. Put a font that has the glyphs on the graph, nodes and edges (`graph [fontname="Microsoft YaHei"]`, same for `node` and `edge`; on Linux `"Noto Sans CJK SC"`, on macOS `"PingFang SC"`), then look at the image to confirm no boxes remain. Labels belong in the reader's language, so this matters whenever the report is not in English.
+ - If `dot` prints an error, fix the source and re-render; never embed a stale image.
+-- After rendering, check the pixel width. Wider than about 2400 px at 150 dpi means the labels will be tiny when shown at 800 px: switch to `rankdir=TB`, shorten labels, or split the diagram.
++- After rendering, check the pixel width (the checker warns above 2600 px). Wider than that at 150 dpi means the labels will be tiny when shown at 800 px: switch to `rankdir=TB`, shorten labels, or split the diagram.
+ - If you can view images, look at the PNG. If you cannot, at least confirm the file exists and is not empty.
+ 
+ ## 3 Charts
+@@ -111,9 +112,9 @@ Rules that keep it portable:
+ 
+ ## 5 Design rules (any form)
+ 
+-- **About twelve nodes at most.** Beyond that readers stop reading and start scanning for the one thing they care about, so make that easy (section 6).
++- **About a dozen nodes, legible at 800 px wide.** A few more are fine when the layout is clean. Beyond that readers stop reading and start scanning for the one thing they care about, so make that easy (section 6).
+ - **One focal point.** Colour and weight go to the hub, the broken link, the changed component or the risk. Everything else is muted grey.
+-- **A verb on every edge.** "calls", "reads", "blocks", "owns". An unlabeled arrow forces the reader to guess the relation.
++- **A verb on the edges.** "calls", "reads", "blocks", "owns". An unlabeled arrow forces the reader to guess the relation. When every edge means the same thing (a pure dependency graph), say so once in the legend or caption and label only the exceptions: twelve identical labels are noise and crowd out the structure.
+ - **Consistent encoding.** Same shape means same type, same colour means same meaning, and any colour that carries meaning appears in the caption or a legend.
+ - **Direction.** Left to right for flow and time, top to bottom for hierarchy.
+ - **Truth over symmetry.** Draw only relationships you verified. Dashed lines mark inferred ones; say so in the caption.
+@@ -121,9 +122,9 @@ Rules that keep it portable:
+ 
+ ## 6 Large webs
+ 
+-When the full graph would exceed about twelve nodes, do not shrink it. Options, in order of preference:
++When the full graph would not stay legible, do not shrink it. Options, in order of preference:
+ 
+-1. **Overview plus zoom.** The overview shows groups (clusters, layers, teams) as single nodes with counts; one zoomed diagram per group that matters follows.
++1. **Overview plus zoom.** The overview shows groups (clusters, layers, teams) or just the main flow; one zoomed diagram per group that matters follows. Every entity must appear in at least one view, and the overview's caption says what it leaves out.
+ 2. **Draw the argument.** Draw only the hub and its direct neighbours (or the path that matters) and put the full edge list in the archive.
+ 3. **Matrix.** When nearly everything connects to everything, use a table with entities on both axes and a symbol in each cell.
+ 
+diff --git a/b/references/review-rubric.md b/b/references/review-rubric.md
+new file mode 100644
+index 0000000..fb48a57
+--- /dev/null
++++ b/b/references/review-rubric.md
+@@ -0,0 +1,86 @@
++# Review rubric for large documents
++
++This is the standard a large document written under this skill is held to. Use it as the writer's last pass before delivering, as a checklist for a reviewer (human or agent) scoring any document, and as the source of the skill's test assertions.
++
++## Run a review
++
++1. Run `python scripts/check_doc.py <file>` on the main file and on every sibling file. It covers every rule marked **auto** and prints each finding with its rule id and tier.
++2. Walk the **judge** rules that apply (column "For"), looking at the document the way its first reader will: the top of the rendered page and nothing else. Rules that need the sources (C5, C6) are checked against them.
++3. Gate: deliver when no Blocker is left and at most two Majors remain. Name the remaining Majors, with the reason, in your reply. Minors are advice.
++4. Fit the effort to the document. A short answer needs only C1, E1, F1 and F4. A medium document adds the rest of C, B3 and D1. A large one gets everything that applies.
++
++**Tiers.** Blocker: the document fails its purpose or has a certain defect. Major: it weakens comprehension or trust. Minor: polish.
++
++**Reader profile.** The rules assume the readers open Markdown in VS Code's preview and on Azure DevOps repo and PR pages, which do not render Mermaid. If they only use GitHub or Azure DevOps wikis, inline Mermaid is fine: pass `--allow-mermaid` and treat D3 as met.
++
++**For.** all = every document. medium+ = medium and large. large = large only. dec = decision or proposal. rca = investigation or root cause. rev = review, audit or assessment. hand = status or handoff. expl = explainer or onboarding.
++
++## Rules
++
++### A Audience split
++
++| ID | Pass condition | Tier | Check | For |
++|---|---|---|---|---|
++| A1 | Zones are marked and ordered. A human zone comes first, opened by a heading or banner that names its audience. AI-input and archive material, if any, comes last in its own labelled zone. Nothing for people sits after machine content. No raw material means no machine zone is needed. | Blocker for a large document with raw material, else Major | auto (markers, order) + judge | all |
++| A2 | The human zone holds no raw material: no table over 15 rows, no code block over 25 lines (diagram sources excepted), no logs, listings or data dumps. Shell commands belong in the AI-input block unless the reader must run them. | Major | auto | all |
++| A3 | Machine and archive blocks are collapsed in `<details>` and plain-headed. Each opens with a line naming its bin (AI input or archive) and what it supports. Long material sits in a sibling file behind a one-line pointer. | Major | judge | large |
++| A4 | The AI-input block is self-sufficient: current state, repo-relative paths with the root stated once, copy-paste commands, ordered next steps, constraints and what not to do, a definition of done, and what to do while decisions are open and where answers are recorded. | Major | judge | hand |
++| A5 | No machine-local paths (home folder, temp or session folders). | Major | auto | all |
++
++### B Guided reading
++
++| ID | Pass condition | Tier | Check | For |
++|---|---|---|---|---|
++| B1 | A reading path sits within 60 lines of the title: at least 3 links to sections, each saying what the reader gets, and who can stop where. | Major | auto + judge | medium+ |
++| B2 | Order follows understanding, not discovery. The mental model comes first, terms are defined before the first section that uses them, and chronology lives in the archive. | Major | judge | expl, rca, large |
++| B3 | The H2 headings of the human zone, read alone, give the outline or the argument. A question or decision heading carries its answer or ask. | Major | judge | medium+ |
++| B4 | Every in-document link, cross-file anchor and image path resolves. Fences and `<details>` balance. No template placeholder is left. | Blocker | auto | all |
++| B5 | A large document has real navigation: at least 5 in-document links. | Major | auto | large |
++| B6 | Link-target headings use plain words and digits (no emoji, no punctuation) and are unique. | Minor | auto | all |
++| B7 | Sections open with the question they answer. Each entity keeps one name throughout. | Minor | judge | large |
++
++### C Glance first
++
++| ID | Pass condition | Tier | Check | For |
++|---|---|---|---|---|
++| C1 | The glance panel opens the document, straight after the title and one metadata line. Its bottom line states the conclusion (for an explainer, the mental model), not what the document covers. | Blocker | judge + auto (more than 12 lines of text before the first panel element) | medium+ |
++| C2 | The panel is compact: about 300 words of prose or fewer (tables and picture excluded), one line per decision and per risk. Verdict, decisions and top risks fit the first screen. | Major | auto + judge | medium+ |
++| C3 | When a judgment, decision or risk exists, the panel states it loudly and completely. The verdict has a glyph, confidence and basis. Each decision has who, what, by when and a recommendation. At most 5 risks, ranked, each with severity and consequence. | Blocker | judge | dec, rca, rev, hand |
++| C4 | Nothing is invented to fill the template: no verdict, decision or risk block without grounding in the sources, any ranking is traceable, and empty slots are omitted. | Major | judge | all |
++| C5 | Numbers in the panel trace to the sources (spot-check at least three). Derived, merged or de-duplicated numbers say so. | Major | judge, needs sources | all |
++| C6 | Every open question or decision in the sources appears in the decision block or is explicitly parked. | Major | judge, needs sources | dec, hand |
++
++### D Diagrams
++
++| ID | Pass condition | Tier | Check | For |
++|---|---|---|---|---|
++| D1 | More than 5 related entities, or any web of relationships, means at least one diagram. A linear chain of 5 steps or fewer, or a flat list, gets none. | Major | judge | all |
++| D2 | Coverage and truth: every entity appears in at least one diagram, every drawn edge exists in the sources, and inferred edges are dashed and captioned. | Major | judge | all |
++| D3 | Image-first: a diagram in the human zone is an embedded image file that exists. Inline Mermaid there is a defect under the default reader profile. For Azure DevOps wikis use `graph`, not `flowchart`. | Major | auto | all |
++| D4 | Legible: the image is 500 to 2600 px wide. At 800 px wide the labels read, nothing overlaps, and no glyph shows as an empty box (look at the image to check). | Major | auto (size) + judge | all |
++| D5 | Explained: alt text, a caption with how to read it and the takeaway, a legend where colour carries meaning, one focal point, and the relation stated (verbs on edges, or once in the caption when every edge is alike). | Minor | judge, auto for alt text | all |
++| D6 | Source kept: the DOT, Mermaid or script file sits beside each image, and an edge list or other text equivalent is in the archive. | Minor | auto (file) + judge | all |
++
++### E Honesty and provenance
++
++| ID | Pass condition | Tier | Check | For |
++|---|---|---|---|---|
++| E1 | Every judgment carries a confidence level and what it rests on. | Major | judge | all |
++| E2 | Inferred, assumed and proposed content is labelled as such, unknowns are listed, and nothing presented as fact is unsourced. | Major | judge | all |
++| E3 | A metadata line under the title gives date, author or agent, status and audience. Sources are named. | Minor | auto (date) + judge | medium+ |
++
++### F Fit and delivery
++
++| ID | Pass condition | Tier | Check | For |
++|---|---|---|---|---|
++| F1 | Proportionate: a short answer gets no zones or panel. A mandated template or schema is kept, with the human layer added around it. | Major | judge | all |
++| F2 | The human zone is not bloated: about 2,500 words or fewer. Beyond that, check whether detail only some readers need has leaked in. | Minor | auto | all |
++| F3 | The chat reply is the panel in miniature (verdict, decisions, top risks, file path, where to start) and does not paste the document. | Major | judge, needs the transcript | large |
++| F4 | Language: the document, its headings, labels and diagram text are in the reader's language, with no missing-glyph boxes. | Major | judge | all |
++| F5 | Hygiene: a blank line after `</summary>` and `</details>` (Major); no `> [!NOTE]` alerts, no HTML colour or style, at most about 3 loud blockquote headings, no paragraph repeated verbatim, no spaces in file names (all Minor). | Major / Minor | auto | all |
++
++## Scorecard format
++
++A reviewer replies with one line, **Verdict: deliver** or **Verdict: fix first**, followed by the counts of Blockers, Majors and Minors. Then a table of only the rules that failed: rule id, line or quote as evidence, and the fix. One line for anything notable that passed on a close call.
++
++The skill's own regression tests (test cases, assertions and the cold-reader test) live in `evals/`.
+diff --git a/a/scripts/check_doc.py b/b/scripts/check_doc.py
+index 95ef377..9a47102 100644
+--- a/a/scripts/check_doc.py
++++ b/b/scripts/check_doc.py
+@@ -1,23 +1,27 @@
+ #!/usr/bin/env python3
+-"""Check a Markdown report against the document-formatting conventions.
++"""Check a Markdown document against the automatic rules of references/review-rubric.md.
+ 
+ Usage:
+-    python check_doc.py REPORT.md [--json] [--allow-mermaid] [--max-block 25] [--max-table 20]
++    python check_doc.py REPORT.md [--json] [--allow-mermaid] [--machine-only]
++                        [--max-block 25] [--max-table 15] [--panel-words 300] [--human-words 2500]
+ 
+-ERROR (exit code 1): broken in-document links, missing local images, unbalanced
+-code fences or <details> blocks.
+-WARN: fragile anchors, missing zone markers, no glance panel or reading path near
+-the top, raw dumps in the human zone, over-dense diagrams, empty alt text.
+-INFO: portability notes about inline Mermaid.
++Every finding carries a rubric rule id and a tier:
++  BLOCKER  certain defect: broken link or image, unbalanced fence or <details>, leftover
++           template placeholder. Exit code 1.
++  MAJOR    likely defect that weakens comprehension or trust. Fix it, or say why not.
++  MINOR    polish.
++The judgment rules of the rubric (conclusion first, honest labelling, diagram truth...)
++cannot be checked by a script; the rubric says how to check those.
+ 
+-Only the standard library is used. Anchors follow the GitHub slug rules, which
+-VS Code also uses; Azure DevOps differs for headings with punctuation, which is
+-why link-target headings should be plain words and digits.
++Only the standard library is used. Anchors follow the GitHub slug rules, which VS Code also
++uses; Azure DevOps differs for headings with punctuation, which is why link-target headings
++should be plain words and digits.
+ """
+ import argparse
+ import difflib
+ import json
+ import re
++import struct
+ import sys
+ import unicodedata
+ from pathlib import Path
+@@ -33,7 +37,21 @@ EXPLICIT_ID = re.compile(r"""<a\s+[^>]*?(?:id|name)\s*=\s*["']([^"']+)["']""", r
+ EDGE = re.compile(r"-\.->|==>|-->|---|->|--")
+ SCHEME = re.compile(r"^[a-z][a-z0-9+.-]*:", re.I)
+ DIAGRAM_LANGS = {"mermaid", "dot", "graphviz", "plantuml"}
++SHELL_LANGS = {"powershell", "ps1", "pwsh", "bash", "sh", "shell", "console", "cmd", "bat", "zsh"}
+ MACHINE_ZONES = {"ai-input", "archive", "machine"}
++PLACEHOLDER = re.compile(
++    r"\{(?:doc-stem|anchor|Section title|Who|what|when|overview|N|n|slug|title|\.\.\.)\}"
++    r"|<!--\s*(?:No judgment to give|If this material is long)", re.I)
++MACHINE_PATH = re.compile(r"[A-Za-z]:\\Users\\[^\\\s`'\"|)]+|/Users/[A-Za-z0-9._-]+/|/home/[A-Za-z0-9._-]+/")
++DATE = re.compile(r"\d{4}[-/.]\d{1,2}[-/.]\d{1,2}")
++ALERT = re.compile(r"^\s*>\s*\[!(?:NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]", re.I)
++LOUD_QUOTE = re.compile(r"^\s*>\s*#{1,6}\s")
++SOURCE_EXT = (".dot", ".gv", ".mmd", ".puml", ".py", ".svg", ".drawio")
++CJK = re.compile(r"[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]")
++LATIN = re.compile(r"[A-Za-z0-9_][A-Za-z0-9_'\u2019-]*")
++MAX_PNG_WIDTH = 2600
++MIN_PNG_WIDTH = 500
++TIER_ORDER = {"BLOCKER": 0, "MAJOR": 1, "MINOR": 2}
+ 
+ 
+ def slugify(text):
+@@ -49,6 +67,35 @@ def slugify(text):
+     return "".join(out).replace(" ", "-")
+ 
+ 
++def count_words(text):
++    """English words plus CJK characters scaled to reading effort (about 1.6 characters per word)."""
++    return len(LATIN.findall(text)) + len(CJK.findall(text)) / 1.6
++
++
++def prose(line):
++    """A line reduced to the words a reader reads: no markup, link targets, images or comments."""
++    t = re.sub(r"<!--.*?-->", "", line)
++    t = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", t)
++    t = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", t)
++    t = re.sub(r"<[^>]+>", "", t)
++    t = re.sub(r"^\s*(?:>\s*)*(?:#{1,6}\s+|[-*+]\s+|\d+[.)]\s+)?", "", t)
++    if t.lstrip().startswith("|"):
++        t = re.sub(r"[|:\-]+", " ", t)
++    return t.replace("**", "").replace("`", "")
++
++
++def png_size(path):
++    """Width and height of a PNG from its header, or None."""
++    try:
++        with open(path, "rb") as fh:
++            head = fh.read(24)
++    except OSError:
++        return None
++    if head[:8] != b"\x89PNG\r\n\x1a\n":
++        return None
++    return struct.unpack(">II", head[16:24])
++
++
+ def scan(lines):
+     """Split a document into lines outside code fences and the fences themselves."""
+     body, fences = [], []
+@@ -68,39 +115,70 @@ def scan(lines):
+     return body, fences, unclosed
+ 
+ 
+-def check(path, args):
+-    findings = []  # (level, line, message)
+-
+-    def add(level, line, msg):
+-        findings.append((level, line, msg))
+-
+-    text = path.read_text(encoding="utf-8-sig", errors="replace")
+-    lines = text.splitlines()
+-    body, fences, unclosed = scan(lines)
+-    body_text = {n: t for n, t in body}
+-    if unclosed:
+-        add("ERROR", unclosed[0], "code fence opened here is never closed")
+-
+-    # Headings, anchors, explicit ids
++def headings_of(body):
++    """Headings as (line, level, raw text, slug) plus a slug -> (line, raw) map, GitHub duplicate rules."""
+     headings, slugs, seen = [], {}, {}
+     for n, line in body:
+         m = HEADING.match(line)
+         if not m:
+             continue
+-        raw = m.group(2)
+-        base = slugify(raw)
++        base = slugify(m.group(2))
+         k = seen.get(base, 0)
+         seen[base] = k + 1
+         slug = base if k == 0 else "%s-%d" % (base, k)
+-        headings.append((n, len(m.group(1)), raw, slug))
+-        slugs[slug] = (n, raw)
++        headings.append((n, len(m.group(1)), m.group(2), slug))
++        slugs[slug] = (n, m.group(2))
++    return headings, slugs
++
++
++def collect_anchors(path):
++    """Heading slugs and explicit ids of another Markdown file."""
++    try:
++        lines = path.read_text(encoding="utf-8-sig", errors="replace").splitlines()
++    except OSError:
++        return set()
++    body, _, _ = scan(lines)
++    _, slugs = headings_of(body)
++    found = set(slugs)
++    for _, line in body:
++        found.update(i.lower() for i in EXPLICIT_ID.findall(line))
++    return found
++
++
++def check(path, args):
++    findings = []  # (tier, rule, line, message)
++
++    def add(tier, rule, line, msg):
++        findings.append((tier, rule, line, msg))
++
++    text = path.read_text(encoding="utf-8-sig", errors="replace")
++    lines = text.splitlines()
++    body, fences, unclosed = scan(lines)
++    if unclosed:
++        add("BLOCKER", "B4", unclosed[0], "code fence opened here is never closed")
++    nonblank = sum(1 for l in lines if l.strip())
++
++    headings, slugs = headings_of(body)
+     explicit = set()
+-    for n, line in body:
++    for _, line in body:
+         explicit.update(i.lower() for i in EXPLICIT_ID.findall(line))
+ 
++    # Zones (needed early: several rules only apply to the human zone)
++    zones = [(n, ZONE.search(t).group(1).lower()) for n, t in body if ZONE.search(t)]
++    names = [z for _, z in zones]
++    machine_only = args.machine_only or (
++        bool(names) and "human" not in names and any(z in MACHINE_ZONES for z in names))
++    human_start = next((n for n, z in zones if z == "human"), 1)
++    first_machine = next((n for n, z in zones if z in MACHINE_ZONES), None)
++    if machine_only:
++        human_start, human_end = 0, 0
++        add("MINOR", "A1", 0, "machine/archive-only file: human-zone rules skipped")
++    else:
++        human_end = first_machine if first_machine and first_machine > human_start else len(lines) + 1
++    in_human = lambda n: human_start <= n < human_end  # noqa: E731
++
+     # Links and images (inline code removed first so `[x](#y)` in code is ignored)
+-    links = []
+-    img_openers = 0
++    links, img_openers = [], 0
+     for n, line in body:
+         clean = re.sub(r"`[^`]*`", "", line)
+         img_openers += len(re.findall(r"!\[", clean))
+@@ -108,14 +186,18 @@ def check(path, args):
+             links.append((n, m.group(1) == "!", m.group(2), m.group(3)))
+     parsed_images = sum(1 for _, is_img, _, _ in links if is_img)
+     if img_openers > parsed_images:
+-        add("WARN", 0, "%d image(s) use unusual syntax (spaces in the path?); they were not checked"
++        add("MAJOR", "B4", 0, "%d image(s) use unusual syntax (spaces in the path?); they were not checked"
+             % (img_openers - parsed_images))
+ 
+-    internal = 0
+-    target_slugs = set()
++    for n, line in body:
++        hit = PLACEHOLDER.search(line)
++        if hit:
++            add("BLOCKER", "B4", n, "leftover template placeholder or hint: %s" % hit.group(0)[:40])
++
++    internal, target_slugs, anchor_cache = 0, set(), {}
+     for n, is_img, alt, target in links:
+         if is_img and not alt.strip():
+-            add("WARN", n, "image has empty alt text; say in one sentence what it shows")
++            add("MINOR", "D5", n, "image has empty alt text; say in one sentence what it shows")
+         if target.startswith("#"):
+             internal += 1
+             anchor = unquote(target[1:]).lower()
+@@ -124,20 +206,46 @@ def check(path, args):
+             else:
+                 near = difflib.get_close_matches(anchor, list(slugs), n=1, cutoff=0.6)
+                 hint = " - did you mean #%s?" % near[0] if near else ""
+-                add("ERROR", n, "broken in-document link #%s%s" % (anchor, hint))
++                add("BLOCKER", "B4", n, "broken in-document link #%s%s" % (anchor, hint))
+             continue
+         if SCHEME.match(target) or target.startswith("//") or target.startswith("/"):
+             if is_img and re.match(r"^(file:|[a-z]:[\\/])", target, re.I):
+-                add("ERROR", n, "image uses a machine-local path (%s); use a relative path" % target)
++                add("BLOCKER", "B4", n, "image uses a machine-local path (%s); use a relative path" % target)
+             continue
+         if re.match(r"^[a-z]:[\\/]", target, re.I) or "\\" in target:
+-            add("WARN", n, "path %r uses a drive letter or backslashes; use a relative path with forward slashes" % target)
++            add("MAJOR", "B4", n, "path %r uses a drive letter or backslashes; use a relative path with "
++                "forward slashes" % target)
+             continue
++        if "%20" in target:
++            add("MINOR", "F5", n, "path %r contains a space; name files without spaces" % target)
+         rel = unquote(re.split(r"[#?]", target)[0])
+         if not rel:
+             continue
+-        if not (path.parent / rel).exists():
+-            add("ERROR" if is_img else "WARN", n, "%s target not found: %s" % ("image" if is_img else "link", rel))
++        target_path = path.parent / rel
++        if not target_path.exists():
++            add("BLOCKER" if is_img else "MAJOR", "B4", n,
++                "%s target not found: %s" % ("image" if is_img else "link", rel))
++            continue
++        if "#" in target and rel.lower().endswith((".md", ".markdown")):
++            frag = unquote(target.split("#", 1)[1]).lower()
++            if frag:
++                if target_path not in anchor_cache:
++                    anchor_cache[target_path] = collect_anchors(target_path)
++                known = anchor_cache[target_path]
++                if frag not in known:
++                    near = difflib.get_close_matches(frag, list(known), n=1, cutoff=0.6)
++                    hint = " - did you mean #%s?" % near[0] if near else ""
++                    add("BLOCKER", "B4", n, "broken link: %s has no heading #%s%s" % (rel, frag, hint))
++        if is_img and rel.lower().endswith(".png"):
++            size = png_size(target_path)
++            if size and size[0] > MAX_PNG_WIDTH:
++                add("MAJOR", "D4", n, "%s is %d px wide; its labels shrink to a speck at 800 px - split the "
++                    "diagram or use fewer, larger labels" % (rel, size[0]))
++            elif size and size[0] < MIN_PNG_WIDTH:
++                add("MINOR", "D4", n, "%s is only %d px wide; check that it is sharp enough" % (rel, size[0]))
++            if not any(target_path.with_suffix(ext).exists() for ext in SOURCE_EXT):
++                add("MINOR", "D6", n, "no source file beside %s (.dot, .mmd, .py ...); keep it so the image "
++                    "can be regenerated" % rel)
+ 
+     # Fragile anchors and duplicates among link targets
+     for n, _, raw, slug in headings:
+@@ -145,68 +253,103 @@ def check(path, args):
+             continue
+         plain = re.sub(r"!?\[([^\]]*)\]\([^)]*\)", r"\1", raw).replace("*", "").replace("`", "")
+         if re.search(r"[^\w\s-]", plain):
+-            add("WARN", n, "heading %r is a link target but contains punctuation or emoji; "
+-                "its anchor may differ between viewers - use plain words and digits" % raw)
++            add("MINOR", "B6", n, "heading %r is a link target but contains punctuation or emoji; its anchor may "
++                "differ between viewers - use plain words and digits" % raw)
+         if re.search(r"-\d+$", slug) and slug[: slug.rfind("-")] in slugs:
+-            add("WARN", n, "duplicate heading text %r; its anchor depends on order - make it unique" % raw)
++            add("MINOR", "B6", n, "duplicate heading text %r; its anchor depends on order - make it unique" % raw)
+ 
+-    # <details> hygiene (blank line rules matter in Azure DevOps and for nested Markdown)
++    # <details> hygiene (blank lines matter for nested Markdown and in Azure DevOps)
+     opens = sum(len(re.findall(r"<details\b", t, re.I)) for _, t in body)
+     closes = sum(len(re.findall(r"</details>", t, re.I)) for _, t in body)
+     if opens != closes:
+-        add("ERROR", 0, "unbalanced <details>: %d opening vs %d closing tags" % (opens, closes))
++        add("BLOCKER", "B4", 0, "unbalanced <details>: %d opening vs %d closing tags" % (opens, closes))
+     for n, line in body:
+-        for tag, what in (("</summary>", "</summary>"), ("</details>", "</details>")):
++        for tag in ("</summary>", "</details>"):
+             if tag in line.lower() and n < len(lines) and lines[n].strip():
+-                add("WARN", n, "add a blank line after %s (needed for rendering in Azure DevOps)" % what)
++                add("MAJOR", "F5", n, "add a blank line after %s (needed for rendering)" % tag)
+ 
+-    # Zones
+-    zones = [(n, ZONE.search(t).group(1).lower()) for n, t in body if ZONE.search(t)]
+-    nonblank = sum(1 for l in lines if l.strip())
+-    names = [z for _, z in zones]
+-    if not zones and nonblank > 80:
+-        add("WARN", 0, "no <!-- zone:... --> markers; human-read and machine/archive content are not marked")
+-    if zones and "human" not in names:
+-        add("WARN", 0, "zone markers exist but none is <!-- zone:human -->")
+-    human_end = next((n for n, z in zones if z in MACHINE_ZONES), None)
+-    if "human" in names and human_end is not None:
+-        h = next(n for n, z in zones if z == "human")
+-        if human_end < h:
+-            add("WARN", human_end, "machine/archive zone starts before the human zone")
+-    if "human" in names and human_end is None and nonblank > 150:
+-        add("INFO", 0, "no machine/archive zone; confirm no raw logs, listings or data sit in the human part")
+-
+-    # Glance panel and reading path near the top
+-    h1 = next((n for n, lvl, _, _ in headings if lvl == 1), 0)
+-    window = range(h1 + 1, h1 + 61)
+-    in_window = [(n, t) for n, t in body if n in window]
+-    has_loud = any(re.match(r"^\s*(>|\|)", t) for _, t in in_window) or any(
+-        is_img and n in window for n, is_img, _, _ in links)
+-    if not has_loud:
+-        add("WARN", h1 or 1, "no blockquote, table or image in the 60 lines after the title; "
+-            "is there a glance panel with the verdict, decision and risks?")
+-    top_links = sum(1 for n, _, _, tgt in links if tgt.startswith("#") and n in window)
+-    if top_links < 2:
+-        add("WARN", h1 or 1, "fewer than 2 in-document links near the top; add a 'Read next' path")
+-
+-    # Raw dumps in the human zone
+-    limit = human_end if human_end is not None else len(lines) + 1
++    # A1 zones
++    if not zones and nonblank > 80 and not machine_only:
++        add("MAJOR", "A1", 0, "no <!-- zone:... --> markers; human-read and machine/archive content are not marked "
++            "(for a large document with raw material this is a Blocker)")
++    if zones and "human" not in names and not machine_only:
++        add("MAJOR", "A1", 0, "zone markers exist but none is <!-- zone:human -->")
++    if "human" in names and first_machine is not None and first_machine < human_start:
++        add("MAJOR", "A1", first_machine, "machine/archive zone starts before the human zone")
++    if "human" in names and first_machine is None and nonblank > 150:
++        add("MINOR", "A1", 0, "no machine/archive zone; confirm no raw logs, listings or data sit in the human part")
++
++    # A2 raw material in the human zone
+     for s, e, lang in fences:
+-        if s < limit and lang not in DIAGRAM_LANGS and (e - s - 1) > args.max_block:
+-            add("WARN", s, "%d-line code block in the human zone; move raw material to the machine/archive zone"
++        if not in_human(s) or lang in DIAGRAM_LANGS:
++            continue
++        if (e - s - 1) > args.max_block:
++            add("MAJOR", "A2", s, "%d-line code block in the human zone; move raw material to the machine/archive zone"
+                 % (e - s - 1))
++        elif lang in SHELL_LANGS:
++            add("MINOR", "A2", s, "shell commands in the human zone; move them to the AI-input block unless "
++                "the reader must run them")
+     run_start, run_len = 0, 0
+     for n, line in body + [(10 ** 9, "")]:
+         if line.lstrip().startswith("|"):
+             run_start = run_start or n
+             run_len += 1
+             continue
+-        if run_len > args.max_table + 2 and run_start < limit:
+-            add("WARN", run_start, "%d-row table in the human zone; summarise it and move the full table to the archive"
+-                % (run_len - 2))
++        if run_len > args.max_table + 2 and in_human(run_start):
++            add("MAJOR", "A2", run_start, "%d-row table in the human zone; summarise it and move the full table "
++                "to the archive" % (run_len - 2))
+         run_start, run_len = 0, 0
+ 
+-    # Diagrams
++    # A5 machine-local paths
++    local_paths = [(n, m.group(0)) for n, l in enumerate(lines, 1) for m in [MACHINE_PATH.search(l)] if m]
++    for n, p in local_paths[:3]:
++        add("MAJOR", "A5", n, "machine-specific path %r; use a path relative to the document or the repo "
++            "(fine only if it comes from the source material)" % p[:60])
++    if len(local_paths) > 3:
++        add("MAJOR", "A5", local_paths[3][0], "%d more machine-specific paths further down" % (len(local_paths) - 3))
++
++    # B1/B5/C1/C2 glance panel and reading path
++    h1 = next((n for n, lvl, _, _ in headings if lvl == 1), 0)
++    panel_words = human_words = 0
++    if not machine_only:
++        window = range(h1 + 1, h1 + 61)
++        top_links = sum(1 for n, _, _, tgt in links if tgt.startswith("#") and n in window)
++        if top_links < 3:
++            add("MAJOR", "B1", h1 or 1, "only %d in-document link(s) in the 60 lines after the title; "
++                "give a 'Read next' path with at least 3" % top_links)
++        if nonblank > 150 and internal < 5:
++            add("MAJOR", "B5", 0, "a large document needs navigation: %d in-document link(s), expected at least 5"
++                % internal)
++        first_el = next((n for n, t in body if n > h1 and re.match(r"^\s*(>|\||!\[)", t)), None)
++        if first_el is None or first_el > h1 + 60:
++            add("MAJOR", "C1", h1 or 1, "no blockquote, table or image in the 60 lines after the title; "
++                "is there a glance panel with the verdict, decision and risks?")
++        else:
++            before = sum(1 for n, t in body if h1 < n < first_el and t.strip()
++                         and not ZONE.search(t) and not HEADING.match(t))
++            if before > 12:
++                add("MAJOR", "C1", h1 or 1, "%d lines of text come before the first panel element; the conclusion "
++                    "should open the document, ahead of background, provenance or reading guides" % before)
++        h2s = [n for n, lvl, _, _ in headings if lvl == 2 and n > h1]
++        if h2s:
++            end = h2s[1] if len(h2s) > 1 else human_end
++            if first_machine and h2s[0] < first_machine < end:
++                end = first_machine
++            panel_words = sum(count_words(prose(t)) for n, t in body
++                              if h2s[0] < n < end and not t.lstrip().startswith("|")
++                              and not t.lstrip().startswith("!["))
++            if panel_words > args.panel_words:
++                add("MAJOR", "C2", h2s[0], "the first section runs to about %d words (budget %d, tables and picture "
++                    "excluded); keep the panel short and link to detail" % (panel_words, args.panel_words))
++        human_words = sum(count_words(prose(t)) for n, t in body if in_human(n))
++        if human_words > args.human_words:
++            add("MINOR", "F2", human_start or 1, "the human zone runs to about %d words (advice: %d); check that detail "
++                "only some readers need has moved to the archive" % (human_words, args.human_words))
++        if not any(DATE.search(t) for n, t in body if h1 <= n <= h1 + 8):
++            add("MINOR", "E3", h1 or 1, "no date near the title; add a line with date, author or agent, status, "
++                "audience")
++
++    # D3/D4 diagrams in code fences
+     diagrams = 0
+     for s, e, lang in fences:
+         if lang not in DIAGRAM_LANGS:
+@@ -215,16 +358,37 @@ def check(path, args):
+         block = "\n".join(lines[s:e - 1])
+         edges = len(EDGE.findall(block))
+         if edges > 25:
+-            add("WARN", s, "%s diagram has about %d edges; split it into an overview plus zoomed views" % (lang, edges))
++            add("MAJOR", "D4", s, "%s diagram has about %d edges; split it into an overview plus zoomed views" % (lang, edges))
+         if lang == "mermaid":
+             first = next((l.strip() for l in lines[s:e - 1] if l.strip()), "")
+             if first.startswith("flowchart"):
+-                add("INFO", s, "Azure DevOps wikis do not support 'flowchart'; use 'graph' if it will be read there")
++                add("MINOR", "D3", s, "Azure DevOps wikis do not support 'flowchart'; use 'graph' if it will be read there")
+             if "---->" in block:
+-                add("INFO", s, "long arrows (---->) are unsupported in Azure DevOps Mermaid")
+-            if s < limit and not args.allow_mermaid:
+-                add("INFO", s, "inline Mermaid in the human zone does not render in VS Code's preview or Azure DevOps "
+-                    "repo pages; consider an embedded PNG with the source in the machine zone")
++                add("MINOR", "D3", s, "long arrows (---->) are unsupported in Azure DevOps Mermaid")
++            if in_human(s) and not args.allow_mermaid:
++                add("MAJOR", "D3", s, "inline Mermaid in the human zone does not render in VS Code's preview or Azure "
++                    "DevOps repo pages; embed a rendered PNG and keep the source beside it")
++
++    # F5 hygiene
++    quotes = [n for n, t in body if LOUD_QUOTE.match(t)]
++    if len(quotes) > 3:
++        add("MINOR", "F5", quotes[3], "%d blockquote headings; loud formatting is for the verdict and the decisions "
++            "(a budget of about 3)" % len(quotes))
++    alerts = [n for n, t in body if ALERT.match(t)]
++    if alerts:
++        add("MINOR", "F5", alerts[0], "'> [!NOTE]'-style alert (%d); many previews and Azure DevOps show the raw tag - "
++            "use a plain blockquote" % len(alerts))
++    styled = [n for n, t in body if re.search(r"<font\b|\bstyle\s*=", t, re.I)]
++    if styled:
++        add("MINOR", "F5", styled[0], "HTML colour or style (%d); it is stripped by GitHub and Azure DevOps" % len(styled))
++    seen_lines = {}
++    for n, t in body:
++        norm = re.sub(r"\s+", " ", prose(t)).strip().lower()
++        if len(norm) >= 80 and not t.lstrip().startswith("|"):
++            if norm in seen_lines:
++                add("MINOR", "F5", n, "same text as line %d; write each fact once and link to it" % seen_lines[norm])
++            else:
++                seen_lines[norm] = n
+ 
+     stats = {
+         "lines": len(lines),
+@@ -234,6 +398,8 @@ def check(path, args):
+         "diagram_blocks": diagrams,
+         "details_blocks": opens,
+         "zones": names,
++        "panel_words": round(panel_words),
++        "human_zone_words": round(human_words),
+     }
+     return findings, stats
+ 
+@@ -242,9 +408,14 @@ def main():
+     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+     ap.add_argument("file")
+     ap.add_argument("--json", action="store_true", help="print machine-readable results")
+-    ap.add_argument("--allow-mermaid", action="store_true", help="do not note inline Mermaid in the human zone")
++    ap.add_argument("--allow-mermaid", action="store_true",
++                    help="readers use GitHub or Azure DevOps wikis: inline Mermaid in the human zone is fine")
++    ap.add_argument("--machine-only", action="store_true",
++                    help="treat the file as archive or AI-input only (skips human-zone rules)")
+     ap.add_argument("--max-block", type=int, default=25, help="longest code block allowed in the human zone")
+-    ap.add_argument("--max-table", type=int, default=20, help="most table rows allowed in the human zone")
++    ap.add_argument("--max-table", type=int, default=15, help="most table rows allowed in the human zone")
++    ap.add_argument("--panel-words", type=int, default=300, help="prose budget of the glance panel")
++    ap.add_argument("--human-words", type=int, default=2500, help="advisory word count of the human zone")
+     args = ap.parse_args()
+     try:
+         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+@@ -255,23 +426,20 @@ def main():
+         print("ERROR: file not found: %s" % path)
+         return 2
+     findings, stats = check(path, args)
+-    order = {"ERROR": 0, "WARN": 1, "INFO": 2}
+-    findings.sort(key=lambda f: (order[f[0]], f[1]))
+-    errors = [f for f in findings if f[0] == "ERROR"]
+-    warns = [f for f in findings if f[0] == "WARN"]
++    findings.sort(key=lambda f: (TIER_ORDER[f[0]], f[2]))
++    counts = {t: sum(1 for f in findings if f[0] == t) for t in TIER_ORDER}
+     if args.json:
+-        print(json.dumps({
+-            "file": str(path),
+-            "errors": [{"line": l, "message": m} for lv, l, m in findings if lv == "ERROR"],
+-            "warnings": [{"line": l, "message": m} for lv, l, m in findings if lv == "WARN"],
+-            "info": [{"line": l, "message": m} for lv, l, m in findings if lv == "INFO"],
+-            "stats": stats,
+-        }, ensure_ascii=False, indent=2))
++        out = {"file": str(path), "stats": stats,
++               "gate": {"blockers": counts["BLOCKER"], "majors": counts["MAJOR"], "minors": counts["MINOR"]}}
++        for tier, key in (("BLOCKER", "blockers"), ("MAJOR", "majors"), ("MINOR", "minors")):
++            out[key] = [{"rule": r, "line": l, "message": m} for t, r, l, m in findings if t == tier]
++        print(json.dumps(out, ensure_ascii=False, indent=2))
+     else:
+-        for lv, line, msg in findings:
+-            print("%-5s %s %s" % (lv, ("line %d:" % line) if line else "doc:", msg))
+-        print("-- %s: %d error(s), %d warning(s); %s" % (path.name, len(errors), len(warns), json.dumps(stats)))
+-    return 1 if errors else 0
++        for tier, rule, line, msg in findings:
++            print("%-7s %-3s %s %s" % (tier, rule, ("line %d:" % line) if line else "doc:", msg))
++        print("-- %s: %d blocker(s), %d major(s), %d minor(s); %s" % (
++            path.name, counts["BLOCKER"], counts["MAJOR"], counts["MINOR"], json.dumps(stats)))
++    return 1 if counts["BLOCKER"] else 0
+ 
+ 
+ if __name__ == "__main__":

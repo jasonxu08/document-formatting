@@ -1,0 +1,33 @@
+digraph dependencies {
+  graph [rankdir=TB, compound=true, fontname="Arial", fontsize=10, nodesep=0.45, ranksep=0.65, pad=0.25, bgcolor="white", labelloc=b, labeljust=l,
+         label=<<font point-size="10">An arrow from A to B means A depends on B (calls it).<br align="left"/>Green: passed staging, rollback available. Red: failed staging, no rollback. Grey: not tested, no rollback.<br align="left"/>Thick outline: critical service. Amber double arrow: the two services depend on each other.<br align="left"/></font>>];
+  node  [shape=box, style="rounded,filled", fontname="Arial", fontsize=12, margin="0.16,0.09"];
+  edge  [color="#444444", arrowsize=0.8, penwidth=1.2, fontname="Arial", fontsize=11];
+
+  subgraph cluster_callers {
+    label="6 services call auth-service directly";
+    labelloc=t; labeljust=l; fontsize=11; style="rounded,dashed"; color="#7A7A7A"; margin=14;
+    "gateway" [label=<<b>gateway</b><br/>Platform · critical<br/><font point-size="10">staging: pass · rollback: yes</font>>, fillcolor="#DDF0DA", color="#2E7D32", penwidth=2.8];
+    "catalog-service" [label=<<b>catalog-service</b><br/>Data · high<br/><font point-size="10">staging: pass · rollback: yes</font>>, fillcolor="#DDF0DA", color="#2E7D32", penwidth=1.4];
+    "share-service" [label=<<b>share-service</b><br/>Data · high<br/><font point-size="10">staging: pass · rollback: yes</font>>, fillcolor="#DDF0DA", color="#2E7D32", penwidth=1.4];
+    "connector-service" [label=<<b>connector-service</b><br/>Integration · medium<br/><font point-size="10">staging: pass · rollback: yes</font>>, fillcolor="#DDF0DA", color="#2E7D32", penwidth=1.4];
+    "map-service" [label=<<b>map-service</b><br/>Data · medium<br/><font point-size="10">staging: pass · rollback: yes</font>>, fillcolor="#DDF0DA", color="#2E7D32", penwidth=1.4];
+    "notify-service" [label=<<b>notify-service</b><br/>Platform · low<br/><font point-size="10">staging: pass · rollback: yes</font>>, fillcolor="#DDF0DA", color="#2E7D32", penwidth=1.4];
+    "gateway" -> "catalog-service";
+    "gateway" -> "share-service";
+    "gateway" -> "connector-service";
+    "catalog-service" -> "map-service" [dir=both, constraint=false, color="#B26A00", fontcolor="#B26A00", penwidth=1.8, label="mutual"];
+    { rank=same; "catalog-service"; "map-service"; }
+    "share-service" -> "catalog-service";
+    "share-service" -> "notify-service";
+    "connector-service" -> "catalog-service";
+  }
+
+  "auth-service" [label=<<b>auth-service</b><br/>Identity · critical<br/><font point-size="10">staging: fail (2 of 148 tests) · rollback: no</font>>, fillcolor="#F8D4D4", color="#B3261E", penwidth=2.8];
+  "user-store" [label=<<b>user-store</b><br/>Identity · critical<br/><font point-size="10">staging: not tested · rollback: no</font>>, fillcolor="#E3E3E3", color="#555555", penwidth=2.8];
+  "search-index" [label=<<b>search-index</b><br/>Data · medium<br/><font point-size="10">staging: pass · rollback: yes</font>>, fillcolor="#DDF0DA", color="#2E7D32", penwidth=1.4];
+
+  "catalog-service" -> "search-index";
+  "catalog-service" -> "auth-service" [ltail=cluster_callers, penwidth=3, color="#B3261E", label="  6 services"];
+  "auth-service" -> "user-store";
+}

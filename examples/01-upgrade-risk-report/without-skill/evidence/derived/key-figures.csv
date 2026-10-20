@@ -1,0 +1,36 @@
+id,figure,value,unit,how_computed
+T1,Days between v8 end of support and the end of the freeze,54,days,2027-01-05 minus 2026-11-12
+T2,Working days for the Data team from Mon 2026-10-26 to the last pre-freeze working day,5,working days,"Mon-Fri days, 2026-10-26 to 2026-10-30 inclusive"
+T3,Length of the Identity engineer's leave,19,calendar days,2026-10-26 to 2026-11-13 inclusive
+T4,Length of the Identity engineer's leave,15,working days,"Mon-Fri days, 2026-10-26 to 2026-11-13 inclusive"
+T5,Length of the code freeze,65,days,2027-01-05 minus 2026-11-01
+T6,End of a 3-month extended-support term activated on 2026-11-12 (assumption: term runs from activation),2027-02-12,date,2026-11-12 plus 3 months
+T7,Days from the last pre-freeze working day to the end of the freeze (minimum v8/v10 mixed running),67,days,2027-01-05 minus 2026-10-30
+D1,Services that call auth-service directly,6,of 8 other services,"gateway, catalog-service, share-service, connector-service, map-service, notify-service"
+D2,Services that depend on user-store directly or indirectly,7,of 8 other services,transitive closure of depends_on; not dependent: search-index
+D3,Direct dependents of catalog-service,4,services,"gateway, share-service, connector-service, map-service"
+D4,Circular dependencies,1,pairs,catalog-service <-> map-service
+D5,Services that passed staging,7,of 9,"gateway, catalog-service, share-service, connector-service, map-service, search-index, notify-service"
+I1,Incident rows in the Q3 log,36,rows,2026-07-02 to 2026-09-28
+I2,Distinct incident events,35,events,rows minus overlapping rows: 2026-07-11 auth-service + gateway
+I3,Logged incident minutes (sum of rows),932,minutes,sum of duration_min
+I4,Logged incident minutes counting overlapping events once,854,minutes,I3 minus duplicated rows
+I5,"Severity mix, by row",SEV1 2 / SEV2 10 / SEV3 24,rows,count of severity (the 2 SEV1 rows are one event)
+I6,auth-service incidents,11,rows,SEV1 1 / SEV2 6 / SEV3 4
+I7,auth-service share of incident rows,30.6,%,11 / 36
+I8,auth-service incident minutes,380,minutes,sum of duration_min
+I9,auth-service share of logged minutes,40.8,%,380 / 932 (about 44% if the overlap is counted once)
+I10,auth-service SEV2 rows as a share of all SEV2 rows,6 of 10,rows,severity == SEV2
+I11,gateway incidents whose summary cites auth-service,4 of 7,rows,139 min in total; 3 rows / 61 min excluding the overlapping 07-11 row
+I12,gateway incidents caused by downstream timeouts,5 of 7,rows,cause == downstream-timeout
+I13,token-refresh-bug incidents,3,rows,72 min; services: auth-service
+I14,runtime-gc incidents,3,rows,"82 min; services: auth-service, catalog-service, search-index"
+I15,Dependency or downstream-timeout incidents,12,rows,354 min; 33% of rows
+I16,Failed rollouts that were rolled back,5,rows,"duration 10-19 min, median 15; severities SEV3; share-service x2, catalog-service x1, connector-service x1, map-service x1"
+I17,auth-service incident rate in Q3,0.12,incidents per day,11 rows / 92 days (2026-07-01 to 2026-09-30)
+I18,"auth-service incidents expected in a window as long as the leave, at the Q3 rate (illustration, not a forecast)",2.3,incidents,rate x 19 days
+I19,Longest incident in Q3,78,minutes,2026-07-11 auth-service SEV1
+I20,"Restore-from-backup RTO (4 hours, from the notes) compared with the longest Q3 incident",3.1,x,240 / 78
+I21,Restore-from-backup RTO as a share of all auth-service incident minutes in Q3,63,%,240 / 380
+X1,"v8 extended support, one quarter",18000,USD,price quoted in the notes
+X2,"v8 extended support, two quarters",36000,USD,assumes the same price for a second quarter

@@ -1,0 +1,221 @@
+{
+  "expectations": [
+    {
+      "text": "Zones labeled: the document labels a part for human reading and a separate part for AI-input / archive / evidence material, using explicit headings or banners that name the audience (a bare 'Appendix' does not count), and the two parts do not interleave",
+      "passed": false,
+      "evidence": "No zone labels exist. The headings are Recommendation, Options considered, What the evidence shows, Plan, Cost, Risks, Assumptions and open items, When to revisit, Decision record, then 'Appendix A: Supporting data', 'Appendix B: Q3 incident analysis' and 'Appendix C: Key dates' - bare appendices that name no audience. mechanical.json warns 'no <!-- zone:... --> markers; human-read and machine/archive content are not marked' and stats.zones is []. The only orientation is plain text at line 8: 'The Recommendation below is enough to decide. Everything after it is the evidence, the plan and the audit trail.' That is not a heading or banner, names no audience (people vs AI/archive), and lumps the plan and the decision record in with the evidence. The evidence/ and analysis/ folders form a separate bundle on disk, but report.md itself never labels the two audiences."
+    },
+    {
+      "text": "Human part highlighted: the part written for humans is marked by a prominent banner or heading that says it is for people or where to start (for example an emoji-led 'start here' heading), so a reader cannot miss it",
+      "passed": false,
+      "evidence": "Nothing in report.md says 'for people' or 'start here'. The first heading (line 10) is the plain topic label '## Recommendation'; line 3 only names the addressee ('For: Marcus Hale, Engineering Lead') and line 8 is an unformatted sentence. There is no emoji-led heading, banner or callout marking the human-reading zone, so a reader is not prominently told where to start."
+    },
+    {
+      "text": "Glance first: the first section after the title is a one-screen overview that states the conclusion itself (what is true or what to do), not merely what the document covers; no background, method or table of contents comes before it",
+      "passed": true,
+      "evidence": "After the title and a 4-line metadata block (For / Decision needed by / Prepared / Based on, lines 3-6), the first section is '## Recommendation' (lines 10-28, about 440 words). It states the conclusion itself: 'Split the upgrade rather than choosing between \"all before the freeze\" and \"all in January\". Move the seven services that passed staging to v10 in the week of 2026-10-26 ... Keep the two Identity-team services ... on v8 until January'. Three reasons, four decisions and a confidence note follow and all end by line 28, inside the first 60 lines. No background, method or table of contents precedes it. Caveat: the section is dense, so 'glance' is generous."
+    },
+    {
+      "text": "Reading path: within the first screen (about 60 lines) there is a reading path or 'read next' list with at least 3 working links to sections, each saying what the reader gets",
+      "passed": false,
+      "evidence": "The first 60 lines contain only two links: line 6 (the `evidence/` folder link inside the 'Based on' metadata) and line 21 ('[Cost](#cost)' inside decision 2). There is no reading-path or 'read next' list, only one link points to a section, and none says what the reader gets. mechanical.json agrees: 'fewer than 2 in-document links near the top; add a Read next path'. The expectation needs at least 3 section links with descriptions."
+    },
+    {
+      "text": "Links work: every in-document link and every image path resolves (scripts/check_doc.py reports no ERROR lines)",
+      "passed": true,
+      "evidence": "mechanical.json: errors [] (no ERROR lines); stats internal_links 3, images 3. I also resolved all 19 link/image targets in report.md independently: the 3 anchors (#cost, #appendix-b-q3-incident-analysis, #appendix-c-key-dates) match headings, the 3 PNGs exist, and every evidence/, analysis/ and figures/ file or folder link exists on disk; 0 unresolved. Caveat: 2 warnings say the anchors for 'Appendix B: Q3 incident analysis' and 'Appendix C: Key dates' (colon in the heading) may differ between viewers such as Azure DevOps - warnings, not errors."
+    },
+    {
+      "text": "Relationship diagram: the nine services and their dependencies are shown as a diagram (embedded image or Mermaid) that includes all nine services and labels or clearly draws the relationships",
+      "passed": true,
+      "evidence": "figures/dependency-graph.png (embedded at line 77 as Figure 1) draws all nine services as labelled nodes (gateway, share-service, connector-service, catalog-service, notify-service, map-service, search-index, auth-service, user-store) with directed arrows. I checked every edge against services.csv depends_on and all match: gateway -> auth/catalog/share/connector; share -> auth/catalog/notify; connector -> auth/catalog; catalog -> auth/search-index and catalog <-> map-service ('call each other'); map -> auth; notify -> auth; auth -> user-store. Nodes also show team, criticality, staging result and rollback status, and the six edges into auth-service are red."
+    },
+    {
+      "text": "Diagram portable: the diagram a human sees first is an embedded image file that exists on disk (PNG or SVG), not only a Mermaid or other code block, because the reader's VS Code preview and Azure DevOps repo pages do not render Mermaid",
+      "passed": true,
+      "evidence": "The first diagram in the document is the embedded image '![Dependency graph of the nine services ...](figures/dependency-graph.png)' at line 77: a PNG that exists on disk (184,704 bytes, 1372x1516, opens fine). check_doc.py stats show images 3 and diagram_blocks 0, so there is no Mermaid or other code-block diagram at all; the Graphviz source is kept as figures/dependency-graph.dot."
+    },
+    {
+      "text": "Diagram readable: the diagram has a caption or how-to-read line, and viewing the rendered image shows legible labels with no overlapping or cut-off text",
+      "passed": true,
+      "evidence": "Caption at line 79: 'Figure 1. Who depends on whom (inventory). The seven passing services are green; the two Identity services are the only ones without a rollback path. catalog-service and map-service call each other.' The image also embeds a legend and a how-to-read line ('An arrow points from a service to a service it depends on. Red arrows point at auth-service.'). I viewed the PNG at native size and downscaled to 800 px wide: the bold service names, the smaller team/criticality/status lines, the 'call each other' edge label and the legend all stay legible, with no overlapping or clipped text."
+    },
+    {
+      "text": "Evidence out of the way: bulky raw material (the 36 incident rows, the full inventory table, long logs) is not in the human part; it sits in the archive/machine part or in a linked file",
+      "passed": true,
+      "evidence": "report.md contains none of the 36 raw incident rows and no raw log or inventory dump. The raw material sits in linked files: evidence/incidents-q3.csv, evidence/services.csv and evidence/upgrade-notes.md, linked from line 6, line 48 and Appendix A (lines 232-234). Appendix B (line 243 on) holds only aggregated by-service (9 rows) and by-cause (8 rows) tables. Caveat: the body has a 9-row derived 'Service by service' table (lines 61-73: team, criticality, staging, rollback, Q3 incident count, phase) - an analysis table that supports the argument rather than the raw inventory (no depends_on or runtime columns), so I did not count it as bulky raw material."
+    },
+    {
+      "text": "Headings tell the story: at least half of the body headings state a claim, finding or question rather than a generic topic label like 'Overview', 'Analysis' or 'Details'",
+      "passed": false,
+      "evidence": "There are 18 body headings (excluding the H1 title: 12 H2, 6 H3). Only 4 state a finding: 'The seven are ready; the two Identity services are not', 'auth-service is where the risk concentrates', 'Recovery cost differs by an order of magnitude' and 'The calendar is the binding constraint' (all H3 under 'What the evidence shows'). The other 14 are topic labels: Recommendation, Options considered, What the evidence shows, Plan, 'Phase 1: the seven passing services, before the freeze', 'Phase 2: the Identity services, in January', Cost, Risks, Assumptions and open items, When to revisit, Decision record, Appendix A: Supporting data, Appendix B: Q3 incident analysis, Appendix C: Key dates. 4/18 = 22% (6/18 = 33% even if the two Phase headings are generously counted) is below the half bar, and all 12 H2 headings are generic."
+    },
+    {
+      "text": "Verdict and ask first: the first screen gives a clear recommendation on upgrading before the freeze versus deferring (a conditional or split answer is fine) and names the decision Marcus must make with its deadline (Friday 23 Oct)",
+      "passed": true,
+      "evidence": "Line 12 (first screen): 'Split the upgrade rather than choosing between \"all before the freeze\" and \"all in January\". Move the seven services that passed staging to v10 in the week of 2026-10-26, before the code freeze (Phase 1). Keep the two Identity-team services ... on v8 until January' - a clear split verdict. The ask is named twice with the deadline: line 4 'Decision needed by: Friday 2026-10-23' and lines 18-23 '> **Decisions needed by Friday 2026-10-23**' with four numbered decisions (approve Phase 1, approve USD 18,000 extended support, ask CAB for a contingency exception, confirm auth-service and user-store stay on v8)."
+    },
+    {
+      "text": "Top risks first: the first screen lists at least 3 top risks with severity markers, including the 12 Nov end of support and the missing rollback path for auth-service",
+      "passed": false,
+      "evidence": "The first 60 lines contain no top-risk list and no severity markers (no High/Critical/SEV labels, colour or emoji on risks). The only risk table, with Likelihood/Impact columns, is under '## Risks' at line 178. The first screen has a recommendation narrative instead: the missing rollback path appears in a bullet (line 15: 'Neither can be rolled back after the schema migration; recovery is a backup restore, estimated at 4 hours'), but the 12 Nov end of support is only implied (line 16: the Identity services 'will still be on v8 on 2026-11-12'); the explicit 'end of security support on 2026-11-12' first appears at line 96. The only 'High'/'Moderate' markers (lines 27-28) rate confidence in the recommendation, not risk severity."
+    },
+    {
+      "text": "Figures are right: the report states that auth-service has 6 dependents and accounts for 11 of the 36 Q3 incidents",
+      "passed": false,
+      "evidence": "6 dependents is stated correctly: line 81 'Six of the other eight services call it directly: gateway, catalog-service, share-service, connector-service, map-service and notify-service' (matches services.csv). The incident share is not stated as 11 of 36: line 85 says 'auth-service accounts for 11 of 35 Q3 incidents (31%), 380 of 854 incident minutes'. incidents-q3.csv has 36 rows (auth-service 11 rows and 380 min; 932 min in total). The report merges the 2026-07-11 gateway SEV1 row ('caused by auth-service SEV1') into the auth-service row and uses 35 as the denominator throughout (Figure 2 title 'n = 35', gateway 6 instead of 7 rows, 854 instead of 932 minutes). The merge is disclosed (lines 75, 247) and '36' appears only as a row count (lines 234, 247), but the figure the report states is 11 of 35, not the 11 of 36 the expectation requires."
+    },
+    {
+      "text": "Audit data kept: the 36 incident rows and the 9-service inventory are preserved for audit, inline in the archive part or as linked files, as the user asked",
+      "passed": true,
+      "evidence": "outputs/evidence/incidents-q3.csv (36 data rows), evidence/services.csv (9 services) and evidence/upgrade-notes.md are byte-identical to the fixtures (SHA-256 hashes match). They are linked from the header (line 6), the source tags (line 48) and the Appendix A table (lines 232-234), which also says 'Do not edit them: if the facts change, add a dated file and a new revision of this report'. Extras kept: analysis/analyze.py (re-run in a scratch copy: it regenerated byte-identical derived CSVs and the same .dot), analysis/derived/*.csv and figures/*.png plus the .dot source."
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 6,
+    "total": 14,
+    "pass_rate": 0.57
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 0,
+    "total_steps": 0,
+    "errors_encountered": 0,
+    "output_chars": 0,
+    "transcript_chars": 0,
+    "note": "Copied from outputs/metrics.json. The harness reported no tool-call or step breakdown and no transcript exists for this run, so those fields are 0 / empty."
+  },
+  "timing": {
+    "executor_duration_seconds": 1566.3,
+    "total_duration_seconds": 1566.3,
+    "note": "executor estimate from file timestamps"
+  },
+  "claims": [
+    {
+      "claim": "auth-service has six dependents (gateway, catalog-service, share-service, connector-service, map-service, notify-service)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "services.csv lists auth-service in depends_on for exactly those six services; the run's analysis/derived/service-dependencies.csv also shows dependent_count 6."
+    },
+    {
+      "claim": "auth-service has 11 Q3 incidents totalling 380 minutes (report lines 85, 255)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "incidents-q3.csv has 11 auth-service rows summing to 380 minutes."
+    },
+    {
+      "claim": "Q3 contained 35 distinct events (36 rows) because the 2026-07-11 gateway SEV1 row restates the auth-service SEV1, so auth-service is 11 of 35 (31%) and 380 of 854 minutes (about 45%)",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Arithmetic is correct under the report's own rule (11/35 = 31.4%, 380/854 = 44.5%, 7 of 11 SEV1/SEV2), but the 35 is an interpretation, not a fact in the data: the log keeps 36 separate incident rows (gateway has 7 rows, total 932 minutes, raw auth share 30.6% of rows and 40.8% of minutes). The gateway row's summary says it was 'caused by auth-service SEV1', so merging is defensible, and it is disclosed in Appendix B, but it changes the headline denominator, gateway's count and the minute totals."
+    },
+    {
+      "claim": "evidence/ holds unmodified copies of the three input files",
+      "type": "process",
+      "verified": true,
+      "evidence": "SHA-256 hashes of evidence/incidents-q3.csv, services.csv and upgrade-notes.md equal the fixture files."
+    },
+    {
+      "claim": "analysis/analyze.py recomputes every number and figure from evidence/ (Appendix A, line 235; user_notes)",
+      "type": "process",
+      "verified": true,
+      "evidence": "Ran the script on a scratch copy of analysis/ and evidence/ (scratch deleted afterwards, run directory untouched): it completed, regenerated the four derived CSVs and dependency-graph.dot byte-identically, and produced PNGs of identical size. The printed key numbers match the report (36 rows, 35 events, 11 auth events, 380/854 minutes, 6 dependents, 8.4 days, 3.1x, 63%)."
+    },
+    {
+      "claim": "The dependency diagram shows all nine services and their dependencies as in the inventory",
+      "type": "factual",
+      "verified": true,
+      "evidence": "All 15 drawn arrows (16 dependencies, with catalog-service and map-service merged into one two-way arrow) match services.csv depends_on."
+    },
+    {
+      "claim": "Q3 had 5 failed rollouts, all rolled back in 10 to 19 minutes (median 15), all SEV3, across 4 of the 7 passing services",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Rows with 'Failed rollout' in incidents-q3.csv: share-service 15 and 10, map-service 14, connector-service 19, catalog-service 15 minutes; all SEV3; 4 distinct services; median 15."
+    },
+    {
+      "claim": "Q3 averaged one auth-service incident every 8.4 days, so about two would be expected in the 19-day leave window; a 4-hour recovery is 3.1 times the longest auth-service incident (78 min) and equals 63% of auth-service incident minutes",
+      "type": "factual",
+      "verified": true,
+      "evidence": "92 days / 11 = 8.4; 19 / 8.4 = 2.3; 240 / 78 = 3.08; 240 / 380 = 63.2%."
+    },
+    {
+      "claim": "11 of 35 events are change-related (config + deploy), 11 of 35 are propagated (dependency + downstream-timeout), and 3 are runtime GC",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Counting from incidents-q3.csv after the 07-11 merge: config 6 + deploy 5; dependency 6 + downstream-timeout 5; runtime-gc 3. Consistent with the report's 35-event basis."
+    },
+    {
+      "claim": "All dates and weekdays are right (Fri 2026-10-23, Mon 10-26, Sun 11-01, Thu 11-05 and 11-12, Fri 11-13, Tue 2027-01-05, nine-week freeze, about five weeks of slack after the freeze)",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Calendar check of every date in Appendix C; the freeze runs 65 days (about 9.3 weeks); 2027-01-05 to about 2027-02-12 is 38 days."
+    },
+    {
+      "claim": "The seven passing services can all move in the week of 2026-10-26 ('Feasible by 2026-10-30? Yes, with no slack' for option C)",
+      "type": "quality",
+      "verified": false,
+      "evidence": "upgrade-notes.md gives a one-week estimate only for the Data team's four services; Integration says connector-service can go any time and Platform only says gateway goes last. No capacity statement exists for gateway or notify-service in that week. The report flags 'Moderate' confidence and user_notes admits the notes are silent on Platform and Integration capacity, but the options table states feasibility as 'Yes'."
+    },
+    {
+      "claim": "Length is about 4,500 words including appendices and about 3,700 before them; text is ASCII-only (user_notes)",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Measured 4,562 words in total and 3,709 before Appendix A; 0 non-ASCII characters."
+    },
+    {
+      "claim": "'The Recommendation below is enough to decide' (report line 8)",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Lines 10-28 contain the verdict, the reasons, four named decisions with the 2026-10-23 deadline and a confidence note with the fallback trigger. It lacks severity-rated top risks and the explicit 12 Nov end-of-support driver, which only appears at line 96."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+      "Extended support terms: whether USD 18,000 is flat or per service and whether a quarter is rolling or calendar (assumed flat and rolling; ceiling set at USD 36,000)",
+      "The CAB rule 'already staged and tested' was read as 'passed staging', which makes the seven eligible and the Identity services not",
+      "What the seven passing services were tested against (v8 or v10 auth-service) is not in the notes; made a pre-Monday check and the basis for 'moderate' confidence",
+      "Why auth-service itself has no rollback path (the notes tie it to the schema migration, which belongs to user-store) was flagged, not resolved",
+      "Proposals nobody has agreed to: Phase 1 order, the 2026-10-30 order date, the 2026-12-15 checkpoint, the Phase 2 gates; Platform and Integration capacity in the week of 2026-10-26 is unknown",
+      "Incident attribution: the two 2026-07-11 SEV1 rows treated as one event (35 from 36), and three gateway incidents attributed to auth-service from free-text summaries",
+      "Rounding: 44.5% written as 'about 45%'",
+      "Dates: report dated 2026-10-17 from the system clock, Friday taken as 2026-10-23, Identity engineer assumed back on Monday 2026-11-16",
+      "Facts in the notes (staging results, rollback times, vendor timing, price) taken as given and not checked against primary sources",
+      "Likelihood and impact ratings in the risk table are the author's judgment"
+    ],
+    "needs_review": [
+      "The 35-versus-36 de-duplication: it changes the headline numbers (gateway 6 vs 7, 854 vs 932 minutes)",
+      "The USD 18,000 pricing basis and the USD 36,000 ceiling put to Marcus as decision 2",
+      "The CAB eligibility reading behind decision 3 (contingency exception)",
+      "The open mixed-version question (what the seven were tested against), which needs an answer from Platform before Friday"
+    ],
+    "workarounds": [
+      "No skill was used (without_skill baseline). Portability choices instead: PNG figures with the .dot source kept, no Mermaid or GitHub-only alert syntax because Azure DevOps may not render them, ASCII-only text, relative links, plain GFM tables and blockquotes"
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Figures are right: the report states that auth-service has 6 dependents and accounts for 11 of the 36 Q3 incidents",
+        "reason": "Ambiguous against this fixture. incidents-q3.csv has 36 rows, but the 2026-07-11 gateway SEV1 row says '(caused by auth-service SEV1)' and repeats the auth-service SEV1 (same date, 78 min). This run merged them and reported 11 of 35 while disclosing the 36 rows in Appendix B, which flips the verdict on otherwise careful, transparent work. State whether a disclosed de-duplication is acceptable (for example '11 of the 36 rows; 11 of 35 also accepted if the merged 07-11 SEV1 is disclosed'). The assertion also checks only two figures while the report carries about 30 derived numbers (854 minutes, 8.4 days, 3.1x, 63%) that nothing spot-checks."
+      },
+      {
+        "assertion": "Evidence out of the way: bulky raw material (the 36 incident rows, the full inventory table, long logs) is not in the human part; it sits in the archive/machine part or in a linked file",
+        "reason": "Passes for any report that leaves the CSVs in separate files, and it does not say whether a condensed per-service table counts as 'the full inventory table' (this run has a 9-row derived table at lines 61-73 inside a 3,700-word, roughly 14-table body). A measurable bulk limit on the human part (words or table rows before the first archive heading) would make it discriminating."
+      },
+      {
+        "assertion": "Glance first: the first section after the title is a one-screen overview that states the conclusion itself (what is true or what to do), not merely what the document covers; no background, method or table of contents comes before it",
+        "reason": "'One-screen' is only checkable through the 60-line convention. This run's overview is about 440 words of dense bullets, paragraphs and a 4-item callout (lines 10-28) and passes. A size bound (for example 250 words or 25 lines) would separate a true glance from a short essay."
+      },
+      {
+        "assertion": "Links work: every in-document link and every image path resolves (scripts/check_doc.py reports no ERROR lines)",
+        "reason": "Only ERROR lines count. check_doc.py warned that the anchors #appendix-b-q3-incident-analysis and #appendix-c-key-dates sit on headings containing a colon and 'may differ between viewers'; Azure DevOps repo pages are a stated reader surface, so those warnings arguably should fail the assertion or the headings should be required to use plain words."
+      },
+      {
+        "reason": "No assertion covers honesty about inferred versus given facts. This run labels its own proposals and assumptions (USD 36,000 ceiling, 2026-10-30 order date, 2026-12-15 checkpoint, 'passed staging' reading of the CAB rule) in the Assumptions table and Appendix C, which matters for an audit trail, yet it also states option C feasibility as 'Yes' for all seven services on the strength of the Data team's estimate for its own four. A check that estimates and assumptions are distinguished from sourced facts (and not extrapolated) would catch both the good and the bad."
+      }
+    ],
+    "overall": "Assertions 1, 2, 4, 10 and 12 discriminate well: a competent plain report fails them and only layout-aware work passes. Weak spots are 9 (satisfied by any report that keeps raw CSVs in separate files), 3 (no size bound), 5 (ignores anchor-fragility warnings) and 13 (denominator ambiguity caused by a duplicated incident row)."
+  }
+}
