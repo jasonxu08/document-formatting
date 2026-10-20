@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# release artefacts built by tools/package_skill.py
+dist/
+dist-*/
+
+# local scratch
+scratch/
+*.tmp

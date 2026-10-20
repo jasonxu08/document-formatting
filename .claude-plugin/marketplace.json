@@ -1,0 +1,25 @@
+{
+  "name": "document-formatting",
+  "owner": {
+    "name": "jasonxu08",
+    "url": "https://github.com/jasonxu08"
+  },
+  "metadata": {
+    "description": "Agent skills for writing documents that people can read."
+  },
+  "plugins": [
+    {
+      "name": "document-formatting",
+      "source": "./",
+      "description": "Write large documents for humans first: audience split, a glanceable verdict, guided reading, relationship diagrams, a checker and a method for rewriting unreadable reports.",
+      "version": "1.0.0",
+      "author": {
+        "name": "jasonxu08"
+      },
+      "homepage": "https://github.com/jasonxu08/document-formatting",
+      "license": "MIT",
+      "category": "documentation",
+      "keywords": ["documentation", "reports", "writing", "markdown", "diagrams", "agent-skill"]
+    }
+  ]
+}

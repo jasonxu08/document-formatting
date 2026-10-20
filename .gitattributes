@@ -1,0 +1,21 @@
+# Normalise line endings: Markdown, JSON, scripts and SVG are stored with LF so records and diffs are stable.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.gif binary
+*.zip binary
+*.skill binary
+
+# Verbatim copies of inputs, and the checksums recorded for them, must stay byte-identical.
+examples/**/input/** -text
+**/*.data/** -text
+**/evidence/** -text
+
+# Keep the GitHub language bar about the skill's scripts, not the review evidence.
+examples/** linguist-documentation
+review/** linguist-documentation
+evals/** linguist-documentation
+docs/** linguist-documentation
+review/**/records/** linguist-generated
+review/skill-evolution/diffs/** linguist-generated

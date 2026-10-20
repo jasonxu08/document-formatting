@@ -1,0 +1,13 @@
+{
+  "name": "document-formatting",
+  "version": "1.0.0",
+  "description": "An agent skill that makes AI-written documents readable by people: it separates human-read content from AI-input and archive material, opens with a glanceable verdict, decisions and risks, guides the reading order, draws relationship diagrams and can rewrite an unreadable long report without losing anything.",
+  "author": {
+    "name": "jasonxu08",
+    "url": "https://github.com/jasonxu08"
+  },
+  "homepage": "https://github.com/jasonxu08/document-formatting",
+  "repository": "https://github.com/jasonxu08/document-formatting",
+  "license": "MIT",
+  "keywords": ["documentation", "reports", "writing", "markdown", "diagrams", "agent-skill"]
+}
