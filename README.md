@@ -187,7 +187,7 @@ Global skill folders for the most common agents (from the skills CLI documentati
 
 The skill was developed and evaluated in GitHub Copilot CLI sessions. It is a plain `SKILL.md` folder in the open Agent Skills format, so other agents load it the same way, but I have not run the full evaluation in each of them. Skill loading is probabilistic everywhere; see the next section.
 
-The skills CLI sends anonymous install telemetry to skills.sh. Set `DISABLE_TELEMETRY=1` to turn it off.
+The skill is listed on [skills.sh](https://skills.sh/jasonxu08/document-formatting), whose page also shows third-party security audits of it. The skills CLI sends anonymous install telemetry to skills.sh; that is how skills get listed and ranked there. Set `DISABLE_TELEMETRY=1` to turn it off.
 
 <a id="make-it-load-every-time"></a>
 

@@ -188,7 +188,7 @@ python skills/document-formatting/scripts/source_set.py verify report.md \
 
 这个 skill 是在 GitHub Copilot CLI 会话中开发并评估的。它就是一个遵循开放 Agent Skills 格式的普通 `SKILL.md` 文件夹，所以其他 agent 加载它的方式也一样，只是我没有在每个 agent 里都跑过完整评估。skill 的加载在所有 agent 中都是概率性的；见下一节。
 
-skills CLI 会向 skills.sh 发送匿名的安装遥测数据。设置 `DISABLE_TELEMETRY=1` 即可关闭。
+这个 skill 已收录在 [skills.sh](https://skills.sh/jasonxu08/document-formatting)，页面上还能看到第三方对它的安全审计结果。skills CLI 会向 skills.sh 发送匿名的安装遥测数据，skills.sh 靠这些数据收录并排名。设置 `DISABLE_TELEMETRY=1` 即可关闭。
 
 <a id="make-it-load-every-time"></a>
 
